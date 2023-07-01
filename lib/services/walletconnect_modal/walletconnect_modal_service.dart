@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:w_common/disposable.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service.dart';
@@ -81,7 +80,7 @@ class WalletConnectModalService extends ChangeNotifier
     ExcludedWalletState excludedWalletState = ExcludedWalletState.list,
     Set<String>? excludedWalletIds,
   }) {
-    if (projectId == null && metadata == null && web3App == null) {
+    if (web3App == null && projectId == null && metadata == null) {
       throw ArgumentError(
         'Either a projectId and metadata must be provided or an already created web3App.',
       );
@@ -231,15 +230,12 @@ class WalletConnectModalService extends ChangeNotifier
   Future<void> disconnect() async {
     _checkInitialized();
 
+    if (_session == null) {
+      return;
+    }
+
     await web3App!.disconnectSession(
       topic: session!.topic,
-      reason: WalletConnectError(
-        code: 0,
-        message: 'User disconnected',
-      ),
-    );
-    await web3App!.disconnectSession(
-      topic: session!.pairingTopic,
       reason: WalletConnectError(
         code: 0,
         message: 'User disconnected',
@@ -262,7 +258,7 @@ class WalletConnectModalService extends ChangeNotifier
     );
 
     if (redirect == null) {
-      launchUrl(
+      urlUtils.instance.launchUrl(
         Uri.parse(
           _session!.peer.metadata.url,
         ),
@@ -275,28 +271,16 @@ class WalletConnectModalService extends ChangeNotifier
     }
   }
 
-  @override
-  void setDefaultChain({
-    // Web3ModalChains? walletconnect_modalChain,
-    required Map<String, RequiredNamespace> requiredNamespaces,
-  }) {
-    _checkInitialized();
+  // @override
+  // void setDefaultChain({
+  //   required Map<String, RequiredNamespace> requiredNamespaces,
+  // }) {
+  //   _checkInitialized();
 
-    // if (walletconnect_modalChain != null) {
-    //   switch (walletconnect_modalChain) {
-    //     case Web3ModalChains.ethereum:
-    //       _requiredNamespaces = NamespaceConstants.ethereum;
-    //       break;
-    //     case Web3ModalChains.polygon:
-    //       _requiredNamespaces = NamespaceConstants.polygon;
-    //       break;
-    //   }
-    // }
+  //   _requiredNamespaces = requiredNamespaces;
 
-    _requiredNamespaces = requiredNamespaces;
-
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
   @override
   void setRequiredNamespaces(Map<String, RequiredNamespace> namespaces) {
@@ -403,7 +387,7 @@ class WalletConnectModalService extends ChangeNotifier
 
   void _checkInitialized() {
     if (!isInitialized) {
-      throw Exception(
+      throw StateError(
         'Web3ModalService must be initialized before calling this method.',
       );
     }

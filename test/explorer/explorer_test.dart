@@ -31,17 +31,17 @@ void main() {
       // assuming some mock referer and params for the init function
       when(
         urlUtils.instance.isInstalled(
-          test_listings_1[0].mobile.native,
+          testListings1[0].mobile.native,
         ),
       ).thenAnswer((_) async => true);
       when(
         urlUtils.instance.isInstalled(
-          test_listings_1[1].mobile.native,
+          testListings1[1].mobile.native,
         ),
       ).thenAnswer((_) async => false);
       when(client.get(any, headers: anyNamed('headers'))).thenAnswer(
         (_) async => http.Response(
-          json.encode(test_response_1.toJson()),
+          json.encode(testResponse1.toJson()),
           200,
         ),
       );
@@ -53,7 +53,6 @@ void main() {
         explorerService.initialized.value,
         equals(true),
       );
-      print(explorerService.itemList.value);
       expect(
         explorerService.itemList.value.length,
         equals(2),
@@ -79,7 +78,7 @@ void main() {
     test('Test Fetching of Wallet Listings', () async {
       when(client.get(any, headers: anyNamed('headers'))).thenAnswer(
         (_) async => http.Response(
-          json.encode(test_response_1.toJson()),
+          json.encode(testResponse1.toJson()),
           200,
         ),
       );
@@ -151,14 +150,14 @@ void main() {
     test('Test Filtering of Excluded Listings', () {
       explorerService.excludedWalletIds = {'1'};
       var filteredListings = explorerService.filterExcludedListings(
-        listings: test_listings_1,
+        listings: testListings1,
       );
 
       expect(
         filteredListings,
         equals(
           [
-            test_listings_1[1],
+            testListings1[1],
           ],
         ),
       );

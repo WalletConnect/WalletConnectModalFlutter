@@ -79,9 +79,9 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
   /// Sets the default chain to use for the session.
   /// [requiredNamespaces] must be provided, if both are null this function
   /// will do nothing.
-  void setDefaultChain({
-    required Map<String, RequiredNamespace> requiredNamespaces,
-  });
+  // void setDefaultChain({
+  //   required Map<String, RequiredNamespace> requiredNamespaces,
+  // });
 
   /// The required namespaces that will be used when connecting to the wallet
   Map<String, RequiredNamespace> get requiredNamespaces;

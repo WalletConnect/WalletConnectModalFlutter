@@ -86,7 +86,6 @@ class ExplorerService implements IExplorerService {
       referer: referer,
       params: params,
     );
-    print(_listings);
 
     if (excludedWalletState == ExcludedWalletState.list) {
       // If we are excluding all wallets, take out the excluded listings, if they exist
@@ -113,7 +112,6 @@ class ExplorerService implements IExplorerService {
       return;
     }
     _walletList.clear();
-    print(_listings);
 
     for (Listing item in _listings) {
       bool installed = await urlUtils.instance.isInstalled(item.mobile.native);

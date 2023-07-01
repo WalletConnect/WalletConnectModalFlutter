@@ -53,6 +53,17 @@ class UrlUtils extends IUrlUtils {
   }
 
   @override
+  Future<bool> launchUrl(
+    Uri url, {
+    LaunchMode? mode,
+  }) async {
+    return launchUrlFunc(
+      url,
+      mode: mode,
+    );
+  }
+
+  @override
   Future<void> launchRedirect({
     Uri? nativeUri,
     Uri? universalUri,
