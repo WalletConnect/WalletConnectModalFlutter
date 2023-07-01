@@ -244,7 +244,9 @@ void main() {
     group('setRequiredNamespaces', () {
       test('throws if _checkInitialized fails', () async {
         expect(
-          () => service.setRequiredNamespaces(NamespaceConstants.ethereum),
+          () => service.setDefaultChain(
+            requiredNamespaces: NamespaceConstants.ethereum,
+          ),
           throwsA(isA<StateError>()),
         );
       });
@@ -252,7 +254,9 @@ void main() {
       test('updates internal value', () async {
         await service.init();
 
-        service.setRequiredNamespaces(NamespaceConstants.ethereum);
+        service.setDefaultChain(
+          requiredNamespaces: NamespaceConstants.ethereum,
+        );
 
         expect(service.requiredNamespaces, NamespaceConstants.ethereum);
       });

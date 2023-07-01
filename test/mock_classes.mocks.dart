@@ -623,15 +623,6 @@ class MockWalletConnectModalService extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void setRequiredNamespaces(Map<String, _i7.RequiredNamespace>? namespaces) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #setRequiredNamespaces,
-          [namespaces],
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
   String getReferer() => (super.noSuchMethod(
         Invocation.method(
           #getReferer,

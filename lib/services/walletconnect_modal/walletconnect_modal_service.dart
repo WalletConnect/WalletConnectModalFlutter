@@ -271,26 +271,26 @@ class WalletConnectModalService extends ChangeNotifier
     }
   }
 
-  // @override
-  // void setDefaultChain({
-  //   required Map<String, RequiredNamespace> requiredNamespaces,
-  // }) {
-  //   _checkInitialized();
-
-  //   _requiredNamespaces = requiredNamespaces;
-
-  //   notifyListeners();
-  // }
-
   @override
-  void setRequiredNamespaces(Map<String, RequiredNamespace> namespaces) {
+  void setDefaultChain({
+    required Map<String, RequiredNamespace> requiredNamespaces,
+  }) {
     _checkInitialized();
-    LoggerUtil.logger.i('Setting Required namespaces: $namespaces');
 
-    _requiredNamespaces = namespaces;
+    _requiredNamespaces = requiredNamespaces;
 
     notifyListeners();
   }
+
+  // @override
+  // void setRequiredNamespaces(Map<String, RequiredNamespace> namespaces) {
+  //   _checkInitialized();
+  //   LoggerUtil.logger.i('Setting Required namespaces: $namespaces');
+
+  //   _requiredNamespaces = namespaces;
+
+  //   notifyListeners();
+  // }
 
   @override
   String getReferer() {

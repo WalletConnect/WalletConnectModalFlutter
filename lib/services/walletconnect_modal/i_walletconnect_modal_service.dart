@@ -48,16 +48,6 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
   /// The service used to fetch wallet listings from the explorer API.
   abstract final IExplorerService explorerService;
 
-  /// The current connection state of the modal.
-  /// Used by the connect button to render the correct UI.
-  // Web3ModalConnectionState get connectionState;
-
-  /// The current state of the modal.
-  // Web3ModalState get state;
-
-  /// The list of wallets from the explorer API.
-  // List<Listing> get listings;
-
   /// Sets up the explorer and the web3App if they already been initialized.
   Future<void> init();
 
@@ -76,21 +66,20 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
 
   void launchCurrentWallet();
 
-  /// Sets the default chain to use for the session.
-  /// [requiredNamespaces] must be provided, if both are null this function
-  /// will do nothing.
-  // void setDefaultChain({
-  //   required Map<String, RequiredNamespace> requiredNamespaces,
-  // });
-
   /// The required namespaces that will be used when connecting to the wallet
   Map<String, RequiredNamespace> get requiredNamespaces;
 
   /// Sets the required namespaces that will be used when connecting to the wallet
   /// The default is set to the [NamespaceConstants.ethereum] namespace.
-  void setRequiredNamespaces(
-    Map<String, RequiredNamespace> requiredNamespaces,
-  );
+  void setDefaultChain({
+    required Map<String, RequiredNamespace> requiredNamespaces,
+  });
+
+  /// Sets the required namespaces that will be used when connecting to the wallet
+  /// The default is set to the [NamespaceConstants.ethereum] namespace.
+  // void setRequiredNamespaces(
+  //   Map<String, RequiredNamespace> requiredNamespaces,
+  // );
 
   // /// Sets the recommended wallets to display in the modal.
   // void setRecommendedWallets(
