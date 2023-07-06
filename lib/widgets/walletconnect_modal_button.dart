@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
 
 class WalletConnectModalButton extends StatelessWidget {
@@ -13,17 +14,18 @@ class WalletConnectModalButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final WalletConnectModalTheme theme = WalletConnectModalTheme.of(context);
+    final WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
 
     return MaterialButton(
       onPressed: onPressed,
-      color: theme.data.primary100,
-      focusColor: theme.data.primary090,
-      hoverColor: theme.data.primary090,
-      highlightColor: theme.data.primary080,
+      color: themeData.primary100,
+      focusColor: themeData.primary090,
+      hoverColor: themeData.primary090,
+      highlightColor: themeData.primary080,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
-          theme.data.radius4XS,
+          themeData.radius4XS,
         ),
       ),
       child: child,

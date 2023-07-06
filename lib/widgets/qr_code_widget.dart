@@ -18,7 +18,7 @@ class QRCodePage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(
-          WalletConnectModalTheme.of(context).data.radiusXS,
+          WalletConnectModalTheme.getData(context).radiusXS,
         ),
       ),
       child: Center(

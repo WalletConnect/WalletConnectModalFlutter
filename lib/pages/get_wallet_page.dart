@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
+import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
+import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_button.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list_item_model.dart';
@@ -17,7 +18,8 @@ class GetWalletPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final WalletConnectModalTheme theme = WalletConnectModalTheme.of(context);
+    final WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
 
     List<GridListItemModel<WalletData>> wallets = service.itemList.value
         .where((GridListItemModel<WalletData> w) => !w.data.installed)
@@ -38,7 +40,7 @@ class GetWalletPage extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16.0,
-            color: theme.data.foreground100,
+            color: themeData.foreground100,
           ),
         ),
         const SizedBox(height: 4.0),
@@ -47,13 +49,15 @@ class GetWalletPage extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16.0,
-            color: theme.data.foreground200,
+            color: themeData.foreground200,
           ),
         ),
         const SizedBox(height: 8.0),
         WalletConnectModalButton(
-          onPressed: () => launchUrl(
-            Uri.parse('https://explorer.walletconnect.com/?type=wallet'),
+          onPressed: () => urlUtils.instance.launchUrl(
+            Uri.parse(
+              StringConstants.getAWalletExploreWalletsUrl,
+            ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -62,14 +66,14 @@ class GetWalletPage extends StatelessWidget {
               Text(
                 'Explore Wallets',
                 style: TextStyle(
-                  fontFamily: theme.data.fontFamily,
-                  color: theme.data.inverse100,
+                  fontFamily: themeData.fontFamily,
+                  color: themeData.inverse100,
                 ),
               ),
               Icon(
                 Icons.arrow_outward,
                 size: 12,
-                color: theme.data.inverse100,
+                color: themeData.inverse100,
               ),
             ],
           ),
@@ -90,9 +94,13 @@ class WalletItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final WalletConnectModalTheme theme = WalletConnectModalTheme.of(context);
+    final WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
 
-    return Padding(
+    return Container(
+      constraints: const BoxConstraints(
+        maxHeight: 200,
+      ),
       padding: const EdgeInsets.only(
         top: 4.0,
         bottom: 4.0,
@@ -106,11 +114,11 @@ class WalletItem extends StatelessWidget {
           wallet.title,
           style: TextStyle(
             fontSize: 16.0,
-            color: theme.data.foreground100,
+            color: themeData.foreground100,
           ),
         ),
         trailing: WalletConnectModalButton(
-          onPressed: () => launchUrl(
+          onPressed: () => urlUtils.instance.launchUrl(
             Uri.parse(
               wallet.data.listing.homepage,
             ),
@@ -122,14 +130,14 @@ class WalletItem extends StatelessWidget {
               Text(
                 'Get',
                 style: TextStyle(
-                  fontFamily: theme.data.fontFamily,
-                  color: theme.data.inverse100,
+                  fontFamily: themeData.fontFamily,
+                  color: themeData.inverse100,
                 ),
               ),
               Icon(
                 Icons.arrow_forward_ios,
                 size: 12,
-                color: theme.data.inverse100,
+                color: themeData.inverse100,
               ),
             ],
           ),

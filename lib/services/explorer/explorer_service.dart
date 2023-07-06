@@ -115,6 +115,9 @@ class ExplorerService implements IExplorerService {
 
     for (Listing item in _listings) {
       bool installed = await urlUtils.instance.isInstalled(item.mobile.native);
+      if (installed) {
+        LoggerUtil.logger.i('Wallet ${item.name} installed: $installed');
+      }
       _walletList.add(
         GridListItemModel<WalletData>(
           title: item.name,

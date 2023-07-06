@@ -67,10 +67,11 @@ For each app you would like to be able to deep link to, you must add that app's 
 
 ## Android Setup
 
-On android 11+ you must specify the different schemes you would like to be able to deep link to in the `android/app/src/main/AndroidManifest.xml` file like so:
+On android 11+ you must specify that use can use the internet, along with the different schemes you would like to be able to deep link to in the `android/app/src/main/AndroidManifest.xml` file like so:
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Intent so you can deep link to wallets -->
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
@@ -82,6 +83,8 @@ On android 11+ you must specify the different schemes you would like to be able 
             <data android:scheme="metamask" />
         </intent>
     </queries>
+    <!-- Permission to access the internet -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     ...
 </manifest>
 ```

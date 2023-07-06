@@ -4,8 +4,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i5;
-import 'dart:convert' as _i22;
-import 'dart:typed_data' as _i23;
+import 'dart:convert' as _i24;
+import 'dart:typed_data' as _i25;
 import 'dart:ui' as _i16;
 
 import 'package:event/event.dart' as _i8;
@@ -29,6 +29,10 @@ import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_u
     as _i21;
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils.dart'
     as _i20;
+import 'package:walletconnect_modal_flutter/services/utils/toast/toast_message.dart'
+    as _i23;
+import 'package:walletconnect_modal_flutter/services/utils/toast/toast_utils.dart'
+    as _i22;
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils.dart'
     as _i18;
 import 'package:walletconnect_modal_flutter/services/walletconnect_modal/walletconnect_modal_service.dart'
@@ -327,16 +331,16 @@ class MockExplorerService extends _i1.Mock implements _i12.ExplorerService {
         returnValueForMissingStub: null,
       );
   @override
-  _i2.ValueNotifier<
-      List<_i13.GridListItemModel<_i14.WalletData>>> get itemList => (super
-          .noSuchMethod(
-        Invocation.getter(#itemList),
-        returnValue:
-            _FakeValueNotifier_0<List<_i13.GridListItemModel<_i14.WalletData>>>(
-          this,
-          Invocation.getter(#itemList),
-        ),
-      ) as _i2.ValueNotifier<List<_i13.GridListItemModel<_i14.WalletData>>>);
+  _i2.ValueNotifier<List<_i13.GridListItemModel<_i14.WalletData>>>
+      get itemList => (super.noSuchMethod(
+            Invocation.getter(#itemList),
+            returnValue: _FakeValueNotifier_0<
+                List<_i13.GridListItemModel<_i14.WalletData>>>(
+              this,
+              Invocation.getter(#itemList),
+            ),
+          ) as _i2
+              .ValueNotifier<List<_i13.GridListItemModel<_i14.WalletData>>>);
   @override
   set itemList(
           _i2.ValueNotifier<List<_i13.GridListItemModel<_i14.WalletData>>>?
@@ -1002,6 +1006,301 @@ class MockPlatformUtils extends _i1.Mock implements _i20.PlatformUtils {
       ) as bool);
 }
 
+/// A class which mocks [ToastUtils].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockToastUtils extends _i1.Mock implements _i22.ToastUtils {
+  MockToastUtils() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Stream<_i23.ToastMessage?> get toasts => (super.noSuchMethod(
+        Invocation.getter(#toasts),
+        returnValue: _i5.Stream<_i23.ToastMessage?>.empty(),
+      ) as _i5.Stream<_i23.ToastMessage?>);
+  @override
+  _i5.Future<Null> get didDispose => (super.noSuchMethod(
+        Invocation.getter(#didDispose),
+        returnValue: _i5.Future<Null>.value(),
+      ) as _i5.Future<Null>);
+  @override
+  String get disposableTypeName => (super.noSuchMethod(
+        Invocation.getter(#disposableTypeName),
+        returnValue: '',
+      ) as String);
+  @override
+  int get disposalTreeSize => (super.noSuchMethod(
+        Invocation.getter(#disposalTreeSize),
+        returnValue: 0,
+      ) as int);
+  @override
+  bool get isDisposed => (super.noSuchMethod(
+        Invocation.getter(#isDisposed),
+        returnValue: false,
+      ) as bool);
+  @override
+  bool get isLeakFlagSet => (super.noSuchMethod(
+        Invocation.getter(#isLeakFlagSet),
+        returnValue: false,
+      ) as bool);
+  @override
+  bool get isOrWillBeDisposed => (super.noSuchMethod(
+        Invocation.getter(#isOrWillBeDisposed),
+        returnValue: false,
+      ) as bool);
+  @override
+  _i5.Future<void> show(_i23.ToastMessage? message) => (super.noSuchMethod(
+        Invocation.method(
+          #show,
+          [message],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+  @override
+  _i5.Future<Null> onDispose() => (super.noSuchMethod(
+        Invocation.method(
+          #onDispose,
+          [],
+        ),
+        returnValue: _i5.Future<Null>.value(),
+      ) as _i5.Future<Null>);
+  @override
+  _i5.Future<T> awaitBeforeDispose<T>(_i5.Future<T>? future) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #awaitBeforeDispose,
+          [future],
+        ),
+        returnValue: _i17.ifNotNull(
+              _i17.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #awaitBeforeDispose,
+                  [future],
+                ),
+              ),
+              (T v) => _i5.Future<T>.value(v),
+            ) ??
+            _FakeFuture_3<T>(
+              this,
+              Invocation.method(
+                #awaitBeforeDispose,
+                [future],
+              ),
+            ),
+      ) as _i5.Future<T>);
+  @override
+  _i5.Future<Null> dispose() => (super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValue: _i5.Future<Null>.value(),
+      ) as _i5.Future<Null>);
+  @override
+  void flagLeak([String? description]) => super.noSuchMethod(
+        Invocation.method(
+          #flagLeak,
+          [description],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i5.Future<T> getManagedDelayedFuture<T>(
+    Duration? duration,
+    T Function()? callback,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getManagedDelayedFuture,
+          [
+            duration,
+            callback,
+          ],
+        ),
+        returnValue: _i17.ifNotNull(
+              _i17.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #getManagedDelayedFuture,
+                  [
+                    duration,
+                    callback,
+                  ],
+                ),
+              ),
+              (T v) => _i5.Future<T>.value(v),
+            ) ??
+            _FakeFuture_3<T>(
+              this,
+              Invocation.method(
+                #getManagedDelayedFuture,
+                [
+                  duration,
+                  callback,
+                ],
+              ),
+            ),
+      ) as _i5.Future<T>);
+  @override
+  _i6.ManagedDisposer getManagedDisposer(_i6.Disposer? disposer) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getManagedDisposer,
+          [disposer],
+        ),
+        returnValue: _FakeManagedDisposer_4(
+          this,
+          Invocation.method(
+            #getManagedDisposer,
+            [disposer],
+          ),
+        ),
+      ) as _i6.ManagedDisposer);
+  @override
+  _i5.Timer getManagedTimer(
+    Duration? duration,
+    void Function()? callback,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getManagedTimer,
+          [
+            duration,
+            callback,
+          ],
+        ),
+        returnValue: _FakeTimer_5(
+          this,
+          Invocation.method(
+            #getManagedTimer,
+            [
+              duration,
+              callback,
+            ],
+          ),
+        ),
+      ) as _i5.Timer);
+  @override
+  _i5.Timer getManagedPeriodicTimer(
+    Duration? duration,
+    void Function(_i5.Timer)? callback,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getManagedPeriodicTimer,
+          [
+            duration,
+            callback,
+          ],
+        ),
+        returnValue: _FakeTimer_5(
+          this,
+          Invocation.method(
+            #getManagedPeriodicTimer,
+            [
+              duration,
+              callback,
+            ],
+          ),
+        ),
+      ) as _i5.Timer);
+  @override
+  _i5.StreamSubscription<T> listenToStream<T>(
+    _i5.Stream<T>? stream,
+    void Function(T)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #listenToStream,
+          [
+            stream,
+            onData,
+          ],
+          {
+            #onError: onError,
+            #onDone: onDone,
+            #cancelOnError: cancelOnError,
+          },
+        ),
+        returnValue: _FakeStreamSubscription_6<T>(
+          this,
+          Invocation.method(
+            #listenToStream,
+            [
+              stream,
+              onData,
+            ],
+            {
+              #onError: onError,
+              #onDone: onDone,
+              #cancelOnError: cancelOnError,
+            },
+          ),
+        ),
+      ) as _i5.StreamSubscription<T>);
+  @override
+  T manageAndReturnTypedDisposable<T extends _i6.Disposable>(T? disposable) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #manageAndReturnTypedDisposable,
+          [disposable],
+        ),
+        returnValue: _i17.dummyValue<T>(
+          this,
+          Invocation.method(
+            #manageAndReturnTypedDisposable,
+            [disposable],
+          ),
+        ),
+      ) as T);
+  @override
+  _i5.Completer<T> manageCompleter<T>(_i5.Completer<T>? completer) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #manageCompleter,
+          [completer],
+        ),
+        returnValue: _FakeCompleter_7<T>(
+          this,
+          Invocation.method(
+            #manageCompleter,
+            [completer],
+          ),
+        ),
+      ) as _i5.Completer<T>);
+  @override
+  void manageDisposable(_i6.Disposable? disposable) => super.noSuchMethod(
+        Invocation.method(
+          #manageDisposable,
+          [disposable],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void manageStreamController(_i5.StreamController<dynamic>? controller) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #manageStreamController,
+          [controller],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i5.Future<Null> onWillDispose() => (super.noSuchMethod(
+        Invocation.method(
+          #onWillDispose,
+          [],
+        ),
+        returnValue: _i5.Future<Null>.value(),
+      ) as _i5.Future<Null>);
+}
+
 /// A class which mocks [Web3App].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -1653,7 +1952,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i22.Encoding? encoding,
+    _i24.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1683,7 +1982,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i22.Encoding? encoding,
+    _i24.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1713,7 +2012,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i22.Encoding? encoding,
+    _i24.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1743,7 +2042,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i22.Encoding? encoding,
+    _i24.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1782,7 +2081,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
         returnValue: _i5.Future<String>.value(''),
       ) as _i5.Future<String>);
   @override
-  _i5.Future<_i23.Uint8List> readBytes(
+  _i5.Future<_i25.Uint8List> readBytes(
     Uri? url, {
     Map<String, String>? headers,
   }) =>
@@ -1792,8 +2091,8 @@ class MockClient extends _i1.Mock implements _i3.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i5.Future<_i23.Uint8List>.value(_i23.Uint8List(0)),
-      ) as _i5.Future<_i23.Uint8List>);
+        returnValue: _i5.Future<_i25.Uint8List>.value(_i25.Uint8List(0)),
+      ) as _i5.Future<_i25.Uint8List>);
   @override
   _i5.Future<_i3.StreamedResponse> send(_i3.BaseRequest? request) =>
       (super.noSuchMethod(

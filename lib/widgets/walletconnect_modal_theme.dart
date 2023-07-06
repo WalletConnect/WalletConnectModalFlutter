@@ -21,6 +21,11 @@ class WalletConnectModalTheme extends InheritedWidget {
     return result!;
   }
 
+  static WalletConnectModalThemeData getData(BuildContext context) {
+    final WalletConnectModalTheme? theme = maybeOf(context);
+    return theme?.data ?? WalletConnectModalThemeData.lightMode;
+  }
+
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
     return true;

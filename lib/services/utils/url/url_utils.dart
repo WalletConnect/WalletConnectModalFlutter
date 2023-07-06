@@ -38,6 +38,11 @@ class UrlUtils extends IUrlUtils {
       return false;
     }
 
+    // If the wallet is just a generic wc:// then it is not installed
+    if (uri.contains('wc://')) {
+      return false;
+    }
+
     try {
       return platformUtils.instance.getPlatformType() == PlatformType.mobile &&
           await canLaunchUrlFunc(

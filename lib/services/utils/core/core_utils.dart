@@ -1,6 +1,6 @@
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/services/utils/core/i_core_utils.dart';
-import 'package:walletconnect_modal_flutter/utils/constants.dart';
+import 'package:walletconnect_modal_flutter/constants/constants.dart';
 import 'package:walletconnect_modal_flutter/services/utils/logger/logger_util.dart';
 
 class CoreUtils extends ICoreUtils {
@@ -50,6 +50,6 @@ class CoreUtils extends ICoreUtils {
   @override
   String getUserAgent() {
     final String os = WalletConnectUtils.getOS();
-    return 'w3m-flutter-${Web3ModalConstants.WEB3MODAL_VERSION}/flutter-core-${WalletConnectConstants.SDK_VERSION}/$os';
+    return 'w3m-flutter-${Web3ModalConstants.WALLETCONNECT_MODAL_VERSION}/flutter-core-${WalletConnectConstants.SDK_VERSION}/$os';
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list_item.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list_item_model.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list_provider.dart';
@@ -28,7 +29,8 @@ class GridList<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final WalletConnectModalTheme theme = WalletConnectModalTheme.of(context);
+    final WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
 
     return ValueListenableBuilder(
       valueListenable: provider.initialized,
@@ -43,7 +45,7 @@ class GridList<T> extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CircularProgressIndicator(
-                  color: theme.data.primary100,
+                  color: themeData.primary100,
                 ),
               ),
             ),
@@ -54,7 +56,8 @@ class GridList<T> extends StatelessWidget {
   }
 
   Widget _buildGridList(BuildContext context) {
-    final WalletConnectModalTheme theme = WalletConnectModalTheme.of(context);
+    final WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
 
     return ValueListenableBuilder(
       valueListenable: provider.itemList,
@@ -85,8 +88,8 @@ class GridList<T> extends StatelessWidget {
               child: Text(
                 'No items found.',
                 style: TextStyle(
-                  color: theme.data.foreground200,
-                  fontFamily: theme.data.fontFamily,
+                  color: themeData.foreground200,
+                  fontFamily: themeData.fontFamily,
                   fontSize: 16,
                 ),
               ),

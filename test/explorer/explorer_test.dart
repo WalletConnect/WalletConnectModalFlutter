@@ -10,7 +10,7 @@ import 'package:walletconnect_modal_flutter/services/utils/platform/platform_uti
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 
-import 'explorer_test_data.dart';
+import '../test_data.dart';
 import '../mock_classes.mocks.dart';
 
 void main() {

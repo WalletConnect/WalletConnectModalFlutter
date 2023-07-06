@@ -9,9 +9,18 @@
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="metamask" />
         </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="trust" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="zerion" />
+        </intent>
     </queries>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="sign"
+        android:label="Flutter Dapp"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         

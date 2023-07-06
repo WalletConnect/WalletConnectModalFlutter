@@ -3,14 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:walletconnect_modal_flutter/models/launch_url_exception.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
+import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/pages/get_wallet_page.dart';
 import 'package:walletconnect_modal_flutter/pages/help_page.dart';
-import 'package:walletconnect_modal_flutter/services/toast/toast_message.dart';
-import 'package:walletconnect_modal_flutter/services/toast/toast_service.dart';
+import 'package:walletconnect_modal_flutter/services/utils/toast/toast_message.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
+import 'package:walletconnect_modal_flutter/services/utils/toast/toast_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/logger/logger_util.dart';
+import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
 import 'package:walletconnect_modal_flutter/widgets/qr_code_widget.dart';
 import 'package:walletconnect_modal_flutter/services/walletconnect_modal/i_walletconnect_modal_service.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list.dart';
@@ -25,12 +27,10 @@ class WalletConnectModal extends StatefulWidget {
   const WalletConnectModal({
     super.key,
     required this.service,
-    required this.toastService,
     this.startState,
   });
 
   final IWalletConnectModalService service;
-  final ToastService toastService;
   final WalletConnectModalState? startState;
 
   @override
@@ -70,7 +70,8 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
 
   @override
   Widget build(BuildContext context) {
-    final WalletConnectModalTheme theme = WalletConnectModalTheme.of(context);
+    final WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
 
     final BorderRadius containerBorderRadius =
         platformUtils.instance.isMobileWidth(
@@ -78,24 +79,24 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
     )
             ? BorderRadius.only(
                 topLeft: Radius.circular(
-                  theme.data.radius3XS,
+                  themeData.radius3XS,
                 ),
                 topRight: Radius.circular(
-                  theme.data.radius3XS,
+                  themeData.radius3XS,
                 ),
               )
             : BorderRadius.circular(
-                theme.data.radius3XS,
+                themeData.radius3XS,
               );
 
     return Container(
-      // constraints: const BoxConstraints(
-      //   minWidth: 200,
-      //   maxWidth: 400,
-      // ),
       decoration: BoxDecoration(
-        color: theme.data.primary100,
+        color: themeData.primary100,
         borderRadius: containerBorderRadius,
+      ),
+      constraints: const BoxConstraints(
+        maxHeight: 2000,
+        maxWidth: 2000,
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -117,7 +118,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
                       height: 20,
                       package: 'walletconnect_modal_flutter',
                       colorFilter: ColorFilter.mode(
-                        theme.data.foreground100,
+                        themeData.foreground100,
                         BlendMode.srcIn,
                       ),
                     ),
@@ -125,7 +126,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
                     Text(
                       'WalletConnect',
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: theme.data.foreground100,
+                            color: themeData.foreground100,
                           ),
                       textAlign: TextAlign.center,
                     ),
@@ -134,6 +135,9 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
                 Row(
                   children: <Widget>[
                     IconButton(
+                      key: const Key(
+                        StringConstants.walletConnectModalHelpButtonKey,
+                      ),
                       icon: _stateStack.last == WalletConnectModalState.help
                           ? const Icon(Icons.help_outlined)
                           : const Icon(Icons.help_outline),
@@ -147,14 +151,17 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
                           });
                         }
                       },
-                      color: theme.data.foreground100,
+                      color: themeData.foreground100,
                     ),
                     IconButton(
+                      key: const Key(
+                        StringConstants.walletConnectModalCloseButtonKey,
+                      ),
                       icon: const Icon(Icons.close),
                       onPressed: () {
                         widget.service.close();
                       },
-                      color: theme.data.foreground100,
+                      color: themeData.foreground100,
                     ),
                   ],
                 ),
@@ -165,13 +172,13 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(
-                  theme.data.radius2XS,
+                  themeData.radius2XS,
                 ),
                 topRight: Radius.circular(
-                  theme.data.radius2XS,
+                  themeData.radius2XS,
                 ),
               ),
-              color: theme.data.background100,
+              color: themeData.background100,
             ),
             padding: const EdgeInsets.only(
               bottom: 20,
@@ -181,9 +188,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
                 TransitionContainer(
                   child: _buildBody(),
                 ),
-                WalletConnectModalToastManager(
-                  toastService: widget.toastService,
-                ),
+                const WalletConnectModalToastManager(),
               ],
             ),
           ),
@@ -204,7 +209,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: CircularProgressIndicator(
-              color: WalletConnectModalTheme.of(context).data.primary100,
+              color: WalletConnectModalTheme.getData(context).primary100,
             ),
           ),
         ),
@@ -221,7 +226,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
           onBack: _pop,
           actionWidget: IconButton(
             icon: const Icon(Icons.copy_outlined),
-            color: WalletConnectModalTheme.of(context).data.foreground100,
+            color: WalletConnectModalTheme.getData(context).foreground100,
             onPressed: _copyQrCodeToClipboard,
           ),
           child: QRCodePage(
@@ -237,7 +242,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
           ),
           actionWidget: IconButton(
             icon: const Icon(Icons.qr_code_scanner),
-            color: WalletConnectModalTheme.of(context).data.foreground100,
+            color: WalletConnectModalTheme.getData(context).foreground100,
             onPressed: _toQrCode,
           ),
           child: GridList<WalletData>(
@@ -344,7 +349,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
         wcURI: widget.service.wcUri!,
       );
     } on LaunchUrlException catch (e) {
-      widget.toastService.show(
+      toastUtils.instance.show(
         ToastMessage(
           type: ToastType.error,
           text: e.message,
@@ -396,7 +401,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
         text: widget.service.wcUri!,
       ),
     );
-    widget.toastService.show(
+    toastUtils.instance.show(
       ToastMessage(
         type: ToastType.info,
         text: 'QR Copied',

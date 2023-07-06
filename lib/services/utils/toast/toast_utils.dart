@@ -1,23 +1,20 @@
 import 'dart:collection';
-import 'package:walletconnect_modal_flutter/services/toast/toast_message.dart';
+import 'package:w_common/disposable.dart';
+import 'package:walletconnect_modal_flutter/services/utils/toast/i_toast_utils.dart';
+import 'package:walletconnect_modal_flutter/services/utils/toast/toast_message.dart';
 import 'dart:async';
 
-class ToastMessageCompleter {
-  final ToastMessage message;
-  final Completer completer = Completer();
-
-  ToastMessageCompleter(this.message);
-}
-
-class ToastService {
+class ToastUtils extends IToastUtils with Disposable {
   final _toastController = StreamController<ToastMessage?>.broadcast();
-
-  Stream<ToastMessage?> get toasts => _toastController.stream;
 
   final _queue = Queue<ToastMessageCompleter>();
 
   bool _isShowing = false;
 
+  @override
+  Stream<ToastMessage?> get toasts => _toastController.stream;
+
+  @override
   Future<void> show(ToastMessage message) async {
     final completer = ToastMessageCompleter(message);
 
@@ -45,7 +42,9 @@ class ToastService {
     }
   }
 
-  void dispose() {
+  @override
+  // ignore: prefer_void_to_null
+  Future<Null> onDispose() async {
     _toastController.close();
   }
 }

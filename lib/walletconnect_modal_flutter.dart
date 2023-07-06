@@ -2,7 +2,7 @@ library walletconnect_modal_flutter;
 
 // Utils
 export 'services/utils/logger/logger_util.dart';
-export 'utils/namespaces.dart';
+export 'constants/namespaces.dart';
 
 // Models
 export 'models/walletconnect_modal_theme_data.dart';

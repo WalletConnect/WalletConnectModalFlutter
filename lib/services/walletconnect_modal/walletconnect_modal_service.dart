@@ -3,17 +3,19 @@
 import 'package:flutter/material.dart';
 import 'package:w_common/disposable.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/i_explorer_service.dart';
-import 'package:walletconnect_modal_flutter/services/toast/toast_message.dart';
-import 'package:walletconnect_modal_flutter/services/toast/toast_service.dart';
+import 'package:walletconnect_modal_flutter/services/utils/toast/toast_message.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
+import 'package:walletconnect_modal_flutter/services/utils/toast/toast_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/walletconnect_modal/i_walletconnect_modal_service.dart';
 import 'package:walletconnect_modal_flutter/services/utils/logger/logger_util.dart';
-import 'package:walletconnect_modal_flutter/utils/namespaces.dart';
+import 'package:walletconnect_modal_flutter/constants/namespaces.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal.dart';
+import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
 
 class WalletConnectModalService extends ChangeNotifier
     with Disposable
@@ -59,7 +61,8 @@ class WalletConnectModalService extends ChangeNotifier
 
   ConnectResponse? connectResponse;
   BuildContext? context;
-  final ToastService _toastService = ToastService();
+
+  // WalletConnectModalThemeData? _themeData;
 
   /// Creates a new instance of [WalletConnectModalService].
   /// [web3App] is optional and can be used to pass in an already created [Web3App].
@@ -179,30 +182,37 @@ class WalletConnectModalService extends ChangeNotifier
 
     notifyListeners();
 
+    final WalletConnectModalTheme? theme =
+        WalletConnectModalTheme.maybeOf(context);
+    final Widget w = theme == null
+        ? WalletConnectModalTheme(
+            data: WalletConnectModalThemeData.lightMode,
+            child: WalletConnectModal(
+              service: this,
+            ),
+          )
+        : WalletConnectModal(
+            service: this,
+          );
+
     if (bottomSheet) {
       await showModalBottomSheet(
         // enableDrag: false,
         backgroundColor: Colors.transparent,
         isDismissible: false,
         isScrollControlled: true,
+        enableDrag: false,
+        useSafeArea: true,
         context: context,
         builder: (context) {
-          return WalletConnectModal(
-            service: this,
-            toastService: _toastService,
-            // startState: startState,
-          );
+          return w;
         },
       );
     } else {
       await showDialog(
         context: context,
         builder: (context) {
-          return WalletConnectModal(
-            service: this,
-            toastService: _toastService,
-            // startState: startState,
-          );
+          return w;
         },
       );
     }
@@ -341,6 +351,13 @@ class WalletConnectModalService extends ChangeNotifier
     );
   }
 
+  /// Waits for the session to connect, and then sets the session and address.
+  /// If the session fails to connect, it will show an error toast.
+  /// If the session connects, it will close the modal.
+  /// If the modal is already closed, it will notify listeners.
+  /// If there is no connect response, it will do nothing.
+  /// The completion of this method is triggered when the dApp
+  /// connects to a wallet.
   Future<void> _awaitConnectResponse() async {
     if (connectResponse == null) {
       return;
@@ -361,7 +378,7 @@ class WalletConnectModalService extends ChangeNotifier
       // );
     } catch (e) {
       LoggerUtil.logger.e('Error connecting to wallet: $e');
-      await _toastService.show(
+      await toastUtils.instance.show(
         ToastMessage(
           type: ToastType.error,
           text: 'Error Connecting to Wallet',
