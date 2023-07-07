@@ -76,7 +76,6 @@ class UrlUtils extends IUrlUtils {
     Uri? nativeUri,
     Uri? universalUri,
   }) async {
-    print(nativeUri);
     LoggerUtil.logger.i(
       'Navigating deep links. Native: ${nativeUri.toString()}, Universal: ${universalUri.toString()}',
     );
@@ -95,7 +94,6 @@ class UrlUtils extends IUrlUtils {
             nativeUri,
             mode: LaunchMode.externalApplication,
           );
-          print('got here: $launched');
           if (!launched) {
             throw Exception('Unable to launch native URI');
           }
