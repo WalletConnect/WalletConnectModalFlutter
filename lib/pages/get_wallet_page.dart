@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
+import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
@@ -21,9 +23,13 @@ class GetWalletPage extends StatelessWidget {
     final WalletConnectModalThemeData themeData =
         WalletConnectModalTheme.getData(context);
 
+    bool longBottomSheet = platformUtils.instance.isLongBottomSheet(
+      MediaQuery.of(context).orientation,
+    );
+    final int listCount = longBottomSheet ? 2 : 6;
     List<GridListItemModel<WalletData>> wallets = service.itemList.value
         .where((GridListItemModel<WalletData> w) => !w.data.installed)
-        .take(6)
+        .take(listCount)
         .toList();
 
     return Column(
@@ -134,11 +140,22 @@ class WalletItem extends StatelessWidget {
                   color: themeData.inverse100,
                 ),
               ),
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 12,
-                color: themeData.inverse100,
+              const SizedBox(width: 4.0),
+              SvgPicture.asset(
+                'assets/icons/forward.svg',
+                width: 12,
+                height: 12,
+                package: 'walletconnect_modal_flutter',
+                colorFilter: ColorFilter.mode(
+                  themeData.inverse100,
+                  BlendMode.srcIn,
+                ),
               ),
+              // Icon(
+              //   Icons.arrow_forward_ios,
+              //   size: 12,
+              //   color: themeData.inverse100,
+              // ),
             ],
           ),
         ),

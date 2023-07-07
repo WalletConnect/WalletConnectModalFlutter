@@ -997,6 +997,14 @@ class MockPlatformUtils extends _i1.Mock implements _i20.PlatformUtils {
         returnValue: _i21.PlatformType.mobile,
       ) as _i21.PlatformType);
   @override
+  bool canDetectInstalledApps() => (super.noSuchMethod(
+        Invocation.method(
+          #canDetectInstalledApps,
+          [],
+        ),
+        returnValue: false,
+      ) as bool);
+  @override
   bool isMobileWidth(double? width) => (super.noSuchMethod(
         Invocation.method(
           #isMobileWidth,

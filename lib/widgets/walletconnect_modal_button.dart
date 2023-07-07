@@ -25,7 +25,7 @@ class WalletConnectModalButton extends StatelessWidget {
       highlightColor: themeData.primary080,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
-          themeData.radius4XS,
+          100,
         ),
       ),
       child: child,

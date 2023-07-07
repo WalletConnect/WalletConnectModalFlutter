@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
 
 class WalletConnectModalSearchBar extends StatelessWidget {
@@ -13,17 +14,18 @@ class WalletConnectModalSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final WalletConnectModalTheme theme = WalletConnectModalTheme.of(context);
+    final WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
 
     return Container(
       height: 36,
       decoration: BoxDecoration(
-        color: theme.data.overlay005,
+        color: themeData.overlay005,
         borderRadius: BorderRadius.circular(
-          theme.data.radiusXS,
+          themeData.radiusXS,
         ),
         border: Border.all(
-          color: theme.data.overlay005,
+          color: themeData.overlay005,
           width: 2,
         ),
       ),
@@ -31,16 +33,16 @@ class WalletConnectModalSearchBar extends StatelessWidget {
         onChanged: onSearch,
         textAlignVertical: TextAlignVertical.center,
         style: TextStyle(
-          color: theme.data.foreground275,
+          color: themeData.foreground275,
         ),
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.search,
-            color: theme.data.foreground275,
+            color: themeData.foreground275,
           ),
           hintText: hintText,
           hintStyle: TextStyle(
-            color: theme.data.foreground275,
+            color: themeData.foreground275,
           ),
           border: InputBorder.none,
           isCollapsed: true,

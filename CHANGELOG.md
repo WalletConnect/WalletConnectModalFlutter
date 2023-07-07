@@ -1,3 +1,10 @@
+## 1.1.1
+
+- Updated the URL launching to function on android
+- Android no longer attempts to check if the app is installed
+- UI updates
+- Bug fixes
+
 ## 1.1.0
 
 - WalletConnectModalTheme widget no longer required, the default theme is light mode, to override this a `WalletConnectModalTheme` widget must be used.

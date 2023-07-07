@@ -43,15 +43,18 @@ class UrlUtils extends IUrlUtils {
       return false;
     }
 
-    try {
-      return platformUtils.instance.getPlatformType() == PlatformType.mobile &&
-          await canLaunchUrlFunc(
-            Uri.parse(
-              uri,
-            ),
-          );
-    } catch (_) {
-      // print(e);
+    if (platformUtils.instance.canDetectInstalledApps()) {
+      try {
+        return platformUtils.instance.getPlatformType() ==
+                PlatformType.mobile &&
+            await canLaunchUrlFunc(
+              Uri.parse(
+                uri,
+              ),
+            );
+      } catch (_) {
+        // print(e);
+      }
     }
 
     return false;
@@ -73,46 +76,61 @@ class UrlUtils extends IUrlUtils {
     Uri? nativeUri,
     Uri? universalUri,
   }) async {
+    print(nativeUri);
     LoggerUtil.logger.i(
       'Navigating deep links. Native: ${nativeUri.toString()}, Universal: ${universalUri.toString()}',
     );
-    LoggerUtil.logger.i(
+    LoggerUtil.logger.v(
       'Deep Link Query Params. Native: ${nativeUri?.queryParameters}, Universal: ${universalUri?.queryParameters}',
     );
 
-    // Launch the link
-    if (nativeUri != null && await canLaunchUrlFunc(nativeUri)) {
-      LoggerUtil.logger.v(
-        'Navigating deep links. Launching native URI.',
-      );
-      try {
-        await launchUrlFunc(
-          nativeUri,
-          mode: LaunchMode.externalApplication,
-        );
-      } catch (e) {
+    try {
+      // Launch the link
+      if (nativeUri != null) {
         LoggerUtil.logger.i(
-          'Navigating deep links. Launching native failed, launching universal URI.',
+          'Navigating deep links. Launching native URI.',
         );
-        // Fallback to universal link
-        if (universalUri != null && await canLaunchUrlFunc(universalUri)) {
-          await launchUrlFunc(
-            universalUri,
+        try {
+          final bool launched = await launchUrlFunc(
+            nativeUri,
             mode: LaunchMode.externalApplication,
           );
-        } else {
-          throw LaunchUrlException('Unable to open the wallet');
+          print('got here: $launched');
+          if (!launched) {
+            throw Exception('Unable to launch native URI');
+          }
+        } catch (e) {
+          LoggerUtil.logger.i(
+            'Navigating deep links. Launching native failed, launching universal URI.',
+          );
+          // Fallback to universal link
+          if (universalUri != null) {
+            final bool launched = await launchUrlFunc(
+              universalUri,
+              mode: LaunchMode.externalApplication,
+            );
+            if (!launched) {
+              throw Exception('Unable to launch native URI');
+            }
+          } else {
+            throw LaunchUrlException('Unable to open the wallet');
+          }
         }
+      } else if (universalUri != null) {
+        LoggerUtil.logger.v(
+          'Navigating deep links. Launching universal URI.',
+        );
+        final bool launched = await launchUrlFunc(
+          universalUri,
+          mode: LaunchMode.externalApplication,
+        );
+        if (!launched) {
+          throw Exception('Unable to launch native URI');
+        }
+      } else {
+        throw LaunchUrlException('Unable to open the wallet');
       }
-    } else if (universalUri != null && await canLaunchUrlFunc(universalUri)) {
-      LoggerUtil.logger.i(
-        'Navigating deep links. Launching universal URI.',
-      );
-      await launchUrlFunc(
-        universalUri,
-        mode: LaunchMode.externalApplication,
-      );
-    } else {
+    } catch (e) {
       throw LaunchUrlException('Unable to open the wallet');
     }
   }

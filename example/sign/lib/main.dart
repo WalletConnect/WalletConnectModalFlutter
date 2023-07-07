@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:sign/home_page.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 
@@ -22,6 +24,20 @@ class _MyAppState extends State<MyApp> {
     WalletConnectModalThemeData.darkMode.primary090,
     WalletConnectModalThemeData.darkMode.primary080,
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
+    LoggerUtil.setLogLevel(Level.verbose);
+  }
 
   // This widget is the root of your application.
   @override

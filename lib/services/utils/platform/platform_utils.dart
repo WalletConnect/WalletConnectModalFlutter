@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:universal_io/io.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
@@ -13,6 +14,22 @@ class PlatformUtils extends IPlatformUtils {
       return PlatformType.web;
     }
     return PlatformType.mobile;
+  }
+
+  @override
+  bool canDetectInstalledApps() {
+    return getPlatformType() == PlatformType.mobile;
+  }
+
+  @override
+  bool isBottomSheet() {
+    return getPlatformType() == PlatformType.mobile;
+  }
+
+  @override
+  bool isLongBottomSheet(Orientation orientation) {
+    return getPlatformType() == PlatformType.mobile &&
+        orientation == Orientation.landscape;
   }
 
   @override

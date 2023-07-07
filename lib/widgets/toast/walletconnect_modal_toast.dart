@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/services/utils/toast/toast_message.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
 
@@ -50,33 +52,63 @@ class _WalletConnectModalToastState extends State<WalletConnectModalToast>
 
   @override
   Widget build(BuildContext context) {
-    WalletConnectModalTheme theme = WalletConnectModalTheme.of(context);
+    WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
 
     return Positioned(
-      top: 20.0,
+      top: 10.0,
       left: 20.0,
       right: 20.0,
       child: Center(
         child: FadeTransition(
           opacity: _opacityAnimation,
           child: Container(
+            height: 40,
             decoration: BoxDecoration(
-              color: widget.message.type == ToastType.info
-                  ? theme.data.background200
-                  : theme.data.error,
+              color: themeData.background300,
               borderRadius: BorderRadius.circular(
-                theme.data.radius3XS,
+                themeData.radiusM,
+              ),
+              border: Border.all(
+                color: themeData.overlay005,
+                width: 2,
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                widget.message.text,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: theme.data.foreground100,
-                  fontSize: 18.0,
-                ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 4.0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(
+                    widget.message.type == ToastType.info
+                        ? 'assets/icons/checkmark.svg'
+                        : 'assets/icons/error.svg',
+                    width: 16,
+                    height: 16,
+                    package: 'walletconnect_modal_flutter',
+                    colorFilter: ColorFilter.mode(
+                      themeData.primary100,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8.0,
+                  ),
+                  Text(
+                    widget.message.text,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: themeData.foreground100,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: themeData.fontFamily,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

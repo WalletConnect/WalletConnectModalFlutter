@@ -7,7 +7,6 @@ import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_dat
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/i_explorer_service.dart';
 import 'package:walletconnect_modal_flutter/services/utils/toast/toast_message.dart';
-import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/toast/toast_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
@@ -154,6 +153,8 @@ class WalletConnectModalService extends ChangeNotifier
       return;
     }
 
+    _isOpen = true;
+
     // If we aren't connected, connect!
     if (!_isConnected) {
       LoggerUtil.logger.i(
@@ -172,13 +173,12 @@ class WalletConnectModalService extends ChangeNotifier
 
     this.context = context;
 
-    final bool bottomSheet =
-        platformUtils.instance.getPlatformType() == PlatformType.mobile ||
-            platformUtils.instance.isMobileWidth(
-              MediaQuery.of(context).size.width,
-            );
+    final bool bottomSheet = platformUtils.instance.isBottomSheet();
 
-    _isOpen = true;
+    // platformUtils.instance.getPlatformType() == PlatformType.mobile ||
+    //     platformUtils.instance.isMobileWidth(
+    //       MediaQuery.of(context).size.width,
+    //     );
 
     notifyListeners();
 

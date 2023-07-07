@@ -18,6 +18,7 @@ import 'package:walletconnect_modal_flutter/services/walletconnect_modal/i_walle
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list.dart';
 import 'package:walletconnect_modal_flutter/widgets/toast/walletconnect_modal_toast_manager.dart';
 import 'package:walletconnect_modal_flutter/widgets/transition_container.dart';
+import 'package:walletconnect_modal_flutter/widgets/walletconnect_icon_button.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_navbar.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_navbar_title.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_search_bar.dart';
@@ -54,7 +55,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
       // Choose the state based on platform
       if (pType == PlatformType.mobile) {
         _stateStack.add(WalletConnectModalState.walletListShort);
-      } else if (pType == PlatformType.desktop) {
+      } else if (pType == PlatformType.desktop || pType == PlatformType.web) {
         _stateStack.add(WalletConnectModalState.qrCodeAndWalletList);
       }
     }
@@ -73,31 +74,69 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
     final WalletConnectModalThemeData themeData =
         WalletConnectModalTheme.getData(context);
 
-    final BorderRadius containerBorderRadius =
-        platformUtils.instance.isMobileWidth(
-      MediaQuery.of(context).size.width,
-    )
-            ? BorderRadius.only(
-                topLeft: Radius.circular(
-                  themeData.radius3XS,
-                ),
-                topRight: Radius.circular(
-                  themeData.radius3XS,
-                ),
-              )
-            : BorderRadius.circular(
-                themeData.radius3XS,
-              );
+    final bool bottomSheet = platformUtils.instance.isBottomSheet();
+    final BorderRadius outerContainerBorderRadius = bottomSheet
+        ? BorderRadius.only(
+            topLeft: Radius.circular(
+              themeData.radius3XS,
+            ),
+            topRight: Radius.circular(
+              themeData.radius3XS,
+            ),
+          )
+        : BorderRadius.only(
+            topLeft: Radius.circular(
+              themeData.radius3XS,
+            ),
+            topRight: Radius.circular(
+              themeData.radius3XS,
+            ),
+            bottomLeft: Radius.circular(
+              themeData.radiusM,
+            ),
+            bottomRight: Radius.circular(
+              themeData.radiusM,
+            ),
+          );
+
+    final BorderRadius innerContainerBorderRadius = bottomSheet
+        ? BorderRadius.only(
+            topLeft: Radius.circular(
+              themeData.radiusM,
+            ),
+            topRight: Radius.circular(
+              themeData.radiusM,
+            ),
+          )
+        : BorderRadius.only(
+            topLeft: Radius.circular(
+              themeData.radiusM,
+            ),
+            topRight: Radius.circular(
+              themeData.radiusM,
+            ),
+            bottomLeft: Radius.circular(
+              themeData.radiusM,
+            ),
+            bottomRight: Radius.circular(
+              themeData.radiusM,
+            ),
+          );
+
+    final double width = bottomSheet ? double.infinity : 600;
+    print(width);
+
+    const double modalWidgetHeight = 32;
 
     return Container(
       decoration: BoxDecoration(
         color: themeData.primary100,
-        borderRadius: containerBorderRadius,
+        borderRadius: outerContainerBorderRadius,
       ),
       constraints: const BoxConstraints(
         maxHeight: 2000,
-        maxWidth: 2000,
       ),
+      width: width,
       clipBehavior: Clip.antiAlias,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -105,63 +144,71 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: 10,
-              vertical: 4,
+              vertical: 8,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    SvgPicture.asset(
-                      'assets/walletconnect_logo_white.svg',
-                      width: 20,
-                      height: 20,
-                      package: 'walletconnect_modal_flutter',
-                      colorFilter: ColorFilter.mode(
-                        themeData.foreground100,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    const SizedBox(width: 2),
-                    Text(
-                      'WalletConnect',
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: themeData.foreground100,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                SvgPicture.asset(
+                  'assets/walletconnect_logo_full_white.svg',
+                  height: modalWidgetHeight,
+                  package: 'walletconnect_modal_flutter',
+                  colorFilter: ColorFilter.mode(
+                    themeData.foreground100,
+                    BlendMode.srcIn,
+                  ),
                 ),
                 Row(
                   children: <Widget>[
-                    IconButton(
-                      key: const Key(
-                        StringConstants.walletConnectModalHelpButtonKey,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: _stateStack.last == WalletConnectModalState.help
+                            ? themeData.inverse100
+                            : themeData.inverse000,
+                        borderRadius: BorderRadius.circular(
+                          modalWidgetHeight / 2,
+                        ),
                       ),
-                      icon: _stateStack.last == WalletConnectModalState.help
-                          ? const Icon(Icons.help_outlined)
-                          : const Icon(Icons.help_outline),
-                      onPressed: () {
-                        if (_stateStack
-                            .contains(WalletConnectModalState.help)) {
-                          _popUntil(WalletConnectModalState.help);
-                        } else {
-                          setState(() {
-                            _stateStack.add(WalletConnectModalState.help);
-                          });
-                        }
-                      },
-                      color: themeData.foreground100,
+                      height: modalWidgetHeight,
+                      width: modalWidgetHeight,
+                      child: WalletConnectIconButton(
+                        key: const Key(
+                          StringConstants.walletConnectModalHelpButtonKey,
+                        ),
+                        iconPath: 'assets/icons/help.svg',
+                        color: _stateStack.last == WalletConnectModalState.help
+                            ? themeData.inverse000
+                            : themeData.inverse100,
+                        onPressed: () {
+                          if (_stateStack
+                              .contains(WalletConnectModalState.help)) {
+                            _popUntil(WalletConnectModalState.help);
+                          } else {
+                            setState(() {
+                              _stateStack.add(WalletConnectModalState.help);
+                            });
+                          }
+                        },
+                      ),
                     ),
-                    IconButton(
-                      key: const Key(
-                        StringConstants.walletConnectModalCloseButtonKey,
+                    const SizedBox(width: 14),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: themeData.inverse000,
+                        borderRadius: BorderRadius.circular(100),
                       ),
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        widget.service.close();
-                      },
-                      color: themeData.foreground100,
+                      height: modalWidgetHeight,
+                      width: modalWidgetHeight,
+                      child: WalletConnectIconButton(
+                        key: const Key(
+                          StringConstants.walletConnectModalCloseButtonKey,
+                        ),
+                        iconPath: 'assets/icons/close.svg',
+                        color: themeData.inverse100,
+                        onPressed: () {
+                          widget.service.close();
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -170,14 +217,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
           ),
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(
-                  themeData.radius2XS,
-                ),
-                topRight: Radius.circular(
-                  themeData.radius2XS,
-                ),
-              ),
+              borderRadius: innerContainerBorderRadius,
               color: themeData.background100,
             ),
             padding: const EdgeInsets.only(
@@ -201,8 +241,8 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
     if (!_initialized) {
       return Container(
         constraints: const BoxConstraints(
-          minWidth: 300,
-          maxWidth: 400,
+          // minWidth: 300,
+          // maxWidth: 400,
           minHeight: 300,
         ),
         child: Center(
@@ -224,9 +264,8 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
             title: 'Scan QR Code',
           ),
           onBack: _pop,
-          actionWidget: IconButton(
-            icon: const Icon(Icons.copy_outlined),
-            color: WalletConnectModalTheme.getData(context).foreground100,
+          actionWidget: WalletConnectIconButton(
+            iconPath: 'assets/icons/copy.svg',
             onPressed: _copyQrCodeToClipboard,
           ),
           child: QRCodePage(
@@ -240,9 +279,8 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
           title: const WalletConnectModalNavbarTitle(
             title: 'Connect your wallet',
           ),
-          actionWidget: IconButton(
-            icon: const Icon(Icons.qr_code_scanner),
-            color: WalletConnectModalTheme.getData(context).foreground100,
+          actionWidget: WalletConnectIconButton(
+            iconPath: 'assets/icons/qr_code.svg',
             onPressed: _toQrCode,
           ),
           child: GridList<WalletData>(

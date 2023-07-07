@@ -31,73 +31,80 @@ class MockCanLaunchUrl extends Mock {
 void main() {
   final mockLaunchUrl = MockLaunchUrl();
   final mockCanLaunchUrl = MockCanLaunchUrl();
+  final mockPlatformUtils = MockPlatformUtils();
 
   final utils = UrlUtils(
     launchUrlFunc: mockLaunchUrl.call,
     canLaunchUrlFunc: mockCanLaunchUrl.call,
   );
 
-  platformUtils.instance = MockPlatformUtils();
+  platformUtils.instance = mockPlatformUtils;
   when(
-    platformUtils.instance.getPlatformType(),
+    mockPlatformUtils.getPlatformType(),
   ).thenReturn(PlatformType.mobile);
+  when(
+    mockPlatformUtils.canDetectInstalledApps(),
+  ).thenReturn(true);
 
   group('Url Utils', () {
-    test('isInstalled returns false when URI is null or empty', () async {
-      expect(await utils.isInstalled(null), isFalse);
-      expect(await utils.isInstalled(''), isFalse);
-    });
+    group('isInstalled', () {
+      test('returns false when URI is null or empty', () async {
+        expect(await utils.isInstalled(null), isFalse);
+        expect(await utils.isInstalled(''), isFalse);
+        expect(await utils.isInstalled('wc://'), isFalse);
+      });
 
-    test('isInstalled calls canLaunchUrl function when URI is valid', () async {
-      await utils.isInstalled('https://example.com');
-      verify(
-        mockCanLaunchUrl.call(
-          Uri.parse('https://example.com'),
-        ),
-      ).called(1);
-    });
-
-    group('launchRedirect', () {
-      test('calls launchUrl function when nativeUri is valid', () async {
-        final uri = Uri.parse('https://native.com');
-        await utils.launchRedirect(
-          nativeUri: uri,
-          universalUri: Uri.parse('https://universal.com'),
-        );
-
+      test('returns false when detect installed apps is false', () async {
+        when(
+          mockPlatformUtils.canDetectInstalledApps(),
+        ).thenReturn(false);
+        expect(await utils.isInstalled('test'), isFalse);
         verify(
-          mockCanLaunchUrl.call(
-            uri,
-          ),
-        ).called(1);
-        verify(
-          mockLaunchUrl.call(
-            uri,
-            mode: LaunchMode.externalApplication,
-          ),
+          mockPlatformUtils.canDetectInstalledApps(),
         ).called(1);
       });
 
-      test('calls launchUrl on universal when nativeUri is invalid', () async {
+      test('isInstalled calls canLaunchUrl function when URI is valid',
+          () async {
+        when(
+          mockPlatformUtils.canDetectInstalledApps(),
+        ).thenReturn(true);
+        await utils.isInstalled('https://example.com');
+        verify(
+          mockPlatformUtils.canDetectInstalledApps(),
+        ).called(1);
+        verify(
+          mockPlatformUtils.getPlatformType(),
+        ).called(1);
+        verify(
+          mockCanLaunchUrl.call(
+            Uri.parse('https://example.com'),
+          ),
+        ).called(1);
+      });
+    });
+
+    group('launchRedirect', () {
+      test('calls launchUrl function properly', () async {
+        // Case 1: Native is not null
         final native = Uri.parse('https://native.com');
         final universal = Uri.parse('https://universal.com');
+        await utils.launchRedirect(
+          nativeUri: native,
+          universalUri: universal,
+        );
+        verify(
+          mockLaunchUrl.call(
+            native,
+            mode: LaunchMode.externalApplication,
+          ),
+        ).called(1);
 
-        // Case 1: Native is null
+        // Case 2: Native is null, universal is not null
         await utils.launchRedirect(
           nativeUri: null,
           universalUri: universal,
         );
-
-        verifyNever(
-          mockCanLaunchUrl.call(
-            native,
-          ),
-        );
-        verify(
-          mockCanLaunchUrl.call(
-            universal,
-          ),
-        ).called(1);
         verify(
           mockLaunchUrl.call(
             universal,
@@ -105,59 +112,18 @@ void main() {
           ),
         ).called(1);
 
-        // Case 2: Native is invalid
-        when(mockCanLaunchUrl.call(native)).thenAnswer(
-          (realInvocation) => Future.value(false),
-        );
-        await utils.launchRedirect(
-          nativeUri: native,
-          universalUri: universal,
-        );
-
-        verify(
-          mockCanLaunchUrl.call(
-            native,
-          ),
-        ).called(1);
-        verify(
-          mockCanLaunchUrl.call(
-            universal,
-          ),
-        ).called(1);
-        verify(
-          mockLaunchUrl.call(
-            universal,
-            mode: LaunchMode.externalApplication,
-          ),
-        ).called(1);
-
-        // Case 3: Native can launch, but launch throws error
-        when(mockCanLaunchUrl.call(native)).thenAnswer(
-          (realInvocation) => Future.value(true),
-        );
+        // Case 3: Native is invalid, universal is not null
         when(mockLaunchUrl.call(native, mode: anyNamed('mode'))).thenThrow(
           Exception('Unable to launch'),
         );
-
         await utils.launchRedirect(
           nativeUri: native,
           universalUri: universal,
         );
-
-        verify(
-          mockCanLaunchUrl.call(
-            native,
-          ),
-        ).called(1);
         verify(
           mockLaunchUrl.call(
             native,
             mode: LaunchMode.externalApplication,
-          ),
-        ).called(1);
-        verify(
-          mockCanLaunchUrl.call(
-            universal,
           ),
         ).called(1);
         verify(
@@ -166,8 +132,6 @@ void main() {
             mode: LaunchMode.externalApplication,
           ),
         ).called(1);
-
-        // Case 4: Neither native nor universal launch successfully
       });
 
       test(
@@ -175,8 +139,9 @@ void main() {
           () async {
         final native = Uri.parse('https://universal.com');
         final universal = Uri.parse('https://universal.com');
-        when(mockCanLaunchUrl.call(any)).thenAnswer((_) => Future.value(false));
+        // when(mockCanLaunchUrl.call(any)).thenAnswer((_) => Future.value(false));
 
+        // Case 1: Both null
         try {
           await utils.launchRedirect(
             nativeUri: null,
@@ -188,11 +153,19 @@ void main() {
             (e as LaunchUrlException).message,
             'Unable to open the wallet',
           );
+          verifyNever(mockLaunchUrl.call(
+            any,
+            mode: anyNamed('mode'),
+          ));
         }
 
+        // Case 2: native null, universal invalid
+        when(mockLaunchUrl.call(universal, mode: anyNamed('mode'))).thenThrow(
+          Exception('Unable to launch'),
+        );
         try {
           await utils.launchRedirect(
-            nativeUri: native,
+            nativeUri: null,
             universalUri: universal,
           );
         } catch (e) {
@@ -201,20 +174,37 @@ void main() {
             (e as LaunchUrlException).message,
             'Unable to open the wallet',
           );
+          verify(mockLaunchUrl.call(
+            any,
+            mode: anyNamed('mode'),
+          )).called(1);
         }
 
-        when(mockCanLaunchUrl.call(native)).thenAnswer(
-          (realInvocation) => Future.value(true),
-        );
-        when(mockCanLaunchUrl.call(universal)).thenAnswer(
-          (realInvocation) => Future.value(false),
-        );
+        // Case 3: native invalid, universal null
         when(mockLaunchUrl.call(native, mode: anyNamed('mode'))).thenThrow(
           Exception('Unable to launch'),
         );
         try {
           await utils.launchRedirect(
             nativeUri: native,
+            universalUri: null,
+          );
+        } catch (e) {
+          expect(e, isA<LaunchUrlException>());
+          expect(
+            (e as LaunchUrlException).message,
+            'Unable to open the wallet',
+          );
+          verify(mockLaunchUrl.call(
+            any,
+            mode: anyNamed('mode'),
+          )).called(1);
+        }
+
+        // Case 4: native invalid, universal invalid
+        try {
+          await utils.launchRedirect(
+            nativeUri: native,
             universalUri: universal,
           );
         } catch (e) {
@@ -223,15 +213,21 @@ void main() {
             (e as LaunchUrlException).message,
             'Unable to open the wallet',
           );
+          verify(mockLaunchUrl.call(
+            any,
+            mode: anyNamed('mode'),
+          )).called(2);
         }
       });
     });
 
     test('navigateDeepLink calls launchRedirect function when links are valid',
         () async {
-      when(mockCanLaunchUrl.call(any)).thenAnswer(
-        (realInvocation) => Future.value(true),
-      );
+      when(mockLaunchUrl.call(
+        Uri.parse('https://native.com'),
+        mode: anyNamed('mode'),
+      )).thenAnswer((_) => Future.value(true));
+
       await utils.navigateDeepLink(
         nativeLink: 'https://native.com',
         universalLink: 'https://universal.com',

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_button.dart';
 
@@ -87,29 +89,19 @@ class _HelpPageState extends State<HelpPage> {
 
   @override
   Widget build(BuildContext context) {
-    WalletConnectModalTheme theme = WalletConnectModalTheme.of(context);
+    WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
+
+    bool longBottomSheet = platformUtils.instance.isLongBottomSheet(
+      MediaQuery.of(context).orientation,
+    );
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        buildSection(
-          title: 'A home for your digital assets',
-          description:
-              'A wallet lets you store, send, and receive digital assets like cryptocurrencies and NFTs.',
-          images: _images.sublist(0, 3),
-        ),
-        buildSection(
-          title: 'One login for all of web3',
-          description:
-              'Log in to any app by connecting your wallet. Say goodbye to countless passwords!',
-          images: _images.sublist(3, 6),
-        ),
-        buildSection(
-          title: 'Your gateway to a new web',
-          description:
-              'With your wallet, you can explore and interact with DeFi, NFTs, DAOS, and much more.',
-          images: _images.sublist(6, 9),
-        ),
+        longBottomSheet ? _buildPageView() : _buildColumnSection(),
+        const SizedBox(height: 8),
         Container(
           constraints: const BoxConstraints(
             minWidth: 250,
@@ -121,12 +113,28 @@ class _HelpPageState extends State<HelpPage> {
               Expanded(
                 child: WalletConnectModalButton(
                   onPressed: widget.getAWallet,
-                  child: Text(
-                    'Get a Wallet',
-                    style: TextStyle(
-                      fontFamily: theme.data.fontFamily,
-                      color: theme.data.inverse100,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/wallet.svg',
+                        width: 18,
+                        height: 18,
+                        package: 'walletconnect_modal_flutter',
+                        colorFilter: ColorFilter.mode(
+                          themeData.inverse100,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        'Get a Wallet',
+                        style: TextStyle(
+                          fontFamily: themeData.fontFamily,
+                          color: themeData.inverse100,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -148,13 +156,13 @@ class _HelpPageState extends State<HelpPage> {
                       Text(
                         'Learn More',
                         style: TextStyle(
-                          fontFamily: theme.data.fontFamily,
-                          color: theme.data.inverse100,
+                          fontFamily: themeData.fontFamily,
+                          color: themeData.inverse100,
                         ),
                       ),
                       Icon(
                         Icons.arrow_outward,
-                        color: theme.data.inverse100,
+                        color: themeData.inverse100,
                       ),
                     ],
                   ),
@@ -167,16 +175,95 @@ class _HelpPageState extends State<HelpPage> {
     );
   }
 
-  Widget buildSection({
+  final controller = PageController();
+
+  Widget _buildPageView() {
+    final List<Widget> pages = _buildSections(
+      padding: 0,
+    );
+    WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          constraints: const BoxConstraints(
+            maxWidth: 600,
+            maxHeight: 160,
+          ),
+          child: PageView.builder(
+            controller: controller,
+            // itemCount: pages.length,
+            itemBuilder: (_, index) {
+              return pages[index % pages.length];
+            },
+          ),
+        ),
+        const SizedBox(height: 10),
+        SmoothPageIndicator(
+          controller: controller,
+          count: pages.length,
+          effect: ExpandingDotsEffect(
+            dotHeight: 8,
+            dotWidth: 8,
+            dotColor: themeData.primary080,
+            activeDotColor: themeData.primary100,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildColumnSection() {
+    return Column(
+      children: _buildSections(),
+    );
+  }
+
+  List<Widget> _buildSections({
+    double padding = 10,
+  }) {
+    return [
+      _buildSection(
+        title: 'A home for your digital assets',
+        description:
+            'A wallet lets you store, send, and receive digital assets like cryptocurrencies and NFTs.',
+        images: _images.sublist(0, 3),
+        padding: padding,
+      ),
+      _buildSection(
+        title: 'One login for all of web3',
+        description:
+            'Log in to any app by connecting your wallet. Say goodbye to countless passwords!',
+        images: _images.sublist(3, 6),
+        padding: padding,
+      ),
+      _buildSection(
+        title: 'Your gateway to a new web',
+        description:
+            'With your wallet, you can explore and interact with DeFi, NFTs, DAOS, and much more.',
+        images: _images.sublist(6, 9),
+        padding: padding,
+      ),
+    ];
+  }
+
+  Widget _buildSection({
     required String title,
     required String description,
     required List<Widget> images,
-    List<double?> imageBorderRadius = const [],
+    double padding = 10,
   }) {
-    WalletConnectModalTheme theme = WalletConnectModalTheme.of(context);
+    WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
 
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(padding),
+      constraints: const BoxConstraints(
+        maxWidth: 600,
+      ),
       child: Column(
         children: <Widget>[
           Row(
@@ -190,7 +277,7 @@ class _HelpPageState extends State<HelpPage> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: theme.data.foreground100,
+              color: themeData.foreground100,
             ),
           ),
           const SizedBox(height: 4),
@@ -199,7 +286,7 @@ class _HelpPageState extends State<HelpPage> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
-              color: theme.data.foreground200,
+              color: themeData.foreground200,
             ),
           ),
         ],

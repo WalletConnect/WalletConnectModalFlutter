@@ -13,9 +13,11 @@ class WalletConnectModalNavbarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-            color: WalletConnectModalTheme.getData(context).foreground100,
-          ),
+      style: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: WalletConnectModalTheme.getData(context).foreground100,
+      ),
       textAlign: TextAlign.center,
     );
   }

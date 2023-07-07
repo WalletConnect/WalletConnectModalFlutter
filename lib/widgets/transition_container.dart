@@ -14,8 +14,8 @@ class TransitionContainer extends StatefulWidget {
 
 class _TransitionContainerState extends State<TransitionContainer>
     with TickerProviderStateMixin {
-  static const fadeDuration = Duration(milliseconds: 300);
-  static const resizeDuration = Duration(milliseconds: 250);
+  static const fadeDuration = Duration(milliseconds: 200);
+  static const resizeDuration = Duration(milliseconds: 150);
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
@@ -63,7 +63,7 @@ class _TransitionContainerState extends State<TransitionContainer>
           _oldChild = widget.child;
         });
         Future.delayed(
-          resizeDuration,
+          resizeDuration - const Duration(milliseconds: 50),
         ).then((value) {
           if (mounted) {
             _fadeController.reverse();

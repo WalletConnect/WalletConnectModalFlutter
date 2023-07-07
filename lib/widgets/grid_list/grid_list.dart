@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
+import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list_item.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list_item_model.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list_provider.dart';
@@ -59,6 +60,10 @@ class GridList<T> extends StatelessWidget {
     final WalletConnectModalThemeData themeData =
         WalletConnectModalTheme.getData(context);
 
+    final bool longBottomSheet = platformUtils.instance.isLongBottomSheet(
+      MediaQuery.of(context).orientation,
+    );
+
     return ValueListenableBuilder(
       valueListenable: provider.itemList,
       builder: (context, List<GridListItemModel<T>> value, child) {
@@ -67,11 +72,11 @@ class GridList<T> extends StatelessWidget {
         switch (state) {
           case GridListState.short:
             itemCount = min(8, value.length);
-            height = 240;
+            height = longBottomSheet ? 120 : 240;
             break;
           case GridListState.long:
             itemCount = value.length;
-            height = 600;
+            height = longBottomSheet ? 240 : 600;
             break;
           case GridListState.extraShort:
             itemCount = min(4, value.length);
@@ -103,9 +108,9 @@ class GridList<T> extends StatelessWidget {
           child: GridView.builder(
             key: Key('${value.length}'),
             itemCount: itemCount,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              childAspectRatio: 0.85,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: longBottomSheet ? 8 : 4,
+              childAspectRatio: longBottomSheet ? 0.73 : 0.85,
             ),
             itemBuilder: (context, index) {
               if (index == itemCount - 1 &&
