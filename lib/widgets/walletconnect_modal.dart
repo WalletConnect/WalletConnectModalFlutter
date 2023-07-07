@@ -124,8 +124,6 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
           );
 
     final double width = bottomSheet ? double.infinity : 600;
-    print(width);
-
     const double modalWidgetHeight = 32;
 
     return Container(
