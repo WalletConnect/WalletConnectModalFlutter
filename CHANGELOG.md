@@ -1,8 +1,7 @@
 ## 1.1.1
 
-- Updated the URL launching to function on android
-- Android no longer attempts to check if the app is installed
-- UI updates
+- Updated the URL launching and added a full test suite
+- UI updates to be more in line with official WalletConnect design
 - Bug fixes
 
 ## 1.1.0
