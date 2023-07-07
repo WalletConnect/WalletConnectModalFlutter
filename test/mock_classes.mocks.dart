@@ -1005,6 +1005,22 @@ class MockPlatformUtils extends _i1.Mock implements _i20.PlatformUtils {
         returnValue: false,
       ) as bool);
   @override
+  bool isBottomSheet() => (super.noSuchMethod(
+        Invocation.method(
+          #isBottomSheet,
+          [],
+        ),
+        returnValue: false,
+      ) as bool);
+  @override
+  bool isLongBottomSheet(_i2.Orientation? orientation) => (super.noSuchMethod(
+        Invocation.method(
+          #isLongBottomSheet,
+          [orientation],
+        ),
+        returnValue: false,
+      ) as bool);
+  @override
   bool isMobileWidth(double? width) => (super.noSuchMethod(
         Invocation.method(
           #isMobileWidth,

@@ -29,6 +29,8 @@ void main() {
     setUp(() async {
       // Setup the singletons
       when(mockPlatformUtils.getPlatformType()).thenReturn(PlatformType.mobile);
+      when(mockPlatformUtils.isBottomSheet()).thenReturn(true);
+      when(mockPlatformUtils.isLongBottomSheet(any)).thenReturn(false);
       when(mockPlatformUtils.isMobileWidth(any)).thenReturn(true);
       platformUtils.instance = mockPlatformUtils;
 

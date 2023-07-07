@@ -28,6 +28,8 @@ void main() {
 
     setUp(() async {
       // Setup the singletons
+      when(mockPlatformUtils.isBottomSheet()).thenReturn(true);
+      when(mockPlatformUtils.isLongBottomSheet(any)).thenReturn(false);
       platformUtils.instance = mockPlatformUtils;
 
       web3App = MockWeb3App();
@@ -116,7 +118,7 @@ void main() {
       ).called(1);
       verify(explorerService.filterList(query: '')).called(1);
       // Once by the open, again by the WalletConnectModal in its init
-      verify(mockPlatformUtils.getPlatformType()).called(2);
+      verify(mockPlatformUtils.getPlatformType()).called(1);
       expect(find.byType(WalletConnectModal), findsOneWidget);
     });
 
