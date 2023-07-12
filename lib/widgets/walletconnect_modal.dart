@@ -151,8 +151,8 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
                   'assets/walletconnect_logo_full_white.svg',
                   height: modalWidgetHeight,
                   package: 'walletconnect_modal_flutter',
-                  colorFilter: ColorFilter.mode(
-                    themeData.foreground100,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
                     BlendMode.srcIn,
                   ),
                 ),

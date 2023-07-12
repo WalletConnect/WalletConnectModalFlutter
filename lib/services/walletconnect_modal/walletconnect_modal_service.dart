@@ -202,6 +202,9 @@ class WalletConnectModalService extends ChangeNotifier
         isDismissible: false,
         isScrollControlled: true,
         enableDrag: false,
+        constraints: BoxConstraints(
+          minWidth: MediaQuery.of(context).size.width,
+        ),
         useSafeArea: true,
         context: context,
         builder: (context) {

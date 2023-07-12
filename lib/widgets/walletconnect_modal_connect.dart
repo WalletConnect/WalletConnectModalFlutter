@@ -85,8 +85,8 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
               width: 20,
               height: 20,
               package: 'walletconnect_modal_flutter',
-              colorFilter: ColorFilter.mode(
-                theme.data.foreground100,
+              colorFilter: const ColorFilter.mode(
+                Colors.white,
                 BlendMode.srcIn,
               ),
             ),
@@ -94,7 +94,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
             Text(
               'Connect Wallet',
               style: TextStyle(
-                color: theme.data.foreground100,
+                color: Colors.white,
                 fontFamily: theme.data.fontFamily,
               ),
             ),

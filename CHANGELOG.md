@@ -1,3 +1,8 @@
+## 1.1.2
+
+- Updated to `walletconnect_flutter_v2` v2.0.13
+- UI Updates
+
 ## 1.1.1
 
 - Updated the URL launching and added a full test suite
