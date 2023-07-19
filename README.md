@@ -65,6 +65,22 @@ For each app you would like to be able to deep link to, you must add that app's 
 </array>
 ```
 
+To handle deep linking to your app, you will also need to add the following to the plist file:
+
+```xml
+<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>flutterdapp</string> <!-- Change "flutterdapp" to be your deep link -->
+        </array>
+        <key>CFBundleURLName</key>
+        <string>com.walletconnect.flutterdapp</string> <!-- Change this package name to be your package -->
+    </dict>
+</array>
+```
+
 ## Android Setup
 
 On android 11+ you must specify that use can use the internet, along with the different schemes you would like to be able to deep link to in the `android/app/src/main/AndroidManifest.xml` file like so:
@@ -85,6 +101,18 @@ On android 11+ you must specify that use can use the internet, along with the di
     </queries>
     <!-- Permission to access the internet -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Update your activity to handle the deep linking from other apps -->
+    <activity
+            ...>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Accepts URIs that begin with "flutterdapp://”, change this to be your deep link -->
+                <data android:scheme="flutterdapp" />
+            </intent-filter>
+        </activity>
     ...
 </manifest>
 ```
