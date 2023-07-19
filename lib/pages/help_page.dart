@@ -61,6 +61,8 @@ class _HelpPageState extends State<HelpPage> {
   ];
   List<Widget> _images = [];
 
+  final _pageController = PageController();
+
   @override
   void initState() {
     super.initState();
@@ -175,8 +177,6 @@ class _HelpPageState extends State<HelpPage> {
     );
   }
 
-  final controller = PageController();
-
   Widget _buildPageView() {
     final List<Widget> pages = _buildSections(
       padding: 0,
@@ -194,7 +194,7 @@ class _HelpPageState extends State<HelpPage> {
             maxHeight: 160,
           ),
           child: PageView.builder(
-            controller: controller,
+            controller: _pageController,
             // itemCount: pages.length,
             itemBuilder: (_, index) {
               return pages[index % pages.length];
@@ -203,7 +203,7 @@ class _HelpPageState extends State<HelpPage> {
         ),
         const SizedBox(height: 10),
         SmoothPageIndicator(
-          controller: controller,
+          controller: _pageController,
           count: pages.length,
           effect: ExpandingDotsEffect(
             dotHeight: 8,

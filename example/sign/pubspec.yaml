@@ -39,6 +39,9 @@ dependencies:
   get_it: ^7.6.0
   walletconnect_flutter_v2: ^2.0.7
   logger: ^1.4.0
+  fl_toast: ^3.1.0
+  qr_flutter: ^4.1.0
+  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:

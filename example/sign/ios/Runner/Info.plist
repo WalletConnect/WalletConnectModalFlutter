@@ -53,5 +53,16 @@
 		<string>rainbow</string>
 		<string>trust</string>
 	</array>
+  <key>CFBundleURLTypes</key>
+  <array>
+      <dict>
+          <key>CFBundleURLSchemes</key>
+          <array>
+              <string>flutterdapp</string>
+          </array>
+          <key>CFBundleURLName</key>
+          <string>com.walletconnect.flutterdapp</string>
+      </dict>
+  </array>
 </dict>
 </plist>

@@ -290,6 +290,8 @@ class WalletConnectModalService extends ChangeNotifier
   }) {
     _checkInitialized();
 
+    LoggerUtil.logger.i('Setting default chain: $requiredNamespaces');
+
     _requiredNamespaces = requiredNamespaces;
 
     notifyListeners();

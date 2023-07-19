@@ -57,30 +57,24 @@ class _MyAppState extends State<MyApp> {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            title: const Text('WalletConnectModal Sign Example'),
-          ),
-          body: SizedBox(
-            width: double.infinity,
-            child: Stack(
-              children: [
-                const MyHomePage(),
-                Positioned(
-                  bottom: 20,
-                  right: 20,
-                  child: Row(
-                    children: [
-                      _buildIconButton(
-                        Icons.theater_comedy_outlined,
-                        _swapTheme,
-                      ),
-                    ],
-                  ),
+        home: SizedBox(
+          width: double.infinity,
+          child: Stack(
+            children: [
+              const MyHomePage(),
+              Positioned(
+                bottom: 20,
+                right: 20,
+                child: Row(
+                  children: [
+                    _buildIconButton(
+                      Icons.theater_comedy_outlined,
+                      _swapTheme,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

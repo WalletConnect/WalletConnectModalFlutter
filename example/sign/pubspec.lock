@@ -169,6 +169,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  fl_toast:
+    dependency: "direct main"
+    description:
+      name: fl_toast
+      sha256: "6df3173e7852a79708db6b32b1d999eba0a6c87c29308ede72a6678fc8c8a2b0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -401,7 +409,7 @@ packages:
     source: hosted
     version: "3.0.1"
   qr_flutter:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: qr_flutter
       sha256: "5095f0fc6e3f71d08adef8feccc8cea4f12eec18a2e31c2e8d82cb6019f4b097"
@@ -478,7 +486,7 @@ packages:
     source: sdk
     version: "0.0.99"
   smooth_page_indicator:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: smooth_page_indicator
       sha256: "725bc638d5e79df0c84658e1291449996943f93bacbc2cec49963dbbab48d8ae"
@@ -691,7 +699,7 @@ packages:
       path: "../.."
       relative: true
     source: path
-    version: "1.1.1"
+    version: "1.1.2"
   web3dart:
     dependency: transitive
     description:
