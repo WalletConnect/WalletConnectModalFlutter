@@ -33,6 +33,10 @@ WalletConnectModalService service = WalletConnectModalService(
     description: 'Flutter WalletConnectModal Sign Example',
     url: 'https://walletconnect.com/',
     icons: ['https://walletconnect.com/walletconnect-logo.png'],
+    redirect: Redirect(
+      native: 'flutterdapp://',
+      universal: 'https://www.walletconnect.com',
+    ),
   ),
 );
 await service.init();
