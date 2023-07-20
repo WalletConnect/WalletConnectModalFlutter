@@ -11,7 +11,6 @@ import 'package:sign/utils/crypto/helpers.dart';
 import 'package:sign/utils/string_constants.dart';
 import 'package:sign/widgets/chain_button.dart';
 import 'package:sign/widgets/session_widget.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 

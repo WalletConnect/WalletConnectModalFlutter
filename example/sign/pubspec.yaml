@@ -42,6 +42,8 @@ dependencies:
   fl_toast: ^3.1.0
   qr_flutter: ^4.1.0
   smooth_page_indicator: ^1.1.0
+  web3dart: ^2.6.1
+  universal_io: ^2.2.2
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +55,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  web3dart_builders: ^0.0.7
+  build_runner: ^2.4.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -66,7 +70,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/abis/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
