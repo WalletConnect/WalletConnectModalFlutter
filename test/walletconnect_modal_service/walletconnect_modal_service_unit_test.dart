@@ -223,7 +223,7 @@ void main() {
         );
         await service.init();
 
-        final redirect = Redirect(
+        const redirect = Redirect(
           native: 'https://native.com',
           universal: 'https://universal.com',
         );

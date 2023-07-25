@@ -2,24 +2,24 @@ import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
 
 final List<Listing> testListings1 = [
-  Listing(
+  const Listing(
     id: '1',
     name: 'Test1',
     homepage: 'https://test1.com',
     imageId: 'test',
-    app: const App(),
+    app: App(),
     mobile: Redirect(
       universal: 'https://test1.com',
       native: 'https://test1.com',
     ),
     desktop: Redirect(),
   ),
-  Listing(
+  const Listing(
     id: '2',
     name: 'Test2',
     homepage: 'https://test2.com',
     imageId: 'test',
-    app: const App(),
+    app: App(),
     mobile: Redirect(
       universal: 'https://test2.com',
       native: 'https://test2.com',

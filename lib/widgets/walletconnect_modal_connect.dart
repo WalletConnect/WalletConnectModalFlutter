@@ -175,7 +175,6 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
       'Web3ModalConnectButton._onServiceUpdate(). isConnected: ${widget.walletConnectModalService.isConnected}, isOpen: ${widget.walletConnectModalService.isOpen}',
     );
 
-    print('got here');
     _updateState();
   }
 

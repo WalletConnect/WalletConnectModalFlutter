@@ -249,7 +249,7 @@ class WalletConnectModalService extends ChangeNotifier
 
     await web3App!.disconnectSession(
       topic: session!.topic,
-      reason: WalletConnectError(
+      reason: const WalletConnectError(
         code: 0,
         message: 'User disconnected',
       ),
