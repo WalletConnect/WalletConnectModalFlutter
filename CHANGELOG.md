@@ -1,3 +1,9 @@
+## 1.1.3
+
+- Updated to `walletconnect_flutter_v2` v2.0.15
+- Additional tests to ensure robustness
+- Example app updates
+
 ## 1.1.2
 
 - Updated to `walletconnect_flutter_v2` v2.0.13
