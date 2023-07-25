@@ -8,4 +8,9 @@ class StringConstants {
       'walletConnectModalHelpButtonKey';
   static const String walletConnectModalCloseButtonKey =
       'walletConnectModalCloseButtonKey';
+
+  // TEXT
+  static const String connectButtonIdle = 'Connect Wallet';
+  static const String connectButtonConnecting = 'Connecting...';
+  static const String connectButtonAccount = 'Disconnect';
 }

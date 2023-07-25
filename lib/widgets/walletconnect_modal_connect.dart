@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
+import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/services/walletconnect_modal/i_walletconnect_modal_service.dart';
 import 'package:walletconnect_modal_flutter/services/utils/logger/logger_util.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
@@ -62,18 +64,19 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
   }
 
   Widget _buildButton(BuildContext context) {
-    final WalletConnectModalTheme theme = WalletConnectModalTheme.of(context);
+    final WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
 
     if (_state == WalletConnectModalConnectButtonState.idle) {
       return MaterialButton(
         onPressed: () => _onConnectPressed(context),
-        color: theme.data.primary100,
-        focusColor: theme.data.primary090,
-        hoverColor: theme.data.primary090,
-        highlightColor: theme.data.primary080,
+        color: themeData.primary100,
+        focusColor: themeData.primary090,
+        hoverColor: themeData.primary090,
+        highlightColor: themeData.primary080,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
-            widget.buttonRadius ?? theme.data.radius4XS,
+            widget.buttonRadius ?? themeData.radius4XS,
           ),
         ),
         child: Row(
@@ -92,10 +95,10 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
             ),
             const SizedBox(width: 8.0),
             Text(
-              'Connect Wallet',
+              StringConstants.connectButtonIdle,
               style: TextStyle(
                 color: Colors.white,
-                fontFamily: theme.data.fontFamily,
+                fontFamily: themeData.fontFamily,
               ),
             ),
           ],
@@ -104,10 +107,10 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
     } else if (_state == WalletConnectModalConnectButtonState.connecting) {
       return MaterialButton(
         onPressed: () {},
-        color: theme.data.overlay030,
+        color: themeData.overlay030,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
-            widget.buttonRadius ?? theme.data.radius4XS,
+            widget.buttonRadius ?? themeData.radius4XS,
           ),
         ),
         child: Row(
@@ -115,14 +118,14 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
           mainAxisSize: MainAxisSize.min,
           children: [
             CircularProgressIndicator(
-              color: theme.data.primary100,
+              color: themeData.primary100,
             ),
             const SizedBox(width: 8.0),
             Text(
-              'Connecting...',
+              StringConstants.connectButtonConnecting,
               style: TextStyle(
-                color: theme.data.foreground100,
-                fontFamily: theme.data.fontFamily,
+                color: themeData.foreground100,
+                fontFamily: themeData.fontFamily,
               ),
             ),
           ],
@@ -131,13 +134,13 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
     } else if (_state == WalletConnectModalConnectButtonState.account) {
       return MaterialButton(
         onPressed: () => _onConnectPressed(context),
-        color: theme.data.primary100,
-        focusColor: theme.data.primary090,
-        hoverColor: theme.data.primary090,
-        highlightColor: theme.data.primary080,
+        color: themeData.primary100,
+        focusColor: themeData.primary090,
+        hoverColor: themeData.primary090,
+        highlightColor: themeData.primary080,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
-            widget.buttonRadius ?? theme.data.radius4XS,
+            widget.buttonRadius ?? themeData.radius4XS,
           ),
         ),
         child: Row(
@@ -145,10 +148,10 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Disconnect',
+              StringConstants.connectButtonAccount,
               style: TextStyle(
-                color: theme.data.foreground100,
-                fontFamily: theme.data.fontFamily,
+                color: themeData.foreground100,
+                fontFamily: themeData.fontFamily,
               ),
             ),
           ],
@@ -172,6 +175,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
       'Web3ModalConnectButton._onServiceUpdate(). isConnected: ${widget.walletConnectModalService.isConnected}, isOpen: ${widget.walletConnectModalService.isOpen}',
     );
 
+    print('got here');
     _updateState();
   }
 
