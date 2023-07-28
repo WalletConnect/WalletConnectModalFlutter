@@ -1,3 +1,8 @@
+## 1.1.4
+
+- Modal now regenerates the WC URI when you tap on a wallet or open the QR Code
+- Other minor bug fixes
+
 ## 1.1.3
 
 - Updated to `walletconnect_flutter_v2` v2.0.15
