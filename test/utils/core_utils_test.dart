@@ -47,7 +47,9 @@ void main() {
       final userAgent = coreUtils.getUserAgent();
       expect(userAgent.startsWith('w3m-flutter-'), true);
       expect(userAgent.contains('/flutter-core-'), true);
-      expect(userAgent.contains(Web3ModalConstants.WALLETCONNECT_MODAL_VERSION),
+      expect(
+          userAgent.contains(
+              WalletConnectModalConstants.WALLETCONNECT_MODAL_VERSION),
           true);
       expect(userAgent.endsWith(WalletConnectUtils.getOS()), true);
     });

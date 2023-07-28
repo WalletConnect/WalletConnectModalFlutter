@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:walletconnect_modal_flutter/constants/constants.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
@@ -75,11 +76,7 @@ void main() {
 
       // Check initial state
       expect(
-        find.byKey(
-          Key(
-            WalletConnectModalState.qrCodeAndWalletList.name,
-          ),
-        ),
+        find.byKey(WalletConnectModalConstants.qrCodeAndWalletListPageKey),
         findsOneWidget,
       );
       expect(

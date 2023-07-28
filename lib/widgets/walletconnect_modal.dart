@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:walletconnect_modal_flutter/constants/constants.dart';
 import 'package:walletconnect_modal_flutter/models/launch_url_exception.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
 import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
@@ -13,6 +14,7 @@ import 'package:walletconnect_modal_flutter/services/utils/toast/toast_utils_sin
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/logger/logger_util.dart';
 import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
+import 'package:walletconnect_modal_flutter/services/utils/widget_stack/widget_stack_singleton.dart';
 import 'package:walletconnect_modal_flutter/widgets/qr_code_widget.dart';
 import 'package:walletconnect_modal_flutter/services/walletconnect_modal/i_walletconnect_modal_service.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list.dart';
@@ -28,11 +30,11 @@ class WalletConnectModal extends StatefulWidget {
   const WalletConnectModal({
     super.key,
     required this.service,
-    this.startState,
+    this.startWidget,
   });
 
   final IWalletConnectModalService service;
-  final WalletConnectModalState? startState;
+  final Widget? startWidget;
 
   @override
   State<WalletConnectModal> createState() => _WalletConnectModalState();
@@ -40,27 +42,36 @@ class WalletConnectModal extends StatefulWidget {
 
 class _WalletConnectModalState extends State<WalletConnectModal> {
   bool _initialized = false;
+  Widget? _body;
 
-  final List<WalletConnectModalState> _stateStack = [];
+  // final List<WalletConnectModalState> _stateStack = [];
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.startState != null) {
-      _stateStack.add(widget.startState!);
+    widgetStack.instance.addListener(_widgetStackUpdated);
+
+    if (widget.startWidget != null) {
+      widgetStack.instance.add(widget.startWidget!);
     } else {
       final PlatformType pType = platformUtils.instance.getPlatformType();
 
       // Choose the state based on platform
       if (pType == PlatformType.mobile) {
-        _stateStack.add(WalletConnectModalState.walletListShort);
+        _addWalletListShort();
       } else if (pType == PlatformType.desktop || pType == PlatformType.web) {
-        _stateStack.add(WalletConnectModalState.qrCodeAndWalletList);
+        _addQrCodeAndWalletList();
       }
     }
 
     initialize();
+  }
+
+  @override
+  void dispose() {
+    widgetStack.instance.removeListener(_widgetStackUpdated);
+    super.dispose();
   }
 
   Future<void> initialize() async {
@@ -160,7 +171,8 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
                   children: <Widget>[
                     Container(
                       decoration: BoxDecoration(
-                        color: _stateStack.last == WalletConnectModalState.help
+                        color: _body?.key ==
+                                WalletConnectModalConstants.helpPageKey
                             ? themeData.inverse100
                             : themeData.inverse000,
                         borderRadius: BorderRadius.circular(
@@ -174,17 +186,23 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
                           StringConstants.walletConnectModalHelpButtonKey,
                         ),
                         iconPath: 'assets/icons/help.svg',
-                        color: _stateStack.last == WalletConnectModalState.help
+                        color: _body?.key ==
+                                WalletConnectModalConstants.helpPageKey
                             ? themeData.inverse000
                             : themeData.inverse100,
                         onPressed: () {
-                          if (_stateStack
-                              .contains(WalletConnectModalState.help)) {
-                            _popUntil(WalletConnectModalState.help);
+                          if (_body?.key ==
+                              WalletConnectModalConstants.helpPageKey) {
+                            widgetStack.instance.pop();
+                            return;
+                          } else if (widgetStack.instance.containsKey(
+                            WalletConnectModalConstants.helpPageKey,
+                          )) {
+                            widgetStack.instance.popUntil(
+                              WalletConnectModalConstants.helpPageKey,
+                            );
                           } else {
-                            setState(() {
-                              _stateStack.add(WalletConnectModalState.help);
-                            });
+                            _addHelp();
                           }
                         },
                       ),
@@ -236,7 +254,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
   }
 
   Widget _buildBody() {
-    if (!_initialized) {
+    if (!_initialized || _body == null) {
       return Container(
         constraints: const BoxConstraints(
           // minWidth: 300,
@@ -254,124 +272,145 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
       );
     }
 
-    switch (_stateStack.last) {
-      case WalletConnectModalState.qrCode:
-        return WalletConnectModalNavBar(
-          key: Key(WalletConnectModalState.qrCode.name),
-          title: const WalletConnectModalNavbarTitle(
-            title: 'Scan QR Code',
-          ),
-          onBack: _pop,
-          actionWidget: WalletConnectIconButton(
-            iconPath: 'assets/icons/copy.svg',
-            onPressed: _copyQrCodeToClipboard,
-          ),
-          child: QRCodePage(
-            service: widget.service,
-            logoPath: 'assets/walletconnect_logo_white.png',
-          ),
-        );
-      case WalletConnectModalState.walletListShort:
-        return WalletConnectModalNavBar(
-          key: Key(WalletConnectModalState.walletListShort.name),
-          title: const WalletConnectModalNavbarTitle(
-            title: 'Connect your wallet',
-          ),
-          actionWidget: WalletConnectIconButton(
-            iconPath: 'assets/icons/qr_code.svg',
-            onPressed: _toQrCode,
-          ),
-          child: GridList<WalletData>(
-            state: GridListState.short,
-            provider: widget.service.explorerService,
-            viewLongList: _viewLongWalletList,
-            onSelect: _onWalletDataSelected,
-          ),
-        );
-      case WalletConnectModalState.walletListLong:
-        return WalletConnectModalNavBar(
-          key: Key(WalletConnectModalState.walletListLong.name),
-          title: WalletConnectModalSearchBar(
-            hintText:
-                'Search ${platformUtils.instance.getPlatformType().name} wallets',
-            onSearch: _updateSearch,
-          ),
-          onBack: _pop,
-          child: GridList<WalletData>(
-            // key: ValueKey('${GridListState.long}$_searchQuery'),
-            state: GridListState.long,
-            provider: widget.service.explorerService,
-            viewLongList: _viewLongWalletList,
-            onSelect: _onWalletDataSelected,
-          ),
-        );
-      case WalletConnectModalState.qrCodeAndWalletList:
-        return WalletConnectModalNavBar(
-          key: Key(
-            WalletConnectModalState.qrCodeAndWalletList.name,
-          ),
-          title: const WalletConnectModalNavbarTitle(
-            title: 'Connect your wallet',
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              QRCodePage(
-                service: widget.service,
-                logoPath: 'assets/walletconnect_logo_white.png',
-              ),
-              GridList(
-                state: GridListState.extraShort,
-                provider: widget.service.explorerService,
-                viewLongList: _viewLongWalletList,
-                onSelect: _onWalletDataSelected,
-              ),
-            ],
-          ),
-        );
-      case WalletConnectModalState.chainList:
-        return WalletConnectModalNavBar(
-          // TODO: Update this to display chains, not wallets
-          key: Key(WalletConnectModalState.chainList.name),
-          title: const WalletConnectModalNavbarTitle(
-            title: 'Select network',
-          ),
-          child: GridList(
-            state: GridListState.extraShort,
-            provider: widget.service.explorerService,
-            viewLongList: _viewLongWalletList,
-            onSelect: _onWalletDataSelected,
-          ),
-        );
-      case WalletConnectModalState.help:
-        return WalletConnectModalNavBar(
-          key: Key(WalletConnectModalState.help.name),
-          title: const WalletConnectModalNavbarTitle(
-            title: 'Help',
-          ),
-          onBack: _pop,
-          child: HelpPage(
-            getAWallet: () {
-              setState(() {
-                _stateStack.add(WalletConnectModalState.getAWallet);
-              });
-            },
-          ),
-        );
-      case WalletConnectModalState.getAWallet:
-        return WalletConnectModalNavBar(
-          key: Key(WalletConnectModalState.getAWallet.name),
-          title: const WalletConnectModalNavbarTitle(
-            title: 'Get a wallet',
-          ),
-          onBack: _pop,
-          child: GetWalletPage(
-            service: widget.service.explorerService,
-          ),
-        );
-      default:
-        return Container();
-    }
+    return _body!;
+  }
+
+  void _addQrCode() {
+    widgetStack.instance.add(
+      WalletConnectModalNavBar(
+        key: WalletConnectModalConstants.qrCodePageKey,
+        title: const WalletConnectModalNavbarTitle(
+          title: 'Scan QR Code',
+        ),
+        onBack: widgetStack.instance.pop,
+        actionWidget: WalletConnectIconButton(
+          iconPath: 'assets/icons/copy.svg',
+          onPressed: _copyQrCodeToClipboard,
+        ),
+        child: QRCodePage(
+          service: widget.service,
+          logoPath: 'assets/walletconnect_logo_white.png',
+        ),
+      ),
+    );
+  }
+
+  void _addWalletListShort() {
+    widgetStack.instance.add(
+      WalletConnectModalNavBar(
+        key: WalletConnectModalConstants.walletListShortPageKey,
+        title: const WalletConnectModalNavbarTitle(
+          title: 'Connect your wallet',
+        ),
+        actionWidget: WalletConnectIconButton(
+          iconPath: 'assets/icons/qr_code.svg',
+          onPressed: _addQrCode,
+        ),
+        child: GridList<WalletData>(
+          state: GridListState.short,
+          provider: widget.service.explorerService,
+          viewLongList: _addWalletListLong,
+          onSelect: _onWalletDataSelected,
+        ),
+      ),
+    );
+  }
+
+  void _addWalletListLong() {
+    widgetStack.instance.add(
+      WalletConnectModalNavBar(
+        key: WalletConnectModalConstants.walletListLongPageKey,
+        title: WalletConnectModalSearchBar(
+          hintText:
+              'Search ${platformUtils.instance.getPlatformType().name} wallets',
+          onSearch: _updateSearch,
+        ),
+        onBack: widgetStack.instance.pop,
+        child: GridList<WalletData>(
+          // key: ValueKey('${GridListState.long}$_searchQuery'),
+          state: GridListState.long,
+          provider: widget.service.explorerService,
+          viewLongList: _addWalletListLong,
+          onSelect: _onWalletDataSelected,
+        ),
+      ),
+    );
+  }
+
+  void _addQrCodeAndWalletList() {
+    widgetStack.instance.add(
+      WalletConnectModalNavBar(
+        key: WalletConnectModalConstants.qrCodeAndWalletListPageKey,
+        title: const WalletConnectModalNavbarTitle(
+          title: 'Connect your wallet',
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            QRCodePage(
+              service: widget.service,
+              logoPath: 'assets/walletconnect_logo_white.png',
+            ),
+            GridList(
+              state: GridListState.extraShort,
+              provider: widget.service.explorerService,
+              viewLongList: _addWalletListLong,
+              onSelect: _onWalletDataSelected,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // void _addChainList() {
+  //   widgetStack.instance.add(
+  //     WalletConnectModalNavBar(
+  //       // TODO: Update this to display chains, not wallets
+  //       key: Key(WalletConnectModalState.chainList.name),
+  //       title: const WalletConnectModalNavbarTitle(
+  //         title: 'Select network',
+  //       ),
+  //       child: GridList(
+  //         state: GridListState.extraShort,
+  //         provider: widget.service.explorerService,
+  //         viewLongList: _addWalletListLong,
+  //         onSelect: _onWalletDataSelected,
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  void _addHelp() {
+    widgetStack.instance.add(
+      WalletConnectModalNavBar(
+        key: WalletConnectModalConstants.helpPageKey,
+        title: const WalletConnectModalNavbarTitle(
+          title: 'Help',
+        ),
+        onBack: widgetStack.instance.pop,
+        child: HelpPage(
+          getAWallet: () {
+            _addGetAWallet();
+          },
+        ),
+      ),
+    );
+  }
+
+  void _addGetAWallet() {
+    widgetStack.instance.add(
+      WalletConnectModalNavBar(
+        key: WalletConnectModalConstants.getAWalletPageKey,
+        title: const WalletConnectModalNavbarTitle(
+          title: 'Get a wallet',
+        ),
+        onBack: widgetStack.instance.pop,
+        child: GetWalletPage(
+          service: widget.service.explorerService,
+        ),
+      ),
+    );
   }
 
   bool _walletSelected = false;
@@ -404,43 +443,6 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
     _walletSelected = false;
   }
 
-  void _viewLongWalletList() {
-    setState(() {
-      _stateStack.add(WalletConnectModalState.walletListLong);
-    });
-  }
-
-  void _pop() {
-    setState(() {
-      // Remove all of the elements until we get to the help state
-      final state = _stateStack.removeLast();
-
-      if (state == WalletConnectModalState.walletListLong) {
-        widget.service.explorerService.filterList(query: '');
-      }
-    });
-  }
-
-  void _popUntil(WalletConnectModalState targetState) {
-    setState(() {
-      // Remove all of the elements until we get to the help state
-      WalletConnectModalState removedState = _stateStack.removeLast();
-      while (removedState != WalletConnectModalState.help) {
-        removedState = _stateStack.removeLast();
-
-        if (removedState == WalletConnectModalState.walletListLong) {
-          widget.service.explorerService.filterList(query: '');
-        }
-      }
-    });
-  }
-
-  void _toQrCode() {
-    setState(() {
-      _stateStack.add(WalletConnectModalState.qrCode);
-    });
-  }
-
   Future<void> _copyQrCodeToClipboard() async {
     await Clipboard.setData(
       ClipboardData(
@@ -457,5 +459,11 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
 
   void _updateSearch(String query) {
     widget.service.explorerService.filterList(query: query);
+  }
+
+  void _widgetStackUpdated() {
+    setState(() {
+      _body = widgetStack.instance.getCurrent();
+    });
   }
 }

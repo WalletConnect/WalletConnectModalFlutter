@@ -50,6 +50,6 @@ class CoreUtils extends ICoreUtils {
   @override
   String getUserAgent() {
     final String os = WalletConnectUtils.getOS();
-    return 'w3m-flutter-${Web3ModalConstants.WALLETCONNECT_MODAL_VERSION}/flutter-core-${WalletConnectConstants.SDK_VERSION}/$os';
+    return 'w3m-flutter-${WalletConnectModalConstants.WALLETCONNECT_MODAL_VERSION}/flutter-core-${WalletConnectConstants.SDK_VERSION}/$os';
   }
 }
