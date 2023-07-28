@@ -1,3 +1,7 @@
+## 1.1.5
+
+- Migrated to use widget stack instead of states for easier extension into Web3Modal
+
 ## 1.1.4
 
 - Modal now regenerates the WC URI when you tap on a wallet or open the QR Code

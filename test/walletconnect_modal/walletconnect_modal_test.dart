@@ -6,7 +6,6 @@ import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/constants/constants.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
-import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal.dart';
 
 import '../mock_classes.mocks.dart';
