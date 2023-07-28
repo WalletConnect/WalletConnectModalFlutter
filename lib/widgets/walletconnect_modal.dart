@@ -267,7 +267,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
             onPressed: _copyQrCodeToClipboard,
           ),
           child: QRCodePage(
-            qrData: widget.service.wcUri!,
+            service: widget.service,
             logoPath: 'assets/walletconnect_logo_white.png',
           ),
         );
@@ -317,7 +317,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               QRCodePage(
-                qrData: widget.service.wcUri!,
+                service: widget.service,
                 logoPath: 'assets/walletconnect_logo_white.png',
               ),
               GridList(
@@ -374,11 +374,19 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
     }
   }
 
+  bool _walletSelected = false;
+
   Future<void> _onWalletDataSelected(WalletData item) async {
+    if (_walletSelected) {
+      return;
+    }
+    _walletSelected = true;
+
     LoggerUtil.logger.v(
       'Selected ${item.listing.name}. Installed: ${item.installed} Item info: $item.',
     );
     try {
+      await widget.service.rebuildConnectionUri();
       await urlUtils.instance.navigateDeepLink(
         nativeLink: item.listing.mobile.native,
         universalLink: item.listing.mobile.universal,
@@ -392,6 +400,8 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
         ),
       );
     }
+
+    _walletSelected = false;
   }
 
   void _viewLongWalletList() {

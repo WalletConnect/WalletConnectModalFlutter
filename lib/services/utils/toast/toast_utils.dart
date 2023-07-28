@@ -7,7 +7,7 @@ import 'dart:async';
 class ToastUtils extends IToastUtils with Disposable {
   final _toastController = StreamController<ToastMessage?>.broadcast();
 
-  final _queue = Queue<ToastMessageCompleter>();
+  final _queue = Queue<ToastMessage>();
 
   bool _isShowing = false;
 
@@ -16,24 +16,21 @@ class ToastUtils extends IToastUtils with Disposable {
 
   @override
   Future<void> show(ToastMessage message) async {
-    final completer = ToastMessageCompleter(message);
-
-    _queue.add(completer);
+    _queue.add(message);
 
     if (!_isShowing) {
       _popToast();
     }
 
-    await completer.completer.future;
+    await message.completer.future;
   }
 
   Future<void> _popToast() async {
     if (_queue.isNotEmpty) {
       _isShowing = true;
-      final messageCompleter = _queue.removeFirst();
-      _toastController.add(messageCompleter.message);
-      await Future.delayed(messageCompleter.message.duration * 2);
-      messageCompleter.completer.complete();
+      final ToastMessage message = _queue.removeFirst();
+      _toastController.add(message);
+      await message.completer.future;
       _isShowing = false;
       _popToast();
     } else {

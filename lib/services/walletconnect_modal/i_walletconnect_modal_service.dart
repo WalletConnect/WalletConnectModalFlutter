@@ -75,6 +75,16 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
     required Map<String, RequiredNamespace> requiredNamespaces,
   });
 
+  /// Rebuilds the connection URI.
+  /// If the dapp attempts to connect to a wallet, and the connection proposal is consumed,
+  /// but not accepted or rejected (no response), and they navigate back to the dapp and try again
+  /// then no connection proposal will be sent. This is because the connection proposal is already consumed.
+  /// So, every time they tap on a button to connect to a wallet, we need to rebuild the connection URI to
+  /// ensure that each time they tap on a wallet, a new connection proposal is sent.
+  ///
+  /// This will do nothing if [isConnected] is true.
+  Future<void> rebuildConnectionUri();
+
   /// Sets the required namespaces that will be used when connecting to the wallet
   /// The default is set to the [NamespaceConstants.ethereum] namespace.
   // void setRequiredNamespaces(

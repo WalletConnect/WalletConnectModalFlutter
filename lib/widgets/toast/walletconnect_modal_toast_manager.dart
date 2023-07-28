@@ -14,7 +14,9 @@ class WalletConnectModalToastManager extends StatelessWidget {
       stream: toastUtils.instance.toasts,
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
-          return WalletConnectModalToast(message: snapshot.data!);
+          return WalletConnectModalToast(
+            message: snapshot.data!,
+          );
         }
         return const SizedBox.shrink();
       },

@@ -39,7 +39,9 @@ class _WalletConnectModalToastState extends State<WalletConnectModalToast>
               milliseconds: fadeInTime * 2,
             ),
       ).then((_) {
-        _controller.reverse();
+        _controller.reverse().then(
+              widget.message.completer.complete,
+            );
       });
     });
   }

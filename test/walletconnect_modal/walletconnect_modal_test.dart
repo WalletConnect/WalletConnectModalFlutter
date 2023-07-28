@@ -49,6 +49,9 @@ void main() {
       when(service.explorerService).thenReturn(explorerService);
       when(service.wcUri).thenReturn('test');
       when(service.isInitialized).thenReturn(true);
+      // when(service.rebuildConnectionUri()).thenAnswer(
+      //   (_) => Future.value(),
+      // );
     });
 
     testWidgets('should load in wallets and their buttons',

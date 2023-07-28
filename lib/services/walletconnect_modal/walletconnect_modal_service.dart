@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:w_common/disposable.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
@@ -59,6 +61,7 @@ class WalletConnectModalService extends ChangeNotifier
   Map<String, RequiredNamespace> get requiredNamespaces => _requiredNamespaces;
 
   ConnectResponse? connectResponse;
+  Future<SessionData>? get sessionFuture => connectResponse?.session.future;
   BuildContext? context;
 
   // WalletConnectModalThemeData? _themeData;
@@ -155,16 +158,7 @@ class WalletConnectModalService extends ChangeNotifier
 
     _isOpen = true;
 
-    // If we aren't connected, connect!
-    if (!_isConnected) {
-      LoggerUtil.logger.i(
-        'Connecting to WalletConnect, required namespaces: $_requiredNamespaces',
-      );
-      connectResponse = await web3App!.connect(
-        requiredNamespaces: _requiredNamespaces,
-      );
-      _awaitConnectResponse();
-    }
+    rebuildConnectionUri();
 
     // Reset the explorer
     explorerService.filterList(
@@ -249,7 +243,7 @@ class WalletConnectModalService extends ChangeNotifier
 
     await web3App!.disconnectSession(
       topic: session!.topic,
-      reason: const WalletConnectError(
+      reason: WalletConnectError(
         code: 0,
         message: 'User disconnected',
       ),
@@ -312,6 +306,32 @@ class WalletConnectModalService extends ChangeNotifier
     _checkInitialized();
 
     return _web3App!.metadata.name.replaceAll(' ', '');
+  }
+
+  @override
+  Future<void> rebuildConnectionUri() async {
+    // If we aren't connected, connect!
+    if (!_isConnected) {
+      LoggerUtil.logger.i(
+        'Connecting to WalletConnect, required namespaces: $_requiredNamespaces',
+      );
+
+      if (connectResponse != null) {
+        sessionFuture!.timeout(
+          const Duration(
+            milliseconds: 0,
+          ),
+        );
+      }
+
+      connectResponse = await web3App!.connect(
+        requiredNamespaces: _requiredNamespaces,
+      );
+
+      notifyListeners();
+
+      _awaitConnectResponse();
+    }
   }
 
   ////// Private methods //////
@@ -381,6 +401,9 @@ class WalletConnectModalService extends ChangeNotifier
       //     text: 'Connected to Wallet',
       //   ),
       // );
+    } on TimeoutException {
+      LoggerUtil.logger.i('Rebuilding session, ending future');
+      return;
     } catch (e) {
       LoggerUtil.logger.e('Error connecting to wallet: $e');
       await toastUtils.instance.show(
@@ -389,8 +412,7 @@ class WalletConnectModalService extends ChangeNotifier
           text: 'Error Connecting to Wallet',
         ),
       );
-    } finally {
-      connectResponse = null;
+      return;
     }
 
     if (_isOpen) {

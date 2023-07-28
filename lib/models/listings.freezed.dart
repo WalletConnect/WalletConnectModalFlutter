@@ -383,6 +383,8 @@ abstract class $ListingCopyWith<$Res> {
       Redirect desktop});
 
   $AppCopyWith<$Res> get app;
+  $RedirectCopyWith<$Res> get mobile;
+  $RedirectCopyWith<$Res> get desktop;
 }
 
 /// @nodoc
@@ -450,6 +452,22 @@ class _$ListingCopyWithImpl<$Res, $Val extends Listing>
       return _then(_value.copyWith(app: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $RedirectCopyWith<$Res> get mobile {
+    return $RedirectCopyWith<$Res>(_value.mobile, (value) {
+      return _then(_value.copyWith(mobile: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $RedirectCopyWith<$Res> get desktop {
+    return $RedirectCopyWith<$Res>(_value.desktop, (value) {
+      return _then(_value.copyWith(desktop: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -471,6 +489,10 @@ abstract class _$$_ListingCopyWith<$Res> implements $ListingCopyWith<$Res> {
 
   @override
   $AppCopyWith<$Res> get app;
+  @override
+  $RedirectCopyWith<$Res> get mobile;
+  @override
+  $RedirectCopyWith<$Res> get desktop;
 }
 
 /// @nodoc

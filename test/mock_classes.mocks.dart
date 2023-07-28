@@ -635,6 +635,15 @@ class MockWalletConnectModalService extends _i1.Mock
         returnValue: '',
       ) as String);
   @override
+  _i5.Future<void> rebuildConnectionUri() => (super.noSuchMethod(
+        Invocation.method(
+          #rebuildConnectionUri,
+          [],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+  @override
   void addListener(_i16.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
