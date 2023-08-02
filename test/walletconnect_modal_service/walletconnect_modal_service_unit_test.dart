@@ -2,6 +2,7 @@ import 'package:event/event.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 
@@ -13,7 +14,7 @@ void main() {
     late WalletConnectModalService service;
     late MockWeb3App web3App;
     late MockSessions sessions;
-    late MockExplorerService explorerService;
+    late MockExplorerService es;
 
     setUp(() {
       web3App = MockWeb3App();
@@ -34,11 +35,13 @@ void main() {
       when(sessions.getAll()).thenReturn(
         [],
       );
-      explorerService = MockExplorerService();
+
       service = WalletConnectModalService(
         web3App: web3App,
-        explorerService: explorerService,
       );
+
+      es = MockExplorerService();
+      explorerService.instance = es;
     });
 
     group('Constructor', () {
@@ -57,7 +60,6 @@ void main() {
 
         expect(service.web3App, isNotNull);
         expect(service.projectId, 'projectId');
-        expect(service.explorerService, isNotNull);
       });
 
       test('does not overwrite provided web3App', () {
@@ -80,19 +82,18 @@ void main() {
           'should call init on _web3App and explorerService, then skip init again',
           () async {
         when(web3App.init()).thenAnswer((_) async {});
-        when(explorerService.init(referer: anyNamed('referer')))
-            .thenAnswer((_) async {});
+        when(es.init(referer: anyNamed('referer'))).thenAnswer((_) async {});
 
         await service.init();
 
         verify(web3App.init()).called(1);
-        verify(explorerService.init(referer: anyNamed('referer'))).called(1);
+        verify(es.init(referer: anyNamed('referer'))).called(1);
         verify(web3App.onSessionDelete).called(1);
 
         await service.init();
 
         verifyNever(web3App.init());
-        verifyNever(explorerService.init(referer: anyNamed('referer')));
+        verifyNever(es.init(referer: anyNamed('referer')));
 
         expect(service.isInitialized, isTrue);
       });
@@ -101,7 +102,7 @@ void main() {
           'should set _isConnected, _session, _address if _web3App.sessions.getAll().isNotEmpty',
           () async {
         when(web3App.init()).thenAnswer((_) async {});
-        when(explorerService.init(referer: anyNamed('referer'))).thenAnswer(
+        when(es.init(referer: anyNamed('referer'))).thenAnswer(
           (_) async {},
         );
 
@@ -201,7 +202,7 @@ void main() {
         await service.init();
 
         when(
-          explorerService.getRedirect(name: testSession.peer.metadata.name),
+          es.getRedirect(name: testSession.peer.metadata.name),
         ).thenReturn(null);
 
         service.launchCurrentWallet();
@@ -228,7 +229,7 @@ void main() {
           universal: 'https://universal.com',
         );
         when(
-          explorerService.getRedirect(name: testSession.peer.metadata.name),
+          es.getRedirect(name: testSession.peer.metadata.name),
         ).thenReturn(redirect);
 
         service.launchCurrentWallet();

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
@@ -21,7 +22,7 @@ void main() {
     late WalletConnectModalService service;
     late MockWeb3App web3App;
     late MockSessions sessions;
-    late MockExplorerService explorerService;
+    late MockExplorerService es;
 
     // Assuming these objects have been defined somewhere in your actual code
     var mockPlatformUtils = MockPlatformUtils();
@@ -61,17 +62,19 @@ void main() {
         [],
       );
 
-      explorerService = MockExplorerService();
+      es = MockExplorerService();
       when(
-        explorerService.init(referer: anyNamed('referer')),
+        es.init(referer: anyNamed('referer')),
       ).thenAnswer((_) async {});
-      when(explorerService.initialized).thenReturn(ValueNotifier(true));
-      when(explorerService.itemList).thenReturn(ValueNotifier([]));
+      when(es.initialized).thenReturn(ValueNotifier(true));
+      when(es.itemList).thenReturn(ValueNotifier([]));
 
       service = WalletConnectModalService(
         web3App: web3App,
-        explorerService: explorerService,
+        // explorerService: explorerService,
       );
+
+      explorerService.instance = es;
 
       await service.init();
     });
@@ -116,7 +119,7 @@ void main() {
           optionalNamespaces: anyNamed('optionalNamespaces'),
         ),
       ).called(1);
-      verify(explorerService.filterList(query: '')).called(1);
+      verify(es.filterList(query: '')).called(1);
       // Once by the open, again by the WalletConnectModal in its init
       verify(mockPlatformUtils.getPlatformType()).called(1);
       expect(find.byType(WalletConnectModal), findsOneWidget);

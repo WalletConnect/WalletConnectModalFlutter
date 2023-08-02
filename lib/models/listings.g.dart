@@ -14,7 +14,7 @@ _$_WalletData _$$_WalletDataFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_WalletDataToJson(_$_WalletData instance) =>
     <String, dynamic>{
-      'listing': instance.listing,
+      'listing': instance.listing.toJson(),
       'installed': instance.installed,
     };
 
@@ -28,7 +28,7 @@ _$_ListingResponse _$$_ListingResponseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_ListingResponseToJson(_$_ListingResponse instance) =>
     <String, dynamic>{
-      'listings': instance.listings,
+      'listings': instance.listings.map((k, e) => MapEntry(k, e.toJson())),
       'total': instance.total,
     };
 
@@ -51,7 +51,7 @@ Map<String, dynamic> _$$_ListingToJson(_$_Listing instance) {
     'name': instance.name,
     'homepage': instance.homepage,
     'image_id': instance.imageId,
-    'app': instance.app,
+    'app': instance.app.toJson(),
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -60,9 +60,9 @@ Map<String, dynamic> _$$_ListingToJson(_$_Listing instance) {
     }
   }
 
-  writeNotNull('injected', instance.injected);
-  val['mobile'] = instance.mobile;
-  val['desktop'] = instance.desktop;
+  writeNotNull('injected', instance.injected?.map((e) => e.toJson()).toList());
+  val['mobile'] = instance.mobile.toJson();
+  val['desktop'] = instance.desktop.toJson();
   return val;
 }
 

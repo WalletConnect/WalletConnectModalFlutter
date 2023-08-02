@@ -5,10 +5,10 @@ import 'package:mockito/mockito.dart';
 import 'package:http/http.dart' as http;
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
+import 'package:walletconnect_modal_flutter/services/explorer/explorer_service.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
-import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 
 import '../test_data.dart';
 import '../mock_classes.mocks.dart';

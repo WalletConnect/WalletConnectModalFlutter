@@ -7,6 +7,7 @@ import 'package:w_common/disposable.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service.dart';
+import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/i_explorer_service.dart';
 import 'package:walletconnect_modal_flutter/services/utils/toast/toast_message.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
@@ -52,8 +53,8 @@ class WalletConnectModalService extends ChangeNotifier
   @override
   String? get wcUri => connectResponse?.uri.toString();
 
-  @override
-  late IExplorerService explorerService;
+  // @override
+  // late IExplorerService explorerService;
 
   Map<String, RequiredNamespace> _requiredNamespaces =
       NamespaceConstants.ethereum;
@@ -80,7 +81,6 @@ class WalletConnectModalService extends ChangeNotifier
     String? projectId,
     PairingMetadata? metadata,
     Map<String, RequiredNamespace>? requiredNamespaces,
-    IExplorerService? explorerService,
     Set<String>? recommendedWalletIds,
     ExcludedWalletState excludedWalletState = ExcludedWalletState.list,
     Set<String>? excludedWalletIds,
@@ -103,13 +103,12 @@ class WalletConnectModalService extends ChangeNotifier
       _requiredNamespaces = requiredNamespaces;
     }
 
-    this.explorerService = explorerService ??
-        ExplorerService(
-          projectId: _projectId,
-          recommendedWalletIds: recommendedWalletIds,
-          excludedWalletState: excludedWalletState,
-          excludedWalletIds: excludedWalletIds,
-        );
+    explorerService.instance = ExplorerService(
+      projectId: _projectId,
+      recommendedWalletIds: recommendedWalletIds,
+      excludedWalletState: excludedWalletState,
+      excludedWalletIds: excludedWalletIds,
+    );
   }
 
   @override
@@ -119,7 +118,7 @@ class WalletConnectModalService extends ChangeNotifier
     }
 
     await _web3App!.init();
-    await explorerService.init(
+    await explorerService.instance!.init(
       referer: _web3App!.metadata.name.replaceAll(' ', ''),
     );
 
@@ -149,6 +148,7 @@ class WalletConnectModalService extends ChangeNotifier
   @override
   Future<void> open({
     required BuildContext context,
+    Widget? startWidget,
   }) async {
     _checkInitialized();
 
@@ -161,7 +161,7 @@ class WalletConnectModalService extends ChangeNotifier
     rebuildConnectionUri();
 
     // Reset the explorer
-    explorerService.filterList(
+    explorerService.instance!.filterList(
       query: '',
     );
 
@@ -183,10 +183,12 @@ class WalletConnectModalService extends ChangeNotifier
             data: WalletConnectModalThemeData.lightMode,
             child: WalletConnectModal(
               service: this,
+              startWidget: startWidget,
             ),
           )
         : WalletConnectModal(
             service: this,
+            startWidget: startWidget,
           );
 
     if (bottomSheet) {
@@ -343,7 +345,7 @@ class WalletConnectModalService extends ChangeNotifier
     }
 
     final Redirect? sessionRedirect = session?.peer.metadata.redirect;
-    final Redirect? explorerRedirect = explorerService.getRedirect(
+    final Redirect? explorerRedirect = explorerService.instance?.getRedirect(
       name: session!.peer.metadata.name,
     );
 

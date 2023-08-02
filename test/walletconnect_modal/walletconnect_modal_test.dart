@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/constants/constants.dart';
+import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal.dart';
@@ -17,7 +18,7 @@ void main() {
     late MockWalletConnectModalService service;
     late MockWeb3App web3App;
     late MockSessions sessions;
-    late MockExplorerService explorerService;
+    late MockExplorerService es;
     final MockPlatformUtils mockPlatformUtils = MockPlatformUtils();
 
     setUp(() async {
@@ -42,11 +43,12 @@ void main() {
       when(sessions.getAll()).thenReturn(
         [],
       );
-      explorerService = MockExplorerService();
-      when(explorerService.initialized).thenReturn(ValueNotifier(false));
-      when(explorerService.itemList).thenReturn(ValueNotifier([]));
+      es = MockExplorerService();
+      when(es.initialized).thenReturn(ValueNotifier(false));
+      when(es.itemList).thenReturn(ValueNotifier([]));
+      explorerService.instance = es;
+
       service = MockWalletConnectModalService();
-      when(service.explorerService).thenReturn(explorerService);
       when(service.wcUri).thenReturn('test');
       when(service.isInitialized).thenReturn(true);
       // when(service.rebuildConnectionUri()).thenAnswer(

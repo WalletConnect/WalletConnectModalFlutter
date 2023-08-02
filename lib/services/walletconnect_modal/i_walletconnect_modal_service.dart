@@ -1,22 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
-import 'package:walletconnect_modal_flutter/services/explorer/i_explorer_service.dart';
-
-// enum Web3ModalChains {
-//   ethereum,
-//   polygon,
-// }
-
-enum WalletConnectModalState {
-  account,
-  qrCode,
-  walletListShort,
-  walletListLong,
-  qrCodeAndWalletList,
-  chainList,
-  help,
-  getAWallet,
-}
 
 abstract class IWalletConnectModalService implements ChangeNotifier {
   /// Whether or not this object has been initialized.
@@ -46,7 +29,7 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
   String? get wcUri;
 
   /// The service used to fetch wallet listings from the explorer API.
-  abstract final IExplorerService explorerService;
+  // abstract final IExplorerService explorerService;
 
   /// Sets up the explorer and the web3App if they already been initialized.
   Future<void> init();
@@ -55,6 +38,7 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
   /// If none is provided, the default state will be used based on platform.
   Future<void> open({
     required BuildContext context,
+    Widget? startWidget,
   });
 
   /// Closes the modal.

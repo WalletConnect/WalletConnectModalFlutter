@@ -7,6 +7,7 @@ import 'package:walletconnect_modal_flutter/models/listings.dart';
 import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/pages/get_wallet_page.dart';
 import 'package:walletconnect_modal_flutter/pages/help_page.dart';
+import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/toast/toast_message.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
@@ -308,7 +309,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
         ),
         child: GridList<WalletData>(
           state: GridListState.short,
-          provider: widget.service.explorerService,
+          provider: explorerService.instance!,
           viewLongList: _addWalletListLong,
           onSelect: _onWalletDataSelected,
         ),
@@ -329,7 +330,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
         child: GridList<WalletData>(
           // key: ValueKey('${GridListState.long}$_searchQuery'),
           state: GridListState.long,
-          provider: widget.service.explorerService,
+          provider: explorerService.instance!,
           viewLongList: _addWalletListLong,
           onSelect: _onWalletDataSelected,
         ),
@@ -353,7 +354,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
             ),
             GridList(
               state: GridListState.extraShort,
-              provider: widget.service.explorerService,
+              provider: explorerService.instance!,
               viewLongList: _addWalletListLong,
               onSelect: _onWalletDataSelected,
             ),
@@ -407,7 +408,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
         ),
         onBack: widgetStack.instance.pop,
         child: GetWalletPage(
-          service: widget.service.explorerService,
+          service: explorerService.instance!,
         ),
       ),
     );
@@ -458,7 +459,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
   }
 
   void _updateSearch(String query) {
-    widget.service.explorerService.filterList(query: query);
+    explorerService.instance!.filterList(query: query);
   }
 
   void _widgetStackUpdated() {
