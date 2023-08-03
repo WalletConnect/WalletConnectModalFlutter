@@ -1,3 +1,8 @@
+## 1.1.7
+
+- Added ability to inject services that need init into the modal, will be used by Web3Modal
+- Bug fixes and polish
+
 ## 1.1.6
 
 - Updated to `walletconnect_flutter_v2` v2.0.16
