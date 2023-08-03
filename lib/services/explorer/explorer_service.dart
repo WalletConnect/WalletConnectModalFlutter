@@ -41,8 +41,11 @@ class ExplorerService implements IExplorerService {
 
   final http.Client client;
 
+  final String referer;
+
   ExplorerService({
     required this.projectId,
+    required this.referer,
     this.explorerUriRoot = 'https://explorer-api.walletconnect.com',
     this.recommendedWalletIds,
     this.excludedWalletState = ExcludedWalletState.list,
@@ -51,10 +54,7 @@ class ExplorerService implements IExplorerService {
   }) : client = client ?? http.Client();
 
   @override
-  Future<void> init({
-    required String referer,
-    ListingParams? params,
-  }) async {
+  Future<void> init() async {
     if (initialized.value) {
       return;
     }
@@ -84,7 +84,7 @@ class ExplorerService implements IExplorerService {
     _listings = await fetchListings(
       endpoint: '/w3m/v1/get${platform}Listings',
       referer: referer,
-      params: params,
+      // params: params,
     );
 
     if (excludedWalletState == ExcludedWalletState.list) {
@@ -213,6 +213,7 @@ class ExplorerService implements IExplorerService {
     }
   }
 
+  @override
   Future<List<Listing>> fetchListings({
     required String endpoint,
     required String referer,

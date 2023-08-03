@@ -18,6 +18,7 @@ void main() {
     final client = MockClient();
     final explorerService = ExplorerService(
       projectId: 'test',
+      referer: 'ref',
       client: client,
     );
 
@@ -45,8 +46,7 @@ void main() {
           200,
         ),
       );
-      String referer = 'test_referer';
-      await explorerService.init(referer: referer);
+      await explorerService.init();
 
       // add assertions based on your expected outcomes
       expect(

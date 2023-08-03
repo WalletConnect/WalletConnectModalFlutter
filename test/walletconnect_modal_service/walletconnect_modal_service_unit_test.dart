@@ -82,18 +82,24 @@ void main() {
           'should call init on _web3App and explorerService, then skip init again',
           () async {
         when(web3App.init()).thenAnswer((_) async {});
-        when(es.init(referer: anyNamed('referer'))).thenAnswer((_) async {});
+        when(es.init()).thenAnswer((_) async {});
+        int count = 0;
+        WalletConnectModalServices.addInitFunction(() {
+          count++;
+        });
 
         await service.init();
 
         verify(web3App.init()).called(1);
-        verify(es.init(referer: anyNamed('referer'))).called(1);
+        verify(es.init()).called(1);
         verify(web3App.onSessionDelete).called(1);
+        expect(count, 1);
 
         await service.init();
 
         verifyNever(web3App.init());
-        verifyNever(es.init(referer: anyNamed('referer')));
+        verifyNever(es.init());
+        expect(count, 1);
 
         expect(service.isInitialized, isTrue);
       });
@@ -102,7 +108,7 @@ void main() {
           'should set _isConnected, _session, _address if _web3App.sessions.getAll().isNotEmpty',
           () async {
         when(web3App.init()).thenAnswer((_) async {});
-        when(es.init(referer: anyNamed('referer'))).thenAnswer(
+        when(es.init()).thenAnswer(
           (_) async {},
         );
 

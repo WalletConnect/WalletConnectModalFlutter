@@ -35,7 +35,7 @@ import 'package:walletconnect_modal_flutter/services/utils/toast/toast_utils.dar
     as _i22;
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils.dart'
     as _i18;
-import 'package:walletconnect_modal_flutter/services/walletconnect_modal/walletconnect_modal_service.dart'
+import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart'
     as _i15;
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list_item_model.dart'
     as _i13;
@@ -366,18 +366,15 @@ class MockExplorerService extends _i1.Mock implements _i11.ExplorerService {
         ),
       ) as _i3.Client);
   @override
-  _i4.Future<void> init({
-    required String? referer,
-    _i14.ListingParams? params,
-  }) =>
-      (super.noSuchMethod(
+  String get referer => (super.noSuchMethod(
+        Invocation.getter(#referer),
+        returnValue: '',
+      ) as String);
+  @override
+  _i4.Future<void> init() => (super.noSuchMethod(
         Invocation.method(
           #init,
           [],
-          {
-            #referer: referer,
-            #params: params,
-          },
         ),
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),

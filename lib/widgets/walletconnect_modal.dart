@@ -364,24 +364,6 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
     );
   }
 
-  // void _addChainList() {
-  //   widgetStack.instance.add(
-  //     WalletConnectModalNavBar(
-  //       // TODO: Update this to display chains, not wallets
-  //       key: Key(WalletConnectModalState.chainList.name),
-  //       title: const WalletConnectModalNavbarTitle(
-  //         title: 'Select network',
-  //       ),
-  //       child: GridList(
-  //         state: GridListState.extraShort,
-  //         provider: widget.service.explorerService,
-  //         viewLongList: _addWalletListLong,
-  //         onSelect: _onWalletDataSelected,
-  //       ),
-  //     ),
-  //   );
-  // }
-
   void _addHelp() {
     widgetStack.instance.add(
       WalletConnectModalNavBar(

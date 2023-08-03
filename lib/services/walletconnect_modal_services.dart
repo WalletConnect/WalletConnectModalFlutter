@@ -12,10 +12,28 @@ import 'package:walletconnect_modal_flutter/services/utils/widget_stack/i_widget
 import 'package:walletconnect_modal_flutter/services/utils/widget_stack/widget_stack_singleton.dart';
 
 class WalletConnectModalServices {
-  IExplorerService get explorer => explorerService.instance!;
-  ICoreUtils get core => coreUtils.instance;
-  IToastUtils get toast => toastUtils.instance;
-  IUrlUtils get url => urlUtils.instance;
-  IWidgetStack get stack => widgetStack.instance;
-  IPlatformUtils get platform => platformUtils.instance;
+  static IExplorerService get explorer => explorerService.instance!;
+  static ICoreUtils get core => coreUtils.instance;
+  static IToastUtils get toast => toastUtils.instance;
+  static IUrlUtils get url => urlUtils.instance;
+  static IWidgetStack get stack => widgetStack.instance;
+  static IPlatformUtils get platform => platformUtils.instance;
+
+  static final List<Function> _initFunctions = [
+    () async {
+      await explorer.init();
+    },
+  ];
+
+  static void addInitFunction(Function function) {
+    _initFunctions.add(function);
+  }
+
+  // static final Map<Type, Future> initFunctionsMap = {};
+
+  static Future<void> init() async {
+    for (final initFunction in _initFunctions) {
+      await initFunction();
+    }
+  }
 }

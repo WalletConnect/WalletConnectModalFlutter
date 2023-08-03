@@ -16,6 +16,7 @@ import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singlet
 import 'package:walletconnect_modal_flutter/services/walletconnect_modal/i_walletconnect_modal_service.dart';
 import 'package:walletconnect_modal_flutter/services/utils/logger/logger_util.dart';
 import 'package:walletconnect_modal_flutter/constants/namespaces.dart';
+import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
 
@@ -105,6 +106,7 @@ class WalletConnectModalService extends ChangeNotifier
 
     explorerService.instance = ExplorerService(
       projectId: _projectId,
+      referer: _web3App!.metadata.name.replaceAll(' ', ''),
       recommendedWalletIds: recommendedWalletIds,
       excludedWalletState: excludedWalletState,
       excludedWalletIds: excludedWalletIds,
@@ -118,9 +120,7 @@ class WalletConnectModalService extends ChangeNotifier
     }
 
     await _web3App!.init();
-    await explorerService.instance!.init(
-      referer: _web3App!.metadata.name.replaceAll(' ', ''),
-    );
+    await WalletConnectModalServices.init();
 
     _registerListeners();
 

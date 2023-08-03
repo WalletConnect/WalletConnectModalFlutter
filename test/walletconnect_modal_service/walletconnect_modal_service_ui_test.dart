@@ -64,7 +64,7 @@ void main() {
 
       es = MockExplorerService();
       when(
-        es.init(referer: anyNamed('referer')),
+        es.init(),
       ).thenAnswer((_) async {});
       when(es.initialized).thenReturn(ValueNotifier(true));
       when(es.itemList).thenReturn(ValueNotifier([]));

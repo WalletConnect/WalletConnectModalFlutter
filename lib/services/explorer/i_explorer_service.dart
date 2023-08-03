@@ -25,10 +25,7 @@ abstract class IExplorerService implements GridListProvider<WalletData> {
   /// The wallets that will be excluded from the modal.
   Set<String>? excludedWalletIds;
 
-  Future<void> init({
-    required String referer,
-    ListingParams? params,
-  });
+  Future<void> init();
 
   String getWalletImageUrl({
     required String imageId,
@@ -40,5 +37,11 @@ abstract class IExplorerService implements GridListProvider<WalletData> {
 
   Redirect? getRedirect({
     required String name,
+  });
+
+  Future<List<Listing>> fetchListings({
+    required String endpoint,
+    required String referer,
+    ListingParams? params,
   });
 }

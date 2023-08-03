@@ -41,7 +41,7 @@ void main() {
 
       explorerService = MockExplorerService();
       when(
-        explorerService.init(referer: anyNamed('referer')),
+        explorerService.init(),
       ).thenAnswer((_) async {});
       when(explorerService.initialized).thenReturn(ValueNotifier(true));
       when(explorerService.itemList).thenReturn(walletData);
