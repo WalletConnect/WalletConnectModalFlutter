@@ -1,12 +1,9 @@
-## 1.1.6
-
-- Updated to `walletconnect_flutter_v2` v2.0.16
-
 ## 1.1.5
 
 - Migrated to use widget stack instead of states for easier extension into Web3Modal
 - Opened up modal service to allow for a start widget to be passed in
 - Added WalletConnectModalServices class to cleanly expose all available services
+- Updated to `walletconnect_flutter_v2` v2.0.16
 
 ## 1.1.4
 
