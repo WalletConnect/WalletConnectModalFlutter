@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
 import 'package:walletconnect_modal_flutter/pages/get_wallet_page.dart';
+import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
@@ -18,7 +19,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('GetAWallet', () {
-    late MockExplorerService explorerService;
+    late MockExplorerService es;
 
     final MockPlatformUtils mockPlatformUtils = MockPlatformUtils();
     final MockUrlUtils mockUrlUtils = MockUrlUtils();
@@ -39,12 +40,13 @@ void main() {
       );
       urlUtils.instance = mockUrlUtils;
 
-      explorerService = MockExplorerService();
+      es = MockExplorerService();
       when(
-        explorerService.init(),
+        es.init(),
       ).thenAnswer((_) async {});
-      when(explorerService.initialized).thenReturn(ValueNotifier(true));
-      when(explorerService.itemList).thenReturn(walletData);
+      when(es.initialized).thenReturn(ValueNotifier(true));
+      when(es.itemList).thenReturn(walletData);
+      explorerService.instance = es;
     });
 
     testWidgets('should load in wallets and their buttons',
@@ -52,10 +54,8 @@ void main() {
       FlutterError.onError = ignoreOverflowErrors;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: GetWalletPage(
-            service: explorerService,
-          ),
+        const MaterialApp(
+          home: GetWalletPage(),
         ),
       );
 
@@ -99,10 +99,8 @@ void main() {
       walletData.value = wallets;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: GetWalletPage(
-            service: explorerService,
-          ),
+        const MaterialApp(
+          home: GetWalletPage(),
         ),
       );
 

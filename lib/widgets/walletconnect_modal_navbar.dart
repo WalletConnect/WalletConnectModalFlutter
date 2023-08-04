@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:walletconnect_modal_flutter/constants/constants.dart';
+import 'package:walletconnect_modal_flutter/services/utils/widget_stack/widget_stack_singleton.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_icon_button.dart';
 
 class WalletConnectModalNavBar extends StatelessWidget {
@@ -29,9 +31,15 @@ class WalletConnectModalNavBar extends StatelessWidget {
                 width: 60,
                 child: Row(
                   children: [
-                    if (onBack != null)
+                    if (widgetStack.instance.canPop())
                       WalletConnectIconButton(
-                        onPressed: onBack!,
+                        key: WalletConnectModalConstants.navbarBackButtonKey,
+                        onPressed: () {
+                          if (onBack != null) {
+                            onBack!();
+                          }
+                          widgetStack.instance.pop();
+                        },
                         iconPath: 'assets/icons/backward.svg',
                         size: 20,
                       ),

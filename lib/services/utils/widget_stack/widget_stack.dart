@@ -1,5 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:walletconnect_modal_flutter/pages/qr_code_and_wallet_list_page.dart';
+import 'package:walletconnect_modal_flutter/pages/wallet_list_short_page.dart';
+import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
+import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/widget_stack/i_widget_stack.dart';
 
 class WidgetStack extends IWidgetStack {
@@ -33,6 +37,11 @@ class WidgetStack extends IWidgetStack {
   }
 
   @override
+  bool canPop() {
+    return _stack.length > 1;
+  }
+
+  @override
   void popUntil(Key key) {
     if (_stack.isEmpty) {
       throw Exception('The stack is empty. No widget to pop.');
@@ -52,5 +61,23 @@ class WidgetStack extends IWidgetStack {
   @override
   bool containsKey(Key key) {
     return _stack.any((element) => element.key == key);
+  }
+
+  @override
+  void clear() {
+    _stack.clear();
+    notifyListeners();
+  }
+
+  @override
+  void addDefault() {
+    final PlatformType pType = platformUtils.instance.getPlatformType();
+
+    // Choose the state based on platform
+    if (pType == PlatformType.mobile) {
+      add(const WalletListShortPage());
+    } else if (pType == PlatformType.desktop || pType == PlatformType.web) {
+      add(const QRCodeAndWalletListPage());
+    }
   }
 }

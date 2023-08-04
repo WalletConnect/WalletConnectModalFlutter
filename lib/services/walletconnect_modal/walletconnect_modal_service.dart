@@ -5,7 +5,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:w_common/disposable.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
-import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
+import 'package:walletconnect_modal_flutter/models/launch_url_exception.dart';
+import 'package:walletconnect_modal_flutter/models/listings.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/i_explorer_service.dart';
@@ -13,12 +14,10 @@ import 'package:walletconnect_modal_flutter/services/utils/toast/toast_message.d
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/toast/toast_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
-import 'package:walletconnect_modal_flutter/services/walletconnect_modal/i_walletconnect_modal_service.dart';
-import 'package:walletconnect_modal_flutter/services/utils/logger/logger_util.dart';
-import 'package:walletconnect_modal_flutter/constants/namespaces.dart';
+import 'package:walletconnect_modal_flutter/services/utils/widget_stack/widget_stack_singleton.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal.dart';
-import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
+import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_provider.dart';
 
 class WalletConnectModalService extends ChangeNotifier
     with Disposable
@@ -164,6 +163,7 @@ class WalletConnectModalService extends ChangeNotifier
     explorerService.instance!.filterList(
       query: '',
     );
+    widgetStack.instance.clear();
 
     this.context = context;
 
@@ -182,14 +182,16 @@ class WalletConnectModalService extends ChangeNotifier
         ? WalletConnectModalTheme(
             data: WalletConnectModalThemeData.lightMode,
             child: WalletConnectModal(
-              service: this,
               startWidget: startWidget,
             ),
           )
         : WalletConnectModal(
-            service: this,
             startWidget: startWidget,
           );
+    final Widget root = WalletConnectModalProvider(
+      service: this,
+      child: w,
+    );
 
     if (bottomSheet) {
       await showModalBottomSheet(
@@ -204,14 +206,14 @@ class WalletConnectModalService extends ChangeNotifier
         useSafeArea: true,
         context: context,
         builder: (context) {
-          return w;
+          return root;
         },
       );
     } else {
       await showDialog(
         context: context,
         builder: (context) {
-          return w;
+          return root;
         },
       );
     }
@@ -228,6 +230,7 @@ class WalletConnectModalService extends ChangeNotifier
     }
     // _isOpen = false;
 
+    toastUtils.instance.clear();
     if (context != null) {
       Navigator.pop(context!);
     }
@@ -254,7 +257,7 @@ class WalletConnectModalService extends ChangeNotifier
   }
 
   @override
-  void launchCurrentWallet() {
+  Future<void> launchCurrentWallet() async {
     _checkInitialized();
 
     if (_session == null) {
@@ -268,17 +271,49 @@ class WalletConnectModalService extends ChangeNotifier
     );
 
     if (redirect == null) {
-      urlUtils.instance.launchUrl(
+      await urlUtils.instance.launchUrl(
         Uri.parse(
           _session!.peer.metadata.url,
         ),
       );
     } else {
-      urlUtils.instance.launchRedirect(
+      await urlUtils.instance.launchRedirect(
         nativeUri: Uri.parse(redirect.native ?? ''),
         universalUri: Uri.parse(redirect.universal ?? ''),
       );
     }
+  }
+
+  bool _connectingWallet = false;
+
+  @override
+  Future<void> connectWallet({
+    required WalletData walletData,
+  }) async {
+    _checkInitialized();
+
+    if (_connectingWallet) {
+      return;
+    }
+    _connectingWallet = true;
+
+    try {
+      await rebuildConnectionUri();
+      await urlUtils.instance.navigateDeepLink(
+        nativeLink: walletData.listing.mobile.native,
+        universalLink: walletData.listing.mobile.universal,
+        wcURI: wcUri!,
+      );
+    } on LaunchUrlException catch (e) {
+      toastUtils.instance.show(
+        ToastMessage(
+          type: ToastType.error,
+          text: e.message,
+        ),
+      );
+    }
+
+    _connectingWallet = false;
   }
 
   @override
@@ -320,11 +355,15 @@ class WalletConnectModalService extends ChangeNotifier
       );
 
       if (connectResponse != null) {
-        sessionFuture!.timeout(
-          const Duration(
-            milliseconds: 0,
-          ),
-        );
+        try {
+          sessionFuture!.timeout(
+            const Duration(
+              milliseconds: 0,
+            ),
+          );
+        } on TimeoutException {
+          // Ignore this error, just wanted to cancel the previous future.
+        }
       }
 
       connectResponse = await web3App!.connect(

@@ -25,6 +25,11 @@ class ToastUtils extends IToastUtils with Disposable {
     await message.completer.future;
   }
 
+  @override
+  void clear() {
+    _queue.clear();
+  }
+
   Future<void> _popToast() async {
     if (_queue.isNotEmpty) {
       _isShowing = true;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
 
 class GridListItem extends StatelessWidget {
@@ -17,7 +18,8 @@ class GridListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final WalletConnectModalTheme theme = WalletConnectModalTheme.of(context);
+    final WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
 
     return InkWell(
       onTap: onSelect,
@@ -35,7 +37,7 @@ class GridListItem extends StatelessWidget {
               overflow: TextOverflow.clip,
               style: TextStyle(
                 fontSize: 12.0,
-                color: theme.data.foreground100,
+                color: themeData.foreground100,
               ),
             ),
             const SizedBox(height: 2.0),
@@ -46,7 +48,7 @@ class GridListItem extends StatelessWidget {
               overflow: TextOverflow.fade,
               style: TextStyle(
                 fontSize: 12.0,
-                color: theme.data.foreground300,
+                color: themeData.foreground300,
               ),
             ),
           ],

@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:walletconnect_modal_flutter/constants/constants.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
+import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_button.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list_item_model.dart';
-import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list_provider.dart';
 import 'package:walletconnect_modal_flutter/widgets/wallet_image.dart';
+import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_navbar.dart';
+import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_navbar_title.dart';
 
 class GetWalletPage extends StatelessWidget {
-  const GetWalletPage({
-    super.key,
-    required this.service,
-  });
-
-  final GridListProvider<WalletData> service;
+  const GetWalletPage()
+      : super(
+          key: WalletConnectModalConstants.getAWalletPageKey,
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -27,65 +28,71 @@ class GetWalletPage extends StatelessWidget {
       MediaQuery.of(context).orientation,
     );
     final int listCount = longBottomSheet ? 2 : 6;
-    List<GridListItemModel<WalletData>> wallets = service.itemList.value
+    List<GridListItemModel<WalletData>> wallets = explorerService
+        .instance!.itemList.value
         .where((GridListItemModel<WalletData> w) => !w.data.installed)
         .take(listCount)
         .toList();
 
-    return Column(
-      children: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children:
-              wallets.map((wallet) => WalletItem(wallet: wallet)).toList(),
-        ),
-        const SizedBox(height: 8.0),
-        Text(
-          "Not what you're looking for?",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16.0,
-            color: themeData.foreground100,
+    return WalletConnectModalNavBar(
+      title: const WalletConnectModalNavbarTitle(
+        title: 'Get a wallet',
+      ),
+      child: Column(
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children:
+                wallets.map((wallet) => WalletItem(wallet: wallet)).toList(),
           ),
-        ),
-        const SizedBox(height: 4.0),
-        Text(
-          "With hundreds of wallets out there, there's something for everyone",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16.0,
-            color: themeData.foreground200,
-          ),
-        ),
-        const SizedBox(height: 8.0),
-        WalletConnectModalButton(
-          onPressed: () => urlUtils.instance.launchUrl(
-            Uri.parse(
-              StringConstants.getAWalletExploreWalletsUrl,
+          const SizedBox(height: 8.0),
+          Text(
+            "Not what you're looking for?",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16.0,
+              color: themeData.foreground100,
             ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Explore Wallets',
-                style: TextStyle(
-                  fontFamily: themeData.fontFamily,
+          const SizedBox(height: 4.0),
+          Text(
+            "With hundreds of wallets out there, there's something for everyone",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16.0,
+              color: themeData.foreground200,
+            ),
+          ),
+          const SizedBox(height: 8.0),
+          WalletConnectModalButton(
+            onPressed: () => urlUtils.instance.launchUrl(
+              Uri.parse(
+                StringConstants.getAWalletExploreWalletsUrl,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Explore Wallets',
+                  style: TextStyle(
+                    fontFamily: themeData.fontFamily,
+                    color: themeData.inverse100,
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_outward,
+                  size: 12,
                   color: themeData.inverse100,
                 ),
-              ),
-              Icon(
-                Icons.arrow_outward,
-                size: 12,
-                color: themeData.inverse100,
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        // URL: https://explorer.walletconnect.com/?type=wallet
-      ],
+          // URL: https://explorer.walletconnect.com/?type=wallet
+        ],
+      ),
     );
   }
 }

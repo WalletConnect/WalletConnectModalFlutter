@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:walletconnect_modal_flutter/constants/constants.dart';
 import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list_item.dart';
@@ -19,13 +20,13 @@ class GridList<T> extends StatelessWidget {
     super.key,
     this.state = GridListState.short,
     required this.provider,
-    required this.viewLongList,
+    this.viewLongList,
     required this.onSelect,
   });
 
   final GridListState state;
   final GridListProvider<T> provider;
-  final void Function() viewLongList;
+  final void Function()? viewLongList;
   final void Function(T) onSelect;
 
   @override
@@ -144,34 +145,36 @@ class GridList<T> extends StatelessWidget {
     List<GridListItemModel<T>> items,
     int startIndex,
   ) {
-    final WalletConnectModalTheme theme = WalletConnectModalTheme.of(context);
+    final WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
 
     List<Widget> images = [];
 
     for (int i = 0; i < 4; i++) {
+      if (startIndex + i + 1 > items.length) {
+        break;
+      }
+
       images.add(
         WalletImage(
           imageUrl: items[startIndex + i].image,
           imageSize: GridList.tileSize / 3.0,
         ),
       );
-
-      if (i + 1 > items.length) {
-        break;
-      }
     }
 
     return GridListItem(
+      key: WalletConnectModalConstants.gridListViewAllButtonKey,
       title: 'View All',
-      onSelect: viewLongList,
+      onSelect: viewLongList ?? () {},
       child: Container(
         width: GridList.tileSize,
         height: GridList.tileSize,
         padding: const EdgeInsets.all(2.0),
         decoration: BoxDecoration(
-          color: theme.data.background200,
+          color: themeData.background200,
           border: Border.all(
-            color: theme.data.overlay010,
+            color: themeData.overlay010,
             strokeAlign: BorderSide.strokeAlignOutside,
           ),
           borderRadius: BorderRadius.circular(

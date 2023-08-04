@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:walletconnect_modal_flutter/models/listings.dart';
 
 abstract class IWalletConnectModalService implements ChangeNotifier {
   /// Whether or not this object has been initialized.
@@ -48,7 +49,11 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
   /// If there is no session, this does nothing.
   Future<void> disconnect();
 
-  void launchCurrentWallet();
+  Future<void> launchCurrentWallet();
+
+  Future<void> connectWallet({
+    required WalletData walletData,
+  });
 
   /// The required namespaces that will be used when connecting to the wallet
   Map<String, RequiredNamespace> get requiredNamespaces;

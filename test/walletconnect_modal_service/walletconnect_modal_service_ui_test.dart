@@ -8,6 +8,7 @@ import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
+import 'package:walletconnect_modal_flutter/services/utils/toast/toast_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal.dart';
 
@@ -32,6 +33,9 @@ void main() {
       when(mockPlatformUtils.isBottomSheet()).thenReturn(true);
       when(mockPlatformUtils.isLongBottomSheet(any)).thenReturn(false);
       platformUtils.instance = mockPlatformUtils;
+
+      toastUtils.instance = MockToastUtils();
+      when(toastUtils.instance.toasts).thenAnswer((_) => const Stream.empty());
 
       web3App = MockWeb3App();
       when(web3App.core).thenReturn(
@@ -90,23 +94,16 @@ void main() {
 
       // Build our app and trigger a frame.
       await tester.pumpWidget(
-        // WalletConnectModalTheme(
-        //   data: WalletConnectModalThemeData.lightMode,
-        //   child:
         MaterialApp(
           home: Scaffold(
             body: Builder(
               key: key,
               builder: (BuildContext context) {
-                // return WalletConnectModal(
-                //   service: service,
-                // );
                 return Container();
               },
             ),
           ),
         ),
-        // ),
       );
 
       service.open(context: key.currentContext!);
@@ -123,6 +120,12 @@ void main() {
       // Once by the open, again by the WalletConnectModal in its init
       verify(mockPlatformUtils.getPlatformType()).called(1);
       expect(find.byType(WalletConnectModal), findsOneWidget);
+
+      service.close();
+
+      await tester.pumpAndSettle();
+
+      verify(toastUtils.instance.clear()).called(1);
     });
 
     // testWidgets('should open dialog on non-mobile',

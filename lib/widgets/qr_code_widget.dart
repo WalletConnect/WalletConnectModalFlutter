@@ -6,8 +6,8 @@ import 'package:walletconnect_modal_flutter/services/utils/platform/platform_uti
 import 'package:walletconnect_modal_flutter/services/walletconnect_modal/i_walletconnect_modal_service.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
 
-class QRCodePage extends StatefulWidget {
-  const QRCodePage({
+class QRCodeWidget extends StatefulWidget {
+  const QRCodeWidget({
     super.key,
     required this.service,
     required this.logoPath,
@@ -17,10 +17,10 @@ class QRCodePage extends StatefulWidget {
   final String logoPath;
 
   @override
-  State<QRCodePage> createState() => _QRCodePageState();
+  State<QRCodeWidget> createState() => _QRCodeWidgetState();
 }
 
-class _QRCodePageState extends State<QRCodePage> {
+class _QRCodeWidgetState extends State<QRCodeWidget> {
   bool _initialized = false;
   String _qrCode = '';
 

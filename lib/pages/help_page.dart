@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:walletconnect_modal_flutter/constants/constants.dart';
+import 'package:walletconnect_modal_flutter/pages/get_wallet_page.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
+import 'package:walletconnect_modal_flutter/services/utils/widget_stack/widget_stack_singleton.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_button.dart';
+import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_navbar.dart';
+import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_navbar_title.dart';
 
 class SvgImageInfo {
   final String path;
@@ -17,12 +22,10 @@ class SvgImageInfo {
 }
 
 class HelpPage extends StatefulWidget {
-  const HelpPage({
-    super.key,
-    required this.getAWallet,
-  });
-
-  final void Function() getAWallet;
+  const HelpPage()
+      : super(
+          key: WalletConnectModalConstants.helpPageKey,
+        );
 
   @override
   State<HelpPage> createState() => _HelpPageState();
@@ -98,82 +101,92 @@ class _HelpPageState extends State<HelpPage> {
       MediaQuery.of(context).orientation,
     );
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        longBottomSheet ? _buildPageView() : _buildColumnSection(),
-        const SizedBox(height: 8),
-        Container(
-          constraints: const BoxConstraints(
-            minWidth: 250,
-            maxWidth: 350,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: WalletConnectModalButton(
-                  onPressed: widget.getAWallet,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/icons/wallet.svg',
-                        width: 18,
-                        height: 18,
-                        package: 'walletconnect_modal_flutter',
-                        colorFilter: ColorFilter.mode(
-                          themeData.inverse100,
-                          BlendMode.srcIn,
+    return WalletConnectModalNavBar(
+      title: const WalletConnectModalNavbarTitle(
+        title: 'Help',
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          longBottomSheet ? _buildPageView() : _buildColumnSection(),
+          const SizedBox(height: 8),
+          Container(
+            constraints: const BoxConstraints(
+              minWidth: 250,
+              // maxWidth: 400,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: WalletConnectModalButton(
+                    key: WalletConnectModalConstants.getAWalletButtonKey,
+                    onPressed: () {
+                      widgetStack.instance.add(
+                        const GetWalletPage(),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/wallet.svg',
+                          width: 18,
+                          height: 18,
+                          package: 'walletconnect_modal_flutter',
+                          colorFilter: ColorFilter.mode(
+                            themeData.inverse100,
+                            BlendMode.srcIn,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 2),
-                      Text(
-                        'Get a Wallet',
-                        style: TextStyle(
-                          fontFamily: themeData.fontFamily,
-                          color: themeData.inverse100,
+                        const SizedBox(width: 2),
+                        Text(
+                          'Get a Wallet',
+                          style: TextStyle(
+                            fontFamily: themeData.fontFamily,
+                            color: themeData.inverse100,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: WalletConnectModalButton(
-                  onPressed: () {
-                    launchUrl(
-                      Uri.parse(
-                        'https://ethereum.org/en/wallets/',
-                      ),
-                    );
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Learn More',
-                        style: TextStyle(
-                          fontFamily: themeData.fontFamily,
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: WalletConnectModalButton(
+                    onPressed: () {
+                      launchUrl(
+                        Uri.parse(
+                          'https://ethereum.org/en/wallets/',
+                        ),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Learn More',
+                          style: TextStyle(
+                            fontFamily: themeData.fontFamily,
+                            color: themeData.inverse100,
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_outward,
                           color: themeData.inverse100,
                         ),
-                      ),
-                      Icon(
-                        Icons.arrow_outward,
-                        color: themeData.inverse100,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

@@ -1,3 +1,9 @@
+## 1.2.0
+
+- Massive internal overhaul of how widgets are handled to allow extensibility
+- Added `connectWallet` function to `IWalletConnectModalService` 
+- Additional automated UI tests to ensure complete functionality of pages
+
 ## 1.1.7
 
 - Added ability to inject services that need init into the modal, will be used by Web3Modal

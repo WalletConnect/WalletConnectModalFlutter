@@ -17,7 +17,7 @@ class WalletConnectModalTheme extends InheritedWidget {
 
   static WalletConnectModalTheme of(BuildContext context) {
     final WalletConnectModalTheme? result = maybeOf(context);
-    assert(result != null, 'No Web3ModalTheme found in context');
+    assert(result != null, 'No WalletConnectModal theme found in context');
     return result!;
   }
 

@@ -4,7 +4,6 @@ import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 part 'listings.freezed.dart';
 part 'listings.g.dart';
 
-// @JsonSerializable(includeIfNull: false)
 @freezed
 class WalletData with _$WalletData {
   @JsonSerializable(includeIfNull: false)

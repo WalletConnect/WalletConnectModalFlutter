@@ -583,13 +583,25 @@ class MockWalletConnectModalService extends _i1.Mock
         returnValueForMissingStub: _i4.Future<void>.value(),
       ) as _i4.Future<void>);
   @override
-  void launchCurrentWallet() => super.noSuchMethod(
+  _i4.Future<void> launchCurrentWallet() => (super.noSuchMethod(
         Invocation.method(
           #launchCurrentWallet,
           [],
         ),
-        returnValueForMissingStub: null,
-      );
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> connectWallet({required _i14.WalletData? walletData}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #connectWallet,
+          [],
+          {#walletData: walletData},
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
   @override
   void setDefaultChain(
           {required Map<String, _i6.RequiredNamespace>? requiredNamespaces}) =>
@@ -1066,6 +1078,14 @@ class MockToastUtils extends _i1.Mock implements _i22.ToastUtils {
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),
       ) as _i4.Future<void>);
+  @override
+  void clear() => super.noSuchMethod(
+        Invocation.method(
+          #clear,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
   @override
   _i4.Future<Null> onDispose() => (super.noSuchMethod(
         Invocation.method(
