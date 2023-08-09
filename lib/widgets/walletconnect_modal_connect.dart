@@ -81,7 +81,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
             Text(
               StringConstants.connectButtonError,
               style: TextStyle(
-                color: themeData.foreground100,
+                color: themeData.error,
                 fontFamily: themeData.fontFamily,
               ),
             ),
@@ -131,7 +131,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
             Text(
               StringConstants.connectButtonConnecting,
               style: TextStyle(
-                color: themeData.foreground100,
+                color: themeData.primary100,
                 fontFamily: themeData.fontFamily,
               ),
             ),

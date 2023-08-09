@@ -3,6 +3,7 @@
 - Updated to `walletconnect_flutter_v2` v2.1.1
 - Internal updates to accomodate simple extensions to the modal
 - Added network error handling when trying to connect to the relay and it fails
+- `WalletConnectModalConnect` widget will now show `Network Error` when the relay fails to connect
 - Tests added and updated
 
 ## 1.2.0
