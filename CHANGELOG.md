@@ -1,3 +1,10 @@
+## 1.2.1
+
+- Updated to `walletconnect_flutter_v2` v2.1.1
+- Internal updates to accomodate simple extensions to the modal
+- Added network error handling when trying to connect to the relay and it fails
+- Tests added and updated
+
 ## 1.2.0
 
 - Massive internal overhaul of how widgets are handled to allow extensibility

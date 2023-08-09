@@ -34,6 +34,10 @@ class WalletConnectModalService extends ChangeNotifier
   @override
   IWeb3App? get web3App => _web3App;
 
+  WalletConnectError? _initError;
+  @override
+  WalletConnectError? get initError => _initError;
+
   bool _isOpen = false;
   @override
   bool get isOpen => _isOpen;
@@ -118,7 +122,14 @@ class WalletConnectModalService extends ChangeNotifier
       return;
     }
 
-    await _web3App!.init();
+    try {
+      _initError = null;
+      await _web3App!.init();
+    } on WalletConnectError catch (e) {
+      _initError = e;
+      notifyListeners();
+      return;
+    }
     await WalletConnectModalServices.init();
 
     _registerListeners();

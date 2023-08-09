@@ -13,6 +13,10 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
   /// for WalletConnect.
   IWeb3App? get web3App;
 
+  /// If the [web3App] fails to initialize, this will contain the error.
+  /// Otherwise, it will be null.
+  WalletConnectError? get initError;
+
   /// Variable that can be used to check if the modal is visible on screen.
   bool get isOpen;
 

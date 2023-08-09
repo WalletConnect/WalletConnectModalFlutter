@@ -292,7 +292,7 @@ class SignPageState extends State<SignPage>
         _buildTestnetSwitch(),
         ...chainButtons,
         WalletConnectModalConnect(
-          walletConnectModalService: _walletConnectModalService!,
+          service: _walletConnectModalService!,
           buttonRadius: 20,
         ),
       ],

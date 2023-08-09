@@ -3,32 +3,48 @@ import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_dat
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
 
 class WalletConnectModalButton extends StatelessWidget {
-  final Widget child;
-  final void Function() onPressed;
-
   const WalletConnectModalButton({
-    Key? key,
-    required this.onPressed,
+    super.key,
     required this.child,
-  }) : super(key: key);
+    this.onPressed,
+    this.borderRadius = 100,
+  });
+
+  final Widget child;
+  final void Function()? onPressed;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
     final WalletConnectModalThemeData themeData =
         WalletConnectModalTheme.getData(context);
 
-    return MaterialButton(
-      onPressed: onPressed,
-      color: themeData.primary100,
-      focusColor: themeData.primary090,
-      hoverColor: themeData.primary090,
-      highlightColor: themeData.primary080,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          100,
+    // No onPressed means the button is disabled and grayed out.
+    if (onPressed == null) {
+      return MaterialButton(
+        onPressed: null,
+        color: themeData.overlay030,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            borderRadius,
+          ),
         ),
-      ),
-      child: child,
-    );
+        child: child,
+      );
+    } else {
+      return MaterialButton(
+        onPressed: onPressed,
+        color: themeData.primary100,
+        focusColor: themeData.primary090,
+        hoverColor: themeData.primary090,
+        highlightColor: themeData.primary080,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            borderRadius,
+          ),
+        ),
+        child: child,
+      );
+    }
   }
 }

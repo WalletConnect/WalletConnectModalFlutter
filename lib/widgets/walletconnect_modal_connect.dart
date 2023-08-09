@@ -4,23 +4,27 @@ import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
 import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/services/walletconnect_modal/i_walletconnect_modal_service.dart';
 import 'package:walletconnect_modal_flutter/services/utils/logger/logger_util.dart';
+import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_button.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
 
 enum WalletConnectModalConnectButtonState {
+  error,
   idle,
   connecting,
-  account,
+  connected,
 }
 
 class WalletConnectModalConnect extends StatefulWidget {
   const WalletConnectModalConnect({
     super.key,
-    required this.walletConnectModalService,
+    required this.service,
     this.buttonRadius,
+    this.connectedWidget,
   });
 
-  final IWalletConnectModalService walletConnectModalService;
+  final IWalletConnectModalService service;
   final double? buttonRadius;
+  final Widget? connectedWidget;
 
   @override
   State<WalletConnectModalConnect> createState() =>
@@ -41,14 +45,14 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
 
     _updateState();
 
-    widget.walletConnectModalService.addListener(_onServiceUpdate);
+    widget.service.addListener(_onServiceUpdate);
   }
 
   @override
   void dispose() {
     super.dispose();
 
-    widget.walletConnectModalService.removeListener(_onServiceUpdate);
+    widget.service.removeListener(_onServiceUpdate);
   }
 
   @override
@@ -67,18 +71,27 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
     final WalletConnectModalThemeData themeData =
         WalletConnectModalTheme.getData(context);
 
-    if (_state == WalletConnectModalConnectButtonState.idle) {
-      return MaterialButton(
-        onPressed: () => _onConnectPressed(context),
-        color: themeData.primary100,
-        focusColor: themeData.primary090,
-        hoverColor: themeData.primary090,
-        highlightColor: themeData.primary080,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            widget.buttonRadius ?? themeData.radius4XS,
-          ),
+    if (_state == WalletConnectModalConnectButtonState.error) {
+      return WalletConnectModalButton(
+        borderRadius: widget.buttonRadius ?? themeData.radius4XS,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              StringConstants.connectButtonError,
+              style: TextStyle(
+                color: themeData.foreground100,
+                fontFamily: themeData.fontFamily,
+              ),
+            ),
+          ],
         ),
+      );
+    } else if (_state == WalletConnectModalConnectButtonState.idle) {
+      return WalletConnectModalButton(
+        borderRadius: widget.buttonRadius ?? themeData.radius4XS,
+        onPressed: () => _onConnectPressed(context),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -105,14 +118,8 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
         ),
       );
     } else if (_state == WalletConnectModalConnectButtonState.connecting) {
-      return MaterialButton(
-        onPressed: () {},
-        color: themeData.overlay030,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            widget.buttonRadius ?? themeData.radius4XS,
-          ),
-        ),
+      return WalletConnectModalButton(
+        borderRadius: widget.buttonRadius ?? themeData.radius4XS,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -131,72 +138,75 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
           ],
         ),
       );
-    } else if (_state == WalletConnectModalConnectButtonState.account) {
-      return MaterialButton(
-        onPressed: () => _onConnectPressed(context),
-        color: themeData.primary100,
-        focusColor: themeData.primary090,
-        hoverColor: themeData.primary090,
-        highlightColor: themeData.primary080,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            widget.buttonRadius ?? themeData.radius4XS,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              StringConstants.connectButtonAccount,
-              style: TextStyle(
-                color: themeData.foreground100,
-                fontFamily: themeData.fontFamily,
+    } else if (_state == WalletConnectModalConnectButtonState.connected) {
+      // Allow handling a custom connected widget
+      if (widget.connectedWidget != null) {
+        return widget.connectedWidget!;
+      } else {
+        // Default to a disconnect button
+        return WalletConnectModalButton(
+          borderRadius: widget.buttonRadius ?? themeData.radius4XS,
+          onPressed: () => _onConnectPressed(context),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                StringConstants.connectButtonConnected,
+                style: TextStyle(
+                  color: themeData.foreground100,
+                  fontFamily: themeData.fontFamily,
+                ),
               ),
-            ),
-          ],
-        ),
-      );
+            ],
+          ),
+        );
+      }
     }
 
     return Container();
   }
 
   void _onConnectPressed(BuildContext context) {
-    if (widget.walletConnectModalService.isConnected) {
-      widget.walletConnectModalService.disconnect();
+    if (widget.service.isConnected) {
+      widget.service.disconnect();
     } else {
-      widget.walletConnectModalService.open(context: context);
+      widget.service.open(context: context);
     }
   }
 
   void _onServiceUpdate() {
     LoggerUtil.logger.i(
-      'Web3ModalConnectButton._onServiceUpdate(). isConnected: ${widget.walletConnectModalService.isConnected}, isOpen: ${widget.walletConnectModalService.isOpen}',
+      'Web3ModalConnectButton._onServiceUpdate(). isConnected: ${widget.service.isConnected}, isOpen: ${widget.service.isOpen}',
     );
 
     _updateState();
   }
 
   void _updateState() {
-    // Case 1: Is connected
-    if (widget.walletConnectModalService.isConnected) {
+    // Case 0: init error
+    if (widget.service.initError != null) {
       setState(() {
-        _state = WalletConnectModalConnectButtonState.account;
+        _state = WalletConnectModalConnectButtonState.error;
+      });
+      return;
+    }
+    // Case 1: Is connected
+    else if (widget.service.isConnected) {
+      setState(() {
+        _state = WalletConnectModalConnectButtonState.connected;
       });
       return;
     }
     // Case 2: Is not open and is not connected
-    else if (!widget.walletConnectModalService.isOpen &&
-        !widget.walletConnectModalService.isConnected) {
+    else if (!widget.service.isOpen && !widget.service.isConnected) {
       setState(() {
         _state = WalletConnectModalConnectButtonState.idle;
       });
       return;
     }
     // Case 3: Is open and is not connected
-    else if (widget.walletConnectModalService.isOpen &&
-        !widget.walletConnectModalService.isConnected) {
+    else if (widget.service.isOpen && !widget.service.isConnected) {
       setState(() {
         _state = WalletConnectModalConnectButtonState.connecting;
       });

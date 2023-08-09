@@ -84,7 +84,7 @@ void main() {
         when(web3App.init()).thenAnswer((_) async {});
         when(es.init()).thenAnswer((_) async {});
         int count = 0;
-        WalletConnectModalServices.addInitFunction(() {
+        WalletConnectModalServices.registerInitFunction('test', () {
           count++;
         });
 

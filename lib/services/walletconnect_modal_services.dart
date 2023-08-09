@@ -19,20 +19,19 @@ class WalletConnectModalServices {
   static IWidgetStack get stack => widgetStack.instance;
   static IPlatformUtils get platform => platformUtils.instance;
 
-  static final List<Function> _initFunctions = [
-    () async {
-      await explorer.init();
-    },
-  ];
+  static final Map<String, Function> _initFunctions = {};
 
-  static void addInitFunction(Function function) {
-    _initFunctions.add(function);
+  /// Register a function to be called during [init], which is called when a WalletConnectModalService
+  /// or any inherited version of it is created.
+  static void registerInitFunction(String name, Function function) {
+    _initFunctions[name] = function;
   }
 
   // static final Map<Type, Future> initFunctionsMap = {};
 
   static Future<void> init() async {
-    for (final initFunction in _initFunctions) {
+    await explorer.init();
+    for (final initFunction in _initFunctions.values) {
       await initFunction();
     }
   }
