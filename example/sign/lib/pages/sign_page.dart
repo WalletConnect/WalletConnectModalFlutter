@@ -87,6 +87,20 @@ class SignPageState extends State<SignPage>
 
     await _walletConnectModalService?.init();
 
+    if (_walletConnectModalService!.isInitialized) {
+      // Loop through all the chain data
+      for (final ChainMetadata chain in ChainData.allChains) {
+        // Loop through the events for that chain
+        for (final event in getChainEvents(chain.type)) {
+          _walletConnectModalService!.web3App!.registerEventHandler(
+            chainId: chain.chainId,
+            event: event,
+            handler: null,
+          );
+        }
+      }
+    }
+
     setState(() {
       _initialized = true;
     });

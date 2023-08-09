@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:sign/models/chain_metadata.dart';
 import 'package:sign/models/page_data.dart';
 import 'package:sign/pages/auth_page.dart';
 import 'package:sign/pages/sign_page.dart';
 import 'package:sign/utils/constants.dart';
-import 'package:sign/utils/crypto/chain_data.dart';
-import 'package:sign/utils/crypto/helpers.dart';
 import 'package:sign/utils/dart_defines.dart';
 import 'package:sign/utils/string_constants.dart';
 import 'package:sign/widgets/event_widget.dart';
@@ -39,9 +36,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> initialize() async {
-    _web3App = await Web3App.createInstance(
-      projectId: DartDefines.projectId,
-      metadata: PairingMetadata(
+    _web3App = Web3App(
+      core: Core(
+        projectId: DartDefines.projectId,
+      ),
+      metadata: const PairingMetadata(
         name: 'Flutter Dapp Example',
         description: 'Flutter Dapp Example',
         url: 'https://www.walletconnect.com/',
@@ -51,23 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
           universal: 'https://www.walletconnect.com',
         ),
       ),
-      logLevel: Level.info,
     );
-
-    _web3App!.onSessionPing.subscribe(_onSessionPing);
-    _web3App!.onSessionEvent.subscribe(_onSessionEvent);
-
-    // Loop through all the chain data
-    for (final ChainMetadata chain in ChainData.allChains) {
-      // Loop through the events for that chain
-      for (final event in getChainEvents(chain.type)) {
-        _web3App!.registerEventHandler(
-          chainId: chain.chainId,
-          event: event,
-          handler: null,
-        );
-      }
-    }
 
     _web3App!.onSessionPing.subscribe(_onSessionPing);
     _web3App!.onSessionEvent.subscribe(_onSessionEvent);
