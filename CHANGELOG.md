@@ -1,6 +1,6 @@
 ## 1.2.2
 
-- Updated to `walletconnect_flutter_v2` v2.1.2
+- Updated to `walletconnect_flutter_v2` v2.1.3
 - Bug fixes and code changes based on how network errors are handled now
 
 ## 1.2.1
