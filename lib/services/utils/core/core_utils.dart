@@ -10,6 +10,29 @@ class CoreUtils extends ICoreUtils {
   }
 
   @override
+  String createSafeUrl(String url) {
+    if (url.isEmpty) return url;
+
+    String safeUrl = url;
+    if (!safeUrl.contains('://')) {
+      safeUrl = url.replaceAll('/', '').replaceAll(':', '');
+      safeUrl = '$safeUrl://';
+    }
+    return safeUrl;
+  }
+
+  @override
+  String createPlainUrl(String url) {
+    if (url.isEmpty) return url;
+
+    String plainUrl = url;
+    if (!plainUrl.endsWith('/')) {
+      plainUrl = '$url/';
+    }
+    return plainUrl;
+  }
+
+  @override
   Uri? formatNativeUrl(String? appUrl, String wcUri) {
     if (appUrl == null || appUrl.isEmpty) return null;
 
@@ -17,12 +40,7 @@ class CoreUtils extends ICoreUtils {
       return formatUniversalUrl(appUrl, wcUri);
     }
 
-    String safeAppUrl = appUrl;
-    if (!safeAppUrl.contains('://')) {
-      safeAppUrl = appUrl.replaceAll('/', '').replaceAll(':', '');
-      safeAppUrl = '$safeAppUrl://';
-    }
-
+    String safeAppUrl = createSafeUrl(appUrl);
     String encodedWcUrl = Uri.encodeComponent(wcUri);
     LoggerUtil.logger.i('Encoded WC URL: $encodedWcUrl');
 
@@ -37,14 +55,14 @@ class CoreUtils extends ICoreUtils {
       return formatNativeUrl(appUrl, wcUri);
     }
     String plainAppUrl = appUrl;
-    if (appUrl.endsWith('/')) {
-      plainAppUrl = appUrl.substring(0, appUrl.length - 1);
+    if (!appUrl.endsWith('/')) {
+      plainAppUrl = '$appUrl/';
     }
 
     String encodedWcUrl = Uri.encodeComponent(wcUri);
     LoggerUtil.logger.i('Encoded WC URL: $encodedWcUrl');
 
-    return Uri.parse('$plainAppUrl/wc?uri=$encodedWcUrl');
+    return Uri.parse('${plainAppUrl}wc?uri=$encodedWcUrl');
   }
 
   @override

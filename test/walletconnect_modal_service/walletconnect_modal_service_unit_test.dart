@@ -124,6 +124,34 @@ void main() {
           testSession.namespaces.values.first.accounts.first,
         );
       });
+
+      test('listens to the onRelayClientError and fills initError with it',
+          () async {
+        when(web3App.init()).thenAnswer((_) async {});
+        when(es.init()).thenAnswer(
+          (_) async {},
+        );
+
+        final core = Core(projectId: 'projectId');
+        when(web3App.core).thenReturn(core);
+
+        await service.init();
+
+        expect(service.initError, isNull);
+        // For each subscription, core will be queried
+        verify(web3App.core).called(2);
+
+        core.relayClient.onRelayClientError.broadcast(
+          ErrorEvent(
+            const WalletConnectError(code: -1, message: 'No internet'),
+          ),
+        );
+
+        expect(
+          service.initError,
+          const WalletConnectError(code: -1, message: 'No internet'),
+        );
+      });
     });
 
     group('disconnect', () {
@@ -231,8 +259,8 @@ void main() {
         await service.init();
 
         const redirect = Redirect(
-          native: 'https://native.com',
-          universal: 'https://universal.com',
+          native: 'native://',
+          universal: 'https://universal.com/',
         );
         when(
           es.getRedirect(name: testSession.peer.metadata.name),

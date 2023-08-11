@@ -1,6 +1,6 @@
 name: walletconnect_modal_flutter
 description: The WalletConnectModal for WalletConnect built using Flutter.
-version: 1.2.1
+version: 1.2.2
 repository: https://github.com/WalletConnect/WalletConnectModalFlutter
 
 environment:
@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
-  walletconnect_flutter_v2: ^2.1.1
+  walletconnect_flutter_v2: ^2.1.2
   flutter_svg: ^2.0.6
   qr_flutter: ^4.1.0
   json_annotation: ^4.8.1

@@ -15,6 +15,8 @@ import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i17;
 import 'package:url_launcher/url_launcher.dart' as _i19;
 import 'package:w_common/disposable.dart' as _i5;
+import 'package:walletconnect_flutter_v2/apis/core/relay_client/websocket/websocket_handler.dart'
+    as _i26;
 import 'package:walletconnect_flutter_v2/apis/core/store/i_generic_store.dart'
     as _i8;
 import 'package:walletconnect_flutter_v2/apis/core/store/i_store.dart' as _i10;
@@ -2145,4 +2147,47 @@ class MockClient extends _i1.Mock implements _i3.Client {
         ),
         returnValueForMissingStub: null,
       );
+}
+
+/// A class which mocks [WebSocketHandler].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockWebSocketHandler extends _i1.Mock implements _i26.WebSocketHandler {
+  MockWebSocketHandler() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<void> get ready => (super.noSuchMethod(
+        Invocation.getter(#ready),
+        returnValue: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> setup({required String? url}) => (super.noSuchMethod(
+        Invocation.method(
+          #setup,
+          [],
+          {#url: url},
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> connect() => (super.noSuchMethod(
+        Invocation.method(
+          #connect,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> close() => (super.noSuchMethod(
+        Invocation.method(
+          #close,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 }

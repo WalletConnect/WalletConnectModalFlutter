@@ -10,6 +10,7 @@ import 'package:walletconnect_modal_flutter/models/listings.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/i_explorer_service.dart';
+import 'package:walletconnect_modal_flutter/services/utils/core/core_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/toast/toast_message.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/toast/toast_utils_singleton.dart';
@@ -56,9 +57,6 @@ class WalletConnectModalService extends ChangeNotifier
 
   @override
   String? get wcUri => connectResponse?.uri.toString();
-
-  // @override
-  // late IExplorerService explorerService;
 
   Map<String, RequiredNamespace> _requiredNamespaces =
       NamespaceConstants.ethereum;
@@ -122,15 +120,11 @@ class WalletConnectModalService extends ChangeNotifier
       return;
     }
 
+    _initError = null;
     try {
-      _initError = null;
       await _web3App!.init();
-    } catch (e) {
-      _initError = e;
-      notifyListeners();
-      return;
-    }
-    await WalletConnectModalServices.init();
+      await WalletConnectModalServices.init();
+    } catch (_) {}
 
     _registerListeners();
 
@@ -288,9 +282,16 @@ class WalletConnectModalService extends ChangeNotifier
         ),
       );
     } else {
+      // Get the native and universal URLs and add the 'wc' to the end
+      // in the redirect.
+      final String nativeUrl =
+          coreUtils.instance.createSafeUrl(redirect.native ?? '');
+      final String universalUrl =
+          coreUtils.instance.createPlainUrl(redirect.universal ?? '');
+
       await urlUtils.instance.launchRedirect(
-        nativeUri: Uri.parse(redirect.native ?? ''),
-        universalUri: Uri.parse(redirect.universal ?? ''),
+        nativeUri: Uri.parse(nativeUrl),
+        universalUri: Uri.parse(universalUrl),
       );
     }
   }
@@ -418,6 +419,9 @@ class WalletConnectModalService extends ChangeNotifier
     web3App!.onSessionDelete.subscribe(
       _onSessionDelete,
     );
+    web3App!.core.relayClient.onRelayClientError.subscribe(
+      _onRelayClientError,
+    );
   }
 
   void _unregisterListeners() {
@@ -427,6 +431,23 @@ class WalletConnectModalService extends ChangeNotifier
     web3App!.onSessionDelete.unsubscribe(
       _onSessionDelete,
     );
+    web3App!.core.relayClient.onRelayClientError.unsubscribe(
+      _onRelayClientError,
+    );
+  }
+
+  void _onSessionDelete(SessionDelete? args) {
+    _isConnected = false;
+    _address = '';
+
+    notifyListeners();
+  }
+
+  void _onRelayClientError(ErrorEvent? args) {
+    LoggerUtil.logger.e('Relay client error: $args');
+    _initError = args!.error;
+
+    notifyListeners();
   }
 
   /// Waits for the session to connect, and then sets the session and address.
@@ -473,13 +494,6 @@ class WalletConnectModalService extends ChangeNotifier
     } else {
       notifyListeners();
     }
-  }
-
-  void _onSessionDelete(SessionDelete? args) {
-    _isConnected = false;
-    _address = '';
-
-    notifyListeners();
   }
 
   void _checkInitialized() {
