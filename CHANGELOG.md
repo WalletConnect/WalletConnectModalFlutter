@@ -1,3 +1,7 @@
+## 1.2.3
+
+- Removed size constraints on WalletConnectModalConnect button
+
 ## 1.2.2
 
 - Updated to `walletconnect_flutter_v2` v2.1.3

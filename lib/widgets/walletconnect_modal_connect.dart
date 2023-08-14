@@ -32,10 +32,6 @@ class WalletConnectModalConnect extends StatefulWidget {
 }
 
 class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
-  static const double buttonHeight = 60;
-  static const double buttonWidthMin = 150;
-  static const double buttonWidthMax = 200;
-
   WalletConnectModalConnectButtonState _state =
       WalletConnectModalConnectButtonState.idle;
 
@@ -57,17 +53,6 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(
-        minHeight: buttonHeight,
-        minWidth: buttonWidthMin,
-        maxWidth: buttonWidthMax,
-      ),
-      child: _buildButton(context),
-    );
-  }
-
-  Widget _buildButton(BuildContext context) {
     final WalletConnectModalThemeData themeData =
         WalletConnectModalTheme.getData(context);
 

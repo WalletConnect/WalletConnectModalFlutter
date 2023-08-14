@@ -76,9 +76,6 @@ class UrlUtils extends IUrlUtils {
     Uri? nativeUri,
     Uri? universalUri,
   }) async {
-    print(
-      'Navigating deep links. Native: ${nativeUri.toString()}, Universal: ${universalUri.toString()}',
-    );
     LoggerUtil.logger.i(
       'Navigating deep links. Native: ${nativeUri.toString()}, Universal: ${universalUri.toString()}',
     );

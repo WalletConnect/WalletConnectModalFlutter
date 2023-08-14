@@ -174,11 +174,6 @@ class WalletConnectModalService extends ChangeNotifier
 
     final bool bottomSheet = platformUtils.instance.isBottomSheet();
 
-    // platformUtils.instance.getPlatformType() == PlatformType.mobile ||
-    //     platformUtils.instance.isMobileWidth(
-    //       MediaQuery.of(context).size.width,
-    //     );
-
     notifyListeners();
 
     final WalletConnectModalTheme? theme =
@@ -341,16 +336,6 @@ class WalletConnectModalService extends ChangeNotifier
     notifyListeners();
   }
 
-  // @override
-  // void setRequiredNamespaces(Map<String, RequiredNamespace> namespaces) {
-  //   _checkInitialized();
-  //   LoggerUtil.logger.i('Setting Required namespaces: $namespaces');
-
-  //   _requiredNamespaces = namespaces;
-
-  //   notifyListeners();
-  // }
-
   @override
   String getReferer() {
     _checkInitialized();
@@ -368,11 +353,7 @@ class WalletConnectModalService extends ChangeNotifier
 
       if (connectResponse != null) {
         try {
-          sessionFuture!.timeout(
-            const Duration(
-              milliseconds: 0,
-            ),
-          );
+          sessionFuture!.timeout(Duration.zero);
         } on TimeoutException {
           // Ignore this error, just wanted to cancel the previous future.
         }
@@ -439,6 +420,7 @@ class WalletConnectModalService extends ChangeNotifier
   void _onSessionDelete(SessionDelete? args) {
     _isConnected = false;
     _address = '';
+    _session = null;
 
     notifyListeners();
   }
