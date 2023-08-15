@@ -269,8 +269,10 @@ void main() {
         service.launchCurrentWallet();
 
         verify(mockUrlUtils.launchRedirect(
-          nativeUri: Uri.parse(redirect.native!),
-          universalUri: Uri.parse(redirect.universal!),
+          nativeUri: Uri.parse(
+              '${redirect.native!}wc?sessionTopic=${testSession.topic}'),
+          universalUri: Uri.parse(
+              '${redirect.universal!}wc?sessionTopic=${testSession.topic}'),
         )).called(1);
         verifyNever(mockUrlUtils.launchUrl(any));
       });
