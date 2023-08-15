@@ -53,6 +53,13 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
 
   @override
   Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(minHeight: 40),
+      child: _buildButton(context),
+    );
+  }
+
+  Widget _buildButton(BuildContext context) {
     final WalletConnectModalThemeData themeData =
         WalletConnectModalTheme.getData(context);
 
@@ -109,8 +116,15 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(
-              color: themeData.primary100,
+            SizedBox(
+              width: 25,
+              height: 25,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: themeData.primary100,
+                  strokeWidth: 4,
+                ),
+              ),
             ),
             const SizedBox(width: 8.0),
             Text(

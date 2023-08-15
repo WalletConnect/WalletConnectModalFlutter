@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class WalletConnectModalConstants {
-  static const WALLETCONNECT_MODAL_VERSION = '1.2.3';
+  static const WALLETCONNECT_MODAL_VERSION = '1.2.4';
 
   static const Key helpPageKey = Key('helpPageKey');
   static const Key qrCodePageKey = Key('qrCodePageKey');

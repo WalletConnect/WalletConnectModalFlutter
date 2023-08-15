@@ -1,3 +1,8 @@
+## 1.2.4
+
+- Added small size constraint back to WalletConnectModalConnect button
+- Added `sessionTopic` to launch wallet so that MetaMask will redirect back to dApp
+
 ## 1.2.3
 
 - Removed size constraints on WalletConnectModalConnect button

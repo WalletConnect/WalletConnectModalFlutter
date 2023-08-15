@@ -285,8 +285,12 @@ class WalletConnectModalService extends ChangeNotifier
           coreUtils.instance.createPlainUrl(redirect.universal ?? '');
 
       await urlUtils.instance.launchRedirect(
-        nativeUri: Uri.parse(nativeUrl),
-        universalUri: Uri.parse(universalUrl),
+        nativeUri: Uri.parse(
+          '${nativeUrl}wc?sessionTopic=${_session!.topic}',
+        ),
+        universalUri: Uri.parse(
+          '${universalUrl}wc?sessionTopic=${_session!.topic}',
+        ),
       );
     }
   }

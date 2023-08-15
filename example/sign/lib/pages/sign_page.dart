@@ -305,9 +305,12 @@ class SignPageState extends State<SignPage>
         ),
         _buildTestnetSwitch(),
         ...chainButtons,
-        WalletConnectModalConnect(
-          service: _walletConnectModalService!,
-          buttonRadius: 20,
+        Container(
+          constraints: const BoxConstraints(minHeight: 100),
+          child: WalletConnectModalConnect(
+            service: _walletConnectModalService!,
+            buttonRadius: 20,
+          ),
         ),
       ],
     );
