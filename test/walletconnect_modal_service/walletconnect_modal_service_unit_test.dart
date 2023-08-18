@@ -15,11 +15,18 @@ void main() {
     late MockWeb3App web3App;
     late MockSessions sessions;
     late MockExplorerService es;
+    late Core core;
+    late MockRelayClient mockRelayClient;
 
     setUp(() {
       web3App = MockWeb3App();
+      core = Core(projectId: 'projectId');
+      mockRelayClient = MockRelayClient();
+      when(mockRelayClient.onRelayClientError).thenReturn(Event<ErrorEvent>());
+      when(mockRelayClient.onRelayClientConnect).thenReturn(Event<EventArgs>());
+      core.relayClient = mockRelayClient;
       when(web3App.core).thenReturn(
-        Core(projectId: 'projectId'),
+        core,
       );
       when(web3App.metadata).thenReturn(
         metadata,
@@ -154,6 +161,23 @@ void main() {
           service.initError,
           const WalletConnectError(code: -1, message: 'No internet'),
         );
+      });
+    });
+
+    group('reconnectRelay', () {
+      test('throws if _checkInitialized fails', () async {
+        expect(
+          () => service.reconnectRelay(),
+          throwsA(isA<StateError>()),
+        );
+      });
+
+      test('calls core.relayClient.connect() on web3App', () async {
+        await service.init();
+
+        service.reconnectRelay();
+
+        verify(mockRelayClient.connect()).called(1);
       });
     });
 
