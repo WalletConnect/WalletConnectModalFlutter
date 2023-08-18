@@ -199,7 +199,10 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
   }
 
   void _reconnect() {
-    widget.service.web3App!.core.relayClient.connect();
+    widget.service.web3App!.core.relayClient.connect(
+        // relayUrl: WalletConnectConstants.DEFAULT_RELAY_URL,
+        // relayUrl: 'https://test.walletconnect.org',
+        );
 
     setState(() {
       _state = WalletConnectModalConnectButtonState.reconnecting;

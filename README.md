@@ -56,6 +56,11 @@ WalletConnectModalConnect(
 ),
 ```
 
+## Notes
+
+Swapping the required or optional namespaces will not do anything if your dApp has already connected.  
+For those changes to take effect, you must disconnect and reconnect.  
+
 ## iOS Setup
 
 For each app you would like to be able to deep link to, you must add that app's link into the `ios/Runner/Info.plist` file like so:
