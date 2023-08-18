@@ -460,7 +460,7 @@ class WalletConnectModalService extends ChangeNotifier
   }
 
   void _onSessionConnect(SessionConnect? args) {
-    print('Session connected: $args');
+    LoggerUtil.logger.i('Session connected: ${args?.session}');
     _isConnected = true;
     _session = args!.session;
     _address = NamespaceUtils.getAccount(
@@ -475,6 +475,7 @@ class WalletConnectModalService extends ChangeNotifier
   }
 
   void _onSessionDelete(SessionDelete? args) {
+    LoggerUtil.logger.i('Session deleted: $args');
     _isConnected = false;
     _address = '';
     _session = null;
