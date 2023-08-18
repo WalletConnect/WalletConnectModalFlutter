@@ -87,6 +87,12 @@ class SignPageState extends State<SignPage>
 
     await _walletConnectModalService?.init();
 
+    for (final PairingInfo p
+        in _walletConnectModalService!.web3App!.pairings.getAll()) {
+      LoggerUtil.logger.i('Deleting pairing: ${p.topic}');
+      await _walletConnectModalService!.web3App!.pairings.delete(p.topic);
+    }
+
     if (_walletConnectModalService!.isInitialized) {
       // Loop through all the chain data
       for (final ChainMetadata chain in ChainData.allChains) {
@@ -369,8 +375,8 @@ class SignPageState extends State<SignPage>
         .i('Updated Required Namespaces, namespaces: $requiredNamespaces');
     LoggerUtil.logger
         .i('Updated Required Namespaces, service: $_walletConnectModalService');
-    _walletConnectModalService?.setDefaultChain(
-      requiredNamespaces: requiredNamespaces,
+    _walletConnectModalService?.setOptionalNamespaces(
+      optionalNamespaces: requiredNamespaces,
     );
   }
 

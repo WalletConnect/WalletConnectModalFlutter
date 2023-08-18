@@ -7,11 +7,13 @@ class WalletConnectModalButton extends StatelessWidget {
     super.key,
     required this.child,
     this.onPressed,
+    this.disabled = false,
     this.borderRadius = 100,
   });
 
   final Widget child;
   final void Function()? onPressed;
+  final bool disabled;
   final double borderRadius;
 
   @override
@@ -20,9 +22,9 @@ class WalletConnectModalButton extends StatelessWidget {
         WalletConnectModalTheme.getData(context);
 
     // No onPressed means the button is disabled and grayed out.
-    if (onPressed == null) {
+    if (disabled) {
       return MaterialButton(
-        onPressed: () {},
+        onPressed: onPressed ?? () {},
         color: themeData.overlay030,
         disabledColor: themeData.overlay030,
         shape: RoundedRectangleBorder(

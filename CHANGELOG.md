@@ -1,3 +1,9 @@
+## 2.0.0
+
+- Added setOptionalNamespaces to WalletConnectModalService
+- Renamed setDefaultNamespaces to setRequiredNamespaces
+- Network Error (Default connect button) now attempts to reconnect if you click on it
+
 ## 1.2.4
 
 - Added small size constraint back to WalletConnectModalConnect button

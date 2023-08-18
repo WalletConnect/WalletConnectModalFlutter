@@ -62,10 +62,21 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
   /// The required namespaces that will be used when connecting to the wallet
   Map<String, RequiredNamespace> get requiredNamespaces;
 
+  /// The optional namespaces that will be used when connecting to the wallet
+  Map<String, RequiredNamespace> get optionalNamespaces;
+
   /// Sets the required namespaces that will be used when connecting to the wallet
-  /// The default is set to the [NamespaceConstants.ethereum] namespace.
-  void setDefaultChain({
+  /// The default is blank. If you are building a multichain dApp it is recommended
+  /// you use the optional namespaces instead so you dApp can function with more
+  /// wallets.
+  void setRequiredNamespaces({
     required Map<String, RequiredNamespace> requiredNamespaces,
+  });
+
+  /// Sets the optional namespaces that will be used when connecting to the wallet
+  /// The default is set to the [NamespaceConstants.ethereum] namespace.
+  void setOptionalNamespaces({
+    required Map<String, RequiredNamespace> optionalNamespaces,
   });
 
   /// Rebuilds the connection URI.

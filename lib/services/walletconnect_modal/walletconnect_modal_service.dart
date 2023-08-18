@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:event/event.dart';
 import 'package:flutter/material.dart';
 import 'package:w_common/disposable.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
@@ -58,10 +59,14 @@ class WalletConnectModalService extends ChangeNotifier
   @override
   String? get wcUri => connectResponse?.uri.toString();
 
-  Map<String, RequiredNamespace> _requiredNamespaces =
-      NamespaceConstants.ethereum;
+  Map<String, RequiredNamespace> _requiredNamespaces = {};
   @override
   Map<String, RequiredNamespace> get requiredNamespaces => _requiredNamespaces;
+
+  Map<String, RequiredNamespace> _optionalNamespaces =
+      NamespaceConstants.ethereum;
+  @override
+  Map<String, RequiredNamespace> get optionalNamespaces => _optionalNamespaces;
 
   ConnectResponse? connectResponse;
   Future<SessionData>? get sessionFuture => connectResponse?.session.future;
@@ -83,6 +88,7 @@ class WalletConnectModalService extends ChangeNotifier
     String? projectId,
     PairingMetadata? metadata,
     Map<String, RequiredNamespace>? requiredNamespaces,
+    Map<String, RequiredNamespace>? optionalNamespaces,
     Set<String>? recommendedWalletIds,
     ExcludedWalletState excludedWalletState = ExcludedWalletState.list,
     Set<String>? excludedWalletIds,
@@ -104,6 +110,9 @@ class WalletConnectModalService extends ChangeNotifier
     if (requiredNamespaces != null) {
       _requiredNamespaces = requiredNamespaces;
     }
+    if (optionalNamespaces != null) {
+      _optionalNamespaces = optionalNamespaces;
+    }
 
     explorerService.instance = ExplorerService(
       projectId: _projectId,
@@ -120,13 +129,13 @@ class WalletConnectModalService extends ChangeNotifier
       return;
     }
 
+    _registerListeners();
+
     _initError = null;
     try {
       await _web3App!.init();
       await WalletConnectModalServices.init();
     } catch (_) {}
-
-    _registerListeners();
 
     if (_web3App!.sessions.getAll().isNotEmpty) {
       _isConnected = true;
@@ -225,17 +234,17 @@ class WalletConnectModalService extends ChangeNotifier
 
   @override
   void close() {
+    // If we aren't open, then we can't and shouldn't close
     if (!_isOpen) {
       return;
     }
-    // _isOpen = false;
 
     toastUtils.instance.clear();
     if (context != null) {
+      // _isOpen and notifyListeners() are handled when we call Navigator.pop()
+      // by the open() method
       Navigator.pop(context!);
     }
-
-    // notifyListeners();
   }
 
   @override
@@ -246,6 +255,15 @@ class WalletConnectModalService extends ChangeNotifier
       return;
     }
 
+    // Disconnect both the pairing and session
+    await web3App!.disconnectSession(
+      topic: session!.pairingTopic,
+      // ignore: prefer_const_constructors
+      reason: WalletConnectError(
+        code: 0,
+        message: 'User disconnected',
+      ),
+    );
     await web3App!.disconnectSession(
       topic: session!.topic,
       // ignore: prefer_const_constructors
@@ -328,14 +346,27 @@ class WalletConnectModalService extends ChangeNotifier
   }
 
   @override
-  void setDefaultChain({
+  void setRequiredNamespaces({
     required Map<String, RequiredNamespace> requiredNamespaces,
   }) {
     _checkInitialized();
 
-    LoggerUtil.logger.i('Setting default chain: $requiredNamespaces');
+    LoggerUtil.logger.i('Setting required namespaces: $requiredNamespaces');
 
     _requiredNamespaces = requiredNamespaces;
+
+    notifyListeners();
+  }
+
+  @override
+  void setOptionalNamespaces({
+    required Map<String, RequiredNamespace> optionalNamespaces,
+  }) {
+    _checkInitialized();
+
+    LoggerUtil.logger.i('Setting optional namespaces: $optionalNamespaces');
+
+    _optionalNamespaces = optionalNamespaces;
 
     notifyListeners();
   }
@@ -365,6 +396,7 @@ class WalletConnectModalService extends ChangeNotifier
 
       connectResponse = await web3App!.connect(
         requiredNamespaces: _requiredNamespaces,
+        optionalNamespaces: optionalNamespaces,
       );
 
       notifyListeners();
@@ -398,11 +430,14 @@ class WalletConnectModalService extends ChangeNotifier
   }
 
   void _registerListeners() {
-    // web3App!.onSessionConnect.subscribe(
-    //   _onSessionConnect,
-    // );
+    web3App!.onSessionConnect.subscribe(
+      _onSessionConnect,
+    );
     web3App!.onSessionDelete.subscribe(
       _onSessionDelete,
+    );
+    web3App!.core.relayClient.onRelayClientConnect.subscribe(
+      _onRelayClientConnect,
     );
     web3App!.core.relayClient.onRelayClientError.subscribe(
       _onRelayClientError,
@@ -410,15 +445,33 @@ class WalletConnectModalService extends ChangeNotifier
   }
 
   void _unregisterListeners() {
-    // web3App!.onSessionConnect.unsubscribe(
-    //   _onSessionConnect,
-    // );
+    web3App!.onSessionConnect.unsubscribe(
+      _onSessionConnect,
+    );
     web3App!.onSessionDelete.unsubscribe(
       _onSessionDelete,
+    );
+    web3App!.core.relayClient.onRelayClientConnect.unsubscribe(
+      _onRelayClientConnect,
     );
     web3App!.core.relayClient.onRelayClientError.unsubscribe(
       _onRelayClientError,
     );
+  }
+
+  void _onSessionConnect(SessionConnect? args) {
+    print('Session connected: $args');
+    _isConnected = true;
+    _session = args!.session;
+    _address = NamespaceUtils.getAccount(
+      _session!.namespaces.values.first.accounts.first,
+    );
+
+    if (_isOpen) {
+      close();
+    } else {
+      notifyListeners();
+    }
   }
 
   void _onSessionDelete(SessionDelete? args) {
@@ -429,9 +482,15 @@ class WalletConnectModalService extends ChangeNotifier
     notifyListeners();
   }
 
+  void _onRelayClientConnect(EventArgs? args) {
+    _initError = null;
+
+    notifyListeners();
+  }
+
   void _onRelayClientError(ErrorEvent? args) {
-    LoggerUtil.logger.e('Relay client error: $args');
-    _initError = args!.error;
+    LoggerUtil.logger.e('Relay client error: ${args?.error}');
+    _initError = args?.error;
 
     notifyListeners();
   }
@@ -449,18 +508,7 @@ class WalletConnectModalService extends ChangeNotifier
     }
 
     try {
-      final SessionData session = await connectResponse!.session.future;
-      _isConnected = true;
-      _session = session;
-      _address = NamespaceUtils.getAccount(
-        _session!.namespaces.values.first.accounts.first,
-      );
-      // await _toastService.show(
-      //   ToastMessage(
-      //     type: ToastType.info,
-      //     text: 'Connected to Wallet',
-      //   ),
-      // );
+      await connectResponse!.session.future;
     } on TimeoutException {
       LoggerUtil.logger.i('Rebuilding session, ending future');
       return;
@@ -473,12 +521,6 @@ class WalletConnectModalService extends ChangeNotifier
         ),
       );
       return;
-    }
-
-    if (_isOpen) {
-      close();
-    } else {
-      notifyListeners();
     }
   }
 

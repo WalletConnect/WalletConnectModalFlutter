@@ -15,8 +15,6 @@ import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i17;
 import 'package:url_launcher/url_launcher.dart' as _i19;
 import 'package:w_common/disposable.dart' as _i5;
-import 'package:walletconnect_flutter_v2/apis/core/relay_client/websocket/websocket_handler.dart'
-    as _i26;
 import 'package:walletconnect_flutter_v2/apis/core/store/i_generic_store.dart'
     as _i8;
 import 'package:walletconnect_flutter_v2/apis/core/store/i_store.dart' as _i10;
@@ -499,6 +497,12 @@ class MockWalletConnectModalService extends _i1.Mock
         returnValue: <String, _i6.RequiredNamespace>{},
       ) as Map<String, _i6.RequiredNamespace>);
   @override
+  Map<String, _i6.RequiredNamespace> get optionalNamespaces =>
+      (super.noSuchMethod(
+        Invocation.getter(#optionalNamespaces),
+        returnValue: <String, _i6.RequiredNamespace>{},
+      ) as Map<String, _i6.RequiredNamespace>);
+  @override
   bool get hasListeners => (super.noSuchMethod(
         Invocation.getter(#hasListeners),
         returnValue: false,
@@ -605,13 +609,24 @@ class MockWalletConnectModalService extends _i1.Mock
         returnValueForMissingStub: _i4.Future<void>.value(),
       ) as _i4.Future<void>);
   @override
-  void setDefaultChain(
+  void setRequiredNamespaces(
           {required Map<String, _i6.RequiredNamespace>? requiredNamespaces}) =>
       super.noSuchMethod(
         Invocation.method(
-          #setDefaultChain,
+          #setRequiredNamespaces,
           [],
           {#requiredNamespaces: requiredNamespaces},
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void setOptionalNamespaces(
+          {required Map<String, _i6.RequiredNamespace>? optionalNamespaces}) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setOptionalNamespaces,
+          [],
+          {#optionalNamespaces: optionalNamespaces},
         ),
         returnValueForMissingStub: null,
       );
@@ -2147,47 +2162,4 @@ class MockClient extends _i1.Mock implements _i3.Client {
         ),
         returnValueForMissingStub: null,
       );
-}
-
-/// A class which mocks [WebSocketHandler].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockWebSocketHandler extends _i1.Mock implements _i26.WebSocketHandler {
-  MockWebSocketHandler() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  _i4.Future<void> get ready => (super.noSuchMethod(
-        Invocation.getter(#ready),
-        returnValue: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-  @override
-  _i4.Future<void> setup({required String? url}) => (super.noSuchMethod(
-        Invocation.method(
-          #setup,
-          [],
-          {#url: url},
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-  @override
-  _i4.Future<void> connect() => (super.noSuchMethod(
-        Invocation.method(
-          #connect,
-          [],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-  @override
-  _i4.Future<void> close() => (super.noSuchMethod(
-        Invocation.method(
-          #close,
-          [],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
 }

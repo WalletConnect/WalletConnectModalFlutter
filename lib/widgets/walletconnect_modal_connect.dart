@@ -12,6 +12,7 @@ enum WalletConnectModalConnectButtonState {
   idle,
   connecting,
   connected,
+  reconnecting,
 }
 
 class WalletConnectModalConnect extends StatefulWidget {
@@ -66,12 +67,43 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
     if (_state == WalletConnectModalConnectButtonState.error) {
       return WalletConnectModalButton(
         borderRadius: widget.buttonRadius ?? themeData.radius4XS,
+        disabled: true,
+        onPressed: () => _reconnect(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               StringConstants.connectButtonError,
+              style: TextStyle(
+                color: themeData.error,
+                fontFamily: themeData.fontFamily,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (_state == WalletConnectModalConnectButtonState.reconnecting) {
+      return WalletConnectModalButton(
+        borderRadius: widget.buttonRadius ?? themeData.radius4XS,
+        disabled: true,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 25,
+              height: 25,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: themeData.primary100,
+                  strokeWidth: 4,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8.0),
+            Text(
+              StringConstants.connectButtonReconnecting,
               style: TextStyle(
                 color: themeData.error,
                 fontFamily: themeData.fontFamily,
@@ -164,6 +196,14 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
     }
 
     return Container();
+  }
+
+  void _reconnect() {
+    widget.service.web3App!.core.relayClient.connect();
+
+    setState(() {
+      _state = WalletConnectModalConnectButtonState.reconnecting;
+    });
   }
 
   void _onConnectPressed(BuildContext context) {
