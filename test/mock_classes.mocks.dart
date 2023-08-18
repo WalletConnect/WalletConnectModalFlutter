@@ -580,6 +580,15 @@ class MockWalletConnectModalService extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
+  _i4.Future<void> reconnectRelay() => (super.noSuchMethod(
+        Invocation.method(
+          #reconnectRelay,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
   _i4.Future<void> disconnect() => (super.noSuchMethod(
         Invocation.method(
           #disconnect,

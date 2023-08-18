@@ -1,3 +1,8 @@
+## 2.1.0
+
+- Added `reconnectRelay` to the WalletConnectModalService to allow for manual reconnection to the relay
+- Updated tests to reflect new changes
+
 ## 2.0.0
 
 - Added setOptionalNamespaces to WalletConnectModalService

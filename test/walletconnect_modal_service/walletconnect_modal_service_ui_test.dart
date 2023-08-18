@@ -47,6 +47,9 @@ void main() {
       when(web3App.onSessionDelete).thenReturn(
         Event<SessionDelete>(),
       );
+      when(web3App.onSessionConnect).thenReturn(
+        Event<SessionConnect>(),
+      );
       when(web3App.init()).thenAnswer((_) async {});
       when(web3App.connect(
         requiredNamespaces: anyNamed('requiredNamespaces'),

@@ -248,6 +248,13 @@ class WalletConnectModalService extends ChangeNotifier
   }
 
   @override
+  Future<void> reconnectRelay() async {
+    _checkInitialized();
+
+    await web3App!.core.relayClient.connect();
+  }
+
+  @override
   Future<void> disconnect() async {
     _checkInitialized();
 

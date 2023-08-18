@@ -127,6 +127,7 @@ void main() {
       when(service.initError).thenReturn(
         const WalletConnectError(code: -1, message: 'Network error'),
       );
+      // when(service.reconnectRelay()).thenAnswer((_) async {});
 
       final GlobalKey key = GlobalKey();
       // late BuildContext context;
@@ -166,7 +167,8 @@ void main() {
 
       // Disabled button after tap
       await tester.tap(find.byKey(key));
-      verifyNoMoreInteractions(service);
+      await tester.pump();
+      verify(service.reconnectRelay()).called(1);
     });
   });
 }

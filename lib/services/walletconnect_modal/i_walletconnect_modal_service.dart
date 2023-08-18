@@ -49,6 +49,10 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
   /// Closes the modal.
   void close();
 
+  /// Connects to the relay if not already connected.
+  /// If the relay is already connected, this does nothing.
+  Future<void> reconnectRelay();
+
   /// Disconnects the session and pairing, if any.
   /// If there is no session, this does nothing.
   Future<void> disconnect();

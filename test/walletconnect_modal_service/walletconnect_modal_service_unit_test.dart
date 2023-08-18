@@ -27,6 +27,9 @@ void main() {
       when(web3App.onSessionDelete).thenReturn(
         Event<SessionDelete>(),
       );
+      when(web3App.onSessionConnect).thenReturn(
+        Event<SessionConnect>(),
+      );
 
       sessions = MockSessions();
       when(web3App.sessions).thenReturn(
@@ -139,7 +142,7 @@ void main() {
 
         expect(service.initError, isNull);
         // For each subscription, core will be queried
-        verify(web3App.core).called(2);
+        verify(web3App.core).called(3);
 
         core.relayClient.onRelayClientError.broadcast(
           ErrorEvent(
