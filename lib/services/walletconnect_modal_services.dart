@@ -2,6 +2,7 @@ import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_s
 import 'package:walletconnect_modal_flutter/services/explorer/i_explorer_service.dart';
 import 'package:walletconnect_modal_flutter/services/utils/core/core_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/core/i_core_utils.dart';
+import 'package:walletconnect_modal_flutter/services/utils/logger/logger_util.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/toast/i_toast_utils.dart';
@@ -30,9 +31,12 @@ class WalletConnectModalServices {
   // static final Map<Type, Future> initFunctionsMap = {};
 
   static Future<void> init() async {
+    LoggerUtil.logger.i('WalletConnectModalServices init');
     await explorer.init();
-    for (final initFunction in _initFunctions.values) {
-      await initFunction();
+    for (final entry in _initFunctions.entries) {
+      LoggerUtil.logger
+          .v('WalletConnectModalServices init service: ${entry.key}');
+      await entry.value();
     }
   }
 }

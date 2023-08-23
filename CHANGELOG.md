@@ -1,3 +1,7 @@
+## 2.1.1
+
+- Some functions updated to be protected instead of private for easier inheritance
+
 ## 2.1.0
 
 - Added `reconnectRelay` to the WalletConnectModalService to allow for manual reconnection to the relay

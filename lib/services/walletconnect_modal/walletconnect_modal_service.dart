@@ -129,11 +129,14 @@ class WalletConnectModalService extends ChangeNotifier
       return;
     }
 
-    _registerListeners();
+    registerListeners();
 
     _initError = null;
     try {
       await _web3App!.init();
+    } catch (_) {}
+
+    try {
       await WalletConnectModalServices.init();
     } catch (_) {}
 
@@ -154,7 +157,7 @@ class WalletConnectModalService extends ChangeNotifier
   // ignore: prefer_void_to_null
   Future<Null> onDispose() async {
     if (_isInitialized) {
-      _unregisterListeners();
+      unregisterListeners();
     }
   }
 
@@ -163,7 +166,7 @@ class WalletConnectModalService extends ChangeNotifier
     required BuildContext context,
     Widget? startWidget,
   }) async {
-    _checkInitialized();
+    checkInitialized();
 
     if (_isOpen) {
       return;
@@ -249,14 +252,14 @@ class WalletConnectModalService extends ChangeNotifier
 
   @override
   Future<void> reconnectRelay() async {
-    _checkInitialized();
+    checkInitialized();
 
     await web3App!.core.relayClient.connect();
   }
 
   @override
   Future<void> disconnect() async {
-    _checkInitialized();
+    checkInitialized();
 
     if (_session == null) {
       return;
@@ -283,13 +286,13 @@ class WalletConnectModalService extends ChangeNotifier
 
   @override
   Future<void> launchCurrentWallet() async {
-    _checkInitialized();
+    checkInitialized();
 
     if (_session == null) {
       return;
     }
 
-    final Redirect? redirect = _constructRedirect();
+    final Redirect? redirect = constructRedirect();
 
     LoggerUtil.logger.i(
       'Launching wallet: $redirect, ${_session?.peer.metadata}',
@@ -326,7 +329,7 @@ class WalletConnectModalService extends ChangeNotifier
   Future<void> connectWallet({
     required WalletData walletData,
   }) async {
-    _checkInitialized();
+    checkInitialized();
 
     if (_connectingWallet) {
       return;
@@ -356,7 +359,7 @@ class WalletConnectModalService extends ChangeNotifier
   void setRequiredNamespaces({
     required Map<String, RequiredNamespace> requiredNamespaces,
   }) {
-    _checkInitialized();
+    checkInitialized();
 
     LoggerUtil.logger.i('Setting required namespaces: $requiredNamespaces');
 
@@ -369,7 +372,7 @@ class WalletConnectModalService extends ChangeNotifier
   void setOptionalNamespaces({
     required Map<String, RequiredNamespace> optionalNamespaces,
   }) {
-    _checkInitialized();
+    checkInitialized();
 
     LoggerUtil.logger.i('Setting optional namespaces: $optionalNamespaces');
 
@@ -380,7 +383,7 @@ class WalletConnectModalService extends ChangeNotifier
 
   @override
   String getReferer() {
-    _checkInitialized();
+    checkInitialized();
 
     return _web3App!.metadata.name.replaceAll(' ', '');
   }
@@ -408,13 +411,14 @@ class WalletConnectModalService extends ChangeNotifier
 
       notifyListeners();
 
-      _awaitConnectResponse();
+      awaitConnectResponse();
     }
   }
 
   ////// Private methods //////
 
-  Redirect? _constructRedirect() {
+  @protected
+  Redirect? constructRedirect() {
     if (session == null) {
       return null;
     }
@@ -436,38 +440,41 @@ class WalletConnectModalService extends ChangeNotifier
     );
   }
 
-  void _registerListeners() {
+  @protected
+  void registerListeners() {
     web3App!.onSessionConnect.subscribe(
-      _onSessionConnect,
+      onSessionConnect,
     );
     web3App!.onSessionDelete.subscribe(
-      _onSessionDelete,
+      onSessionDelete,
     );
     web3App!.core.relayClient.onRelayClientConnect.subscribe(
-      _onRelayClientConnect,
+      onRelayClientConnect,
     );
     web3App!.core.relayClient.onRelayClientError.subscribe(
-      _onRelayClientError,
+      onRelayClientError,
     );
   }
 
-  void _unregisterListeners() {
+  @protected
+  void unregisterListeners() {
     web3App!.onSessionConnect.unsubscribe(
-      _onSessionConnect,
+      onSessionConnect,
     );
     web3App!.onSessionDelete.unsubscribe(
-      _onSessionDelete,
+      onSessionDelete,
     );
     web3App!.core.relayClient.onRelayClientConnect.unsubscribe(
-      _onRelayClientConnect,
+      onRelayClientConnect,
     );
     web3App!.core.relayClient.onRelayClientError.unsubscribe(
-      _onRelayClientError,
+      onRelayClientError,
     );
   }
 
-  void _onSessionConnect(SessionConnect? args) {
-    LoggerUtil.logger.i('Session connected: ${args?.session}');
+  @protected
+  void onSessionConnect(SessionConnect? args) {
+    LoggerUtil.logger.i('_onSessionConnect: ${args?.session}');
     _isConnected = true;
     _session = args!.session;
     _address = NamespaceUtils.getAccount(
@@ -481,8 +488,9 @@ class WalletConnectModalService extends ChangeNotifier
     }
   }
 
-  void _onSessionDelete(SessionDelete? args) {
-    LoggerUtil.logger.i('Session deleted: $args');
+  @protected
+  void onSessionDelete(SessionDelete? args) {
+    LoggerUtil.logger.i('_onSessionDelete: $args');
     _isConnected = false;
     _address = '';
     _session = null;
@@ -490,14 +498,17 @@ class WalletConnectModalService extends ChangeNotifier
     notifyListeners();
   }
 
-  void _onRelayClientConnect(EventArgs? args) {
+  @protected
+  void onRelayClientConnect(EventArgs? args) {
+    LoggerUtil.logger.i('_onRelayClientConnect: $args');
     _initError = null;
 
     notifyListeners();
   }
 
-  void _onRelayClientError(ErrorEvent? args) {
-    LoggerUtil.logger.e('Relay client error: ${args?.error}');
+  @protected
+  void onRelayClientError(ErrorEvent? args) {
+    LoggerUtil.logger.e('_onRelayClientError: ${args?.error}');
     _initError = args?.error;
 
     notifyListeners();
@@ -510,7 +521,8 @@ class WalletConnectModalService extends ChangeNotifier
   /// If there is no connect response, it will do nothing.
   /// The completion of this method is triggered when the dApp
   /// connects to a wallet.
-  Future<void> _awaitConnectResponse() async {
+  @protected
+  Future<void> awaitConnectResponse() async {
     if (connectResponse == null) {
       return;
     }
@@ -532,10 +544,11 @@ class WalletConnectModalService extends ChangeNotifier
     }
   }
 
-  void _checkInitialized() {
+  @protected
+  void checkInitialized() {
     if (!isInitialized) {
       throw StateError(
-        'Web3ModalService must be initialized before calling this method.',
+        'Service must be initialized before calling this method.',
       );
     }
   }
