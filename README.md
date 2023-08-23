@@ -56,6 +56,49 @@ WalletConnectModalConnect(
 ),
 ```
 
+### Excluding, Recommending, and Including Wallets
+
+You can pass a list of wallet IDs into the `WalletConnectModalService` to exclude, recommend, or include wallets.
+
+All wallet IDs can be found on the [explorer](https://walletconnect.com/explorer?type=wallet), just click on the wallet you want to copy the ID for.
+
+Example 1: Exclude all wallets except MetaMask and Trust
+
+```dart
+WalletConnectModalService(
+  web3App: web3App,
+  recommendedWalletIds: {
+    'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', // MetaMask
+    '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0', // Trust
+  },
+  excludedWalletState: ExcludedWalletState.all, // Exclude all wallets except the two above
+);
+```
+
+Example 2: Recommend (Sort to the top) MetaMask and Trust
+
+```dart
+WalletConnectModalService(
+  web3App: web3App,
+  recommendedWalletIds: {
+    'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', // MetaMask
+    '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0', // Trust
+  },
+);
+```
+
+Example 3: Exclude MetaMask and Trust
+
+```dart
+WalletConnectModalService(
+  web3App: web3App,
+  excludedWalletIds: {
+    'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', // MetaMask
+    '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0', // Trust
+  },
+);
+```
+
 ## Notes
 
 Swapping the required or optional namespaces will not do anything if your dApp has already connected.  
