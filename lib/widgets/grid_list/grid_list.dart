@@ -15,6 +15,7 @@ enum GridListState { short, long, extraShort }
 
 class GridList<T> extends StatelessWidget {
   static const double tileSize = 60;
+  static const double smallTileSize = 50;
   static double getTileBorderRadius(double tileSize) => tileSize / 4.0;
 
   const GridList({
@@ -61,6 +62,7 @@ class GridList<T> extends StatelessWidget {
   Widget _buildGridList(BuildContext context) {
     final WalletConnectModalThemeData themeData =
         WalletConnectModalTheme.getData(context);
+    final size = MediaQuery.of(context).size;
 
     final bool longBottomSheet = platformUtils.instance.isLongBottomSheet(
       MediaQuery.of(context).orientation,
@@ -74,11 +76,11 @@ class GridList<T> extends StatelessWidget {
         switch (state) {
           case GridListState.short:
             itemCount = min(8, value.length);
-            height = longBottomSheet ? 120 : 240;
+            height = longBottomSheet ? 120 : (size.height * 0.3);
             break;
           case GridListState.long:
             itemCount = value.length;
-            height = longBottomSheet ? 240 : 600;
+            height = longBottomSheet ? 240 : (size.height * 0.6);
             break;
           case GridListState.extraShort:
             itemCount = min(4, value.length);
@@ -130,6 +132,9 @@ class GridList<T> extends StatelessWidget {
                   onSelect: () => onSelect(value[index].data),
                   child: WalletImage(
                     imageUrl: value[index].image,
+                    imageSize: size.height < 700.0
+                        ? GridList.smallTileSize
+                        : GridList.tileSize,
                   ),
                 );
               }
@@ -147,6 +152,7 @@ class GridList<T> extends StatelessWidget {
   ) {
     final WalletConnectModalThemeData themeData =
         WalletConnectModalTheme.getData(context);
+    final size = MediaQuery.of(context).size;
 
     List<Widget> images = [];
 
@@ -169,7 +175,8 @@ class GridList<T> extends StatelessWidget {
       onSelect: viewLongList ?? () {},
       child: Container(
         width: GridList.tileSize,
-        height: GridList.tileSize,
+        height:
+            size.height < 700.0 ? GridList.smallTileSize : GridList.tileSize,
         padding: const EdgeInsets.all(2.0),
         decoration: BoxDecoration(
           color: themeData.background200,
