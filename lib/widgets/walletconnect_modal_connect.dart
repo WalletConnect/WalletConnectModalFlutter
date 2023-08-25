@@ -21,11 +21,13 @@ class WalletConnectModalConnect extends StatefulWidget {
     required this.service,
     this.buttonRadius,
     this.connectedWidget,
+    this.width,
   });
 
   final IWalletConnectModalService service;
   final double? buttonRadius;
   final Widget? connectedWidget;
+  final double? width;
 
   @override
   State<WalletConnectModalConnect> createState() =>
@@ -33,6 +35,10 @@ class WalletConnectModalConnect extends StatefulWidget {
 }
 
 class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
+  static const double _defaultButtonRadius = 10;
+  static const double circularIndicatorSize = 20;
+  static const double circularIndicatorStrokeWidth = 2;
+
   WalletConnectModalConnectButtonState _state =
       WalletConnectModalConnectButtonState.idle;
 
@@ -54,9 +60,15 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(minHeight: 40),
-      child: _buildButton(context),
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        constraints: BoxConstraints(
+          minHeight: 40,
+          minWidth: widget.width ?? 180,
+        ),
+        child: _buildButton(context),
+      ),
     );
   }
 
@@ -66,7 +78,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
 
     if (_state == WalletConnectModalConnectButtonState.error) {
       return WalletConnectModalButton(
-        borderRadius: widget.buttonRadius ?? themeData.radius4XS,
+        borderRadius: widget.buttonRadius ?? _defaultButtonRadius,
         disabled: true,
         onPressed: () => _reconnect(),
         child: Row(
@@ -78,6 +90,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
               style: TextStyle(
                 color: themeData.error,
                 fontFamily: themeData.fontFamily,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -85,19 +98,19 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
       );
     } else if (_state == WalletConnectModalConnectButtonState.reconnecting) {
       return WalletConnectModalButton(
-        borderRadius: widget.buttonRadius ?? themeData.radius4XS,
+        borderRadius: widget.buttonRadius ?? _defaultButtonRadius,
         disabled: true,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              width: 25,
-              height: 25,
+              width: circularIndicatorSize,
+              height: circularIndicatorSize,
               child: Center(
                 child: CircularProgressIndicator(
                   color: themeData.primary100,
-                  strokeWidth: 4,
+                  strokeWidth: circularIndicatorStrokeWidth,
                 ),
               ),
             ),
@@ -107,6 +120,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
               style: TextStyle(
                 color: themeData.error,
                 fontFamily: themeData.fontFamily,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -114,7 +128,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
       );
     } else if (_state == WalletConnectModalConnectButtonState.idle) {
       return WalletConnectModalButton(
-        borderRadius: widget.buttonRadius ?? themeData.radius4XS,
+        borderRadius: widget.buttonRadius ?? _defaultButtonRadius,
         onPressed: () => _onConnectPressed(context),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -122,8 +136,8 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
           children: [
             SvgPicture.asset(
               'assets/walletconnect_logo_white.svg',
-              width: 20,
-              height: 20,
+              width: 14,
+              height: 16,
               package: 'walletconnect_modal_flutter',
               colorFilter: const ColorFilter.mode(
                 Colors.white,
@@ -136,6 +150,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
               style: TextStyle(
                 color: Colors.white,
                 fontFamily: themeData.fontFamily,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -143,18 +158,19 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
       );
     } else if (_state == WalletConnectModalConnectButtonState.connecting) {
       return WalletConnectModalButton(
-        borderRadius: widget.buttonRadius ?? themeData.radius4XS,
+        borderRadius: widget.buttonRadius ?? _defaultButtonRadius,
+        disabled: true,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              width: 25,
-              height: 25,
+              width: circularIndicatorSize,
+              height: circularIndicatorSize,
               child: Center(
                 child: CircularProgressIndicator(
                   color: themeData.primary100,
-                  strokeWidth: 4,
+                  strokeWidth: circularIndicatorStrokeWidth,
                 ),
               ),
             ),
@@ -164,6 +180,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
               style: TextStyle(
                 color: themeData.primary100,
                 fontFamily: themeData.fontFamily,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -176,7 +193,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
       } else {
         // Default to a disconnect button
         return WalletConnectModalButton(
-          borderRadius: widget.buttonRadius ?? themeData.radius4XS,
+          borderRadius: widget.buttonRadius ?? _defaultButtonRadius,
           onPressed: () => _onConnectPressed(context),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -185,8 +202,9 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
               Text(
                 StringConstants.connectButtonConnected,
                 style: TextStyle(
-                  color: themeData.foreground100,
+                  color: Colors.white,
                   fontFamily: themeData.fontFamily,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],

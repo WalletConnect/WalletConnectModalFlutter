@@ -1,5 +1,7 @@
-import 'package:sign/models/eth/ethereum_transaction.dart';
-import 'package:sign/utils/crypto/test_data.dart';
+import 'package:walletconnect_flutter_dapp/models/chain_metadata.dart';
+import 'package:walletconnect_flutter_dapp/models/eth/ethereum_transaction.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/chain_data_wrapper.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/test_data.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 enum EIP155Methods {
@@ -8,6 +10,8 @@ enum EIP155Methods {
   ethSignTransaction,
   ethSignTypedData,
   ethSendTransaction,
+  walletSwitchEthereumChain,
+  walletAddEthereumChain,
 }
 
 enum EIP155Events {
@@ -42,12 +46,34 @@ extension EIP155EventsStringX on String {
 }
 
 class EIP155 {
+  static const ethRequiredMethods = [
+    'personal_sign',
+    'eth_signTypedData',
+    'eth_sendTransaction',
+  ];
+  static const walletSwitchEthChain = 'wallet_switchEthereumChain';
+  static const walletAddEthChain = 'wallet_addEthereumChain';
+  static const ethOptionalMethods = [
+    walletSwitchEthChain,
+    walletAddEthChain,
+  ];
+  static const allMethods = [
+    ...ethRequiredMethods,
+    ...ethOptionalMethods,
+  ];
+  static const ethEvents = [
+    'chainChanged',
+    'accountsChanged',
+  ];
+
   static final Map<EIP155Methods, String> methods = {
     EIP155Methods.personalSign: 'personal_sign',
     // EIP155Methods.ethSign: 'eth_sign',
     // EIP155Methods.ethSignTransaction: 'eth_signTransaction',
-    // EIP155Methods.ethSignTypedData: 'eth_signTypedData',
-    EIP155Methods.ethSendTransaction: 'eth_sendTransaction',
+    EIP155Methods.ethSignTypedData: 'eth_signTypedData',
+    // EIP155Methods.ethSendTransaction: 'eth_sendTransaction',
+    // EIP155Methods.walletSwitchEthereumChain: 'wallet_switchEthereumChain',
+    // EIP155Methods.walletAddEthereumChain: 'wallet_addEthereumChain'
   };
 
   static final Map<EIP155Events, String> events = {
@@ -85,7 +111,7 @@ class EIP155 {
           topic: topic,
           chainId: chainId,
           address: address,
-          data: typedData,
+          data: testSignTypedData(int.parse(chainId.split(':')[1])),
         );
       case EIP155Methods.ethSignTransaction:
         return ethSignTransaction(
@@ -109,6 +135,61 @@ class EIP155 {
             value: '0x01',
           ),
         );
+      case EIP155Methods.walletAddEthereumChain:
+      case EIP155Methods.walletSwitchEthereumChain:
+        return walletSwitchChain(
+          web3App: web3App,
+          topic: topic,
+          chainId: chainId,
+          chainInfo: ChainData.chains.firstWhere(
+            (element) => element.chainId == chainId,
+            orElse: () => ChainData.chains.first,
+          ),
+        );
+    }
+  }
+
+  static Future<dynamic> walletSwitchChain({
+    required IWeb3App web3App,
+    required String topic,
+    required String chainId,
+    required ChainMetadata chainInfo,
+  }) async {
+    final int chainIdInt = int.parse(chainInfo.chainId);
+    final String chainHex = chainIdInt.toRadixString(16);
+    try {
+      return await web3App.request(
+        topic: topic,
+        chainId: chainId,
+        request: SessionRequestParams(
+          method: methods[EIP155Methods.walletSwitchEthereumChain]!,
+          params: [
+            {
+              'chainId': '0x$chainHex',
+            },
+          ],
+        ),
+      );
+    } catch (e) {
+      return await web3App.request(
+        topic: topic,
+        chainId: chainId,
+        request: SessionRequestParams(
+          method: 'wallet_addEthereumChain',
+          params: [
+            {
+              'chainId': '0x$chainHex',
+              'chainName': chainInfo.chainName,
+              'nativeCurrency': {
+                'name': chainInfo.tokenName,
+                'symbol': chainInfo.tokenName,
+                'decimals': 18,
+              },
+              'rpcUrls': [chainInfo.rpcUrl],
+            },
+          ],
+        ),
+      );
     }
   }
 

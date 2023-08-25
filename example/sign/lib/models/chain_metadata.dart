@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 enum ChainType {
   eip155,
@@ -8,22 +8,28 @@ enum ChainType {
 }
 
 class ChainMetadata {
-  final String chainId;
-  final String name;
-  final String logo;
-  final bool isTestnet;
   final Color color;
   final ChainType type;
-  final List<String> rpc;
+  final String chainName;
+  final String chainId;
+  final String namespace;
+  final String chainIcon;
+  final String tokenName;
+  final Map<String, RequiredNamespace> requiredNamespaces;
+  final Map<String, RequiredNamespace> optionalNamespaces;
+  final String rpcUrl;
 
   const ChainMetadata({
-    required this.chainId,
-    required this.name,
-    required this.logo,
-    this.isTestnet = false,
     required this.color,
     required this.type,
-    required this.rpc,
+    required this.chainName,
+    required this.chainId,
+    required this.namespace,
+    required this.chainIcon,
+    required this.tokenName,
+    required this.requiredNamespaces,
+    required this.optionalNamespaces,
+    required this.rpcUrl,
   });
 
   @override
@@ -31,19 +37,29 @@ class ChainMetadata {
     if (identical(this, other)) return true;
 
     return other is ChainMetadata &&
+        other.color == color &&
+        other.type == type &&
+        other.chainName == chainName &&
         other.chainId == chainId &&
-        other.name == name &&
-        other.logo == logo &&
-        other.isTestnet == isTestnet &&
-        listEquals(other.rpc, rpc);
+        other.namespace == namespace &&
+        other.chainIcon == chainIcon &&
+        other.tokenName == tokenName &&
+        other.requiredNamespaces == requiredNamespaces &&
+        other.optionalNamespaces == optionalNamespaces &&
+        other.rpcUrl == rpcUrl;
   }
 
   @override
   int get hashCode {
-    return chainId.hashCode ^
-        name.hashCode ^
-        logo.hashCode ^
-        rpc.hashCode ^
-        isTestnet.hashCode;
+    return color.hashCode ^
+        type.hashCode ^
+        chainName.hashCode ^
+        chainId.hashCode ^
+        namespace.hashCode ^
+        chainIcon.hashCode ^
+        tokenName.hashCode ^
+        requiredNamespaces.hashCode ^
+        optionalNamespaces.hashCode ^
+        rpcUrl.hashCode;
   }
 }

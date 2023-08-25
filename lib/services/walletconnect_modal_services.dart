@@ -1,5 +1,7 @@
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/i_explorer_service.dart';
+import 'package:walletconnect_modal_flutter/services/storage_service/i_storage_service.dart';
+import 'package:walletconnect_modal_flutter/services/storage_service/storage_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/core/core_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/core/i_core_utils.dart';
 import 'package:walletconnect_modal_flutter/services/utils/logger/logger_util.dart';
@@ -19,6 +21,7 @@ class WalletConnectModalServices {
   static IUrlUtils get url => urlUtils.instance;
   static IWidgetStack get stack => widgetStack.instance;
   static IPlatformUtils get platform => platformUtils.instance;
+  static IStorageService get storage => storageService.instance;
 
   static final Map<String, Function> _initFunctions = {};
 

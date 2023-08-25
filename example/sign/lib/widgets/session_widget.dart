@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sign/models/chain_metadata.dart';
-import 'package:sign/utils/constants.dart';
-import 'package:sign/utils/crypto/eip155.dart';
-import 'package:sign/utils/crypto/helpers.dart';
-import 'package:sign/utils/string_constants.dart';
-import 'package:sign/widgets/method_dialog.dart';
+import 'package:walletconnect_flutter_dapp/models/chain_metadata.dart';
+import 'package:walletconnect_flutter_dapp/utils/constants.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/eip155.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/helpers.dart';
+import 'package:walletconnect_flutter_dapp/utils/string_constants.dart';
+import 'package:walletconnect_flutter_dapp/widgets/method_dialog.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 class SessionWidget extends StatefulWidget {
@@ -58,33 +58,9 @@ class SessionWidgetState extends State<SessionWidget> {
     }
 
     // Add a delete button
-    children.add(
-      Container(
-        width: double.infinity,
-        height: StyleConstants.linear48,
-        margin: const EdgeInsets.symmetric(
-          vertical: StyleConstants.linear8,
-        ),
-        child: ElevatedButton(
-          onPressed: () async {
-            await widget.web3App.disconnectSession(
-                topic: widget.session.topic,
-                reason: Errors.getSdkError(
-                  Errors.USER_DISCONNECTED,
-                ));
-          },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(
-              Colors.red,
-            ),
-          ),
-          child: const Text(
-            StringConstants.delete,
-            style: StyleConstants.buttonText,
-          ),
-        ),
-      ),
-    );
+    // children.add(
+
+    // );
 
     return ListView(
       children: children,
@@ -102,7 +78,7 @@ class SessionWidgetState extends State<SessionWidget> {
 
     final List<Widget> children = [
       Text(
-        chainMetadata.name,
+        chainMetadata.chainName,
         style: StyleConstants.subtitleText,
       ),
       const SizedBox(
@@ -270,7 +246,7 @@ class SessionWidgetState extends State<SessionWidget> {
           web3App: widget.web3App,
           topic: widget.session.topic,
           method: method.toEip155Method()!,
-          chainId: chainMetadata.chainId,
+          chainId: chainMetadata.namespace,
           address: address.toLowerCase(),
         );
       // case ChainType.kadena:

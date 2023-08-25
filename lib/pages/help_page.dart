@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:walletconnect_modal_flutter/constants/constants.dart';
 import 'package:walletconnect_modal_flutter/pages/get_wallet_page.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
+import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/widget_stack/widget_stack_singleton.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_button.dart';
@@ -103,7 +104,7 @@ class _HelpPageState extends State<HelpPage> {
 
     return WalletConnectModalNavBar(
       title: const WalletConnectModalNavbarTitle(
-        title: 'Help',
+        title: 'What is a wallet?',
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -119,67 +120,74 @@ class _HelpPageState extends State<HelpPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                  child: WalletConnectModalButton(
-                    key: WalletConnectModalConstants.getAWalletButtonKey,
-                    onPressed: () {
-                      widgetStack.instance.add(
-                        const GetWalletPage(),
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/icons/wallet.svg',
-                          width: 18,
-                          height: 18,
-                          package: 'walletconnect_modal_flutter',
-                          colorFilter: ColorFilter.mode(
-                            themeData.inverse100,
-                            BlendMode.srcIn,
-                          ),
+                WalletConnectModalButton(
+                  key: WalletConnectModalConstants.getAWalletButtonKey,
+                  onPressed: () {
+                    widgetStack.instance.add(
+                      const GetWalletPage(),
+                    );
+                  },
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 2,
+                    horizontal: 10,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/wallet.svg',
+                        width: 18,
+                        height: 18,
+                        package: 'walletconnect_modal_flutter',
+                        colorFilter: const ColorFilter.mode(
+                          Colors.white,
+                          BlendMode.srcIn,
                         ),
-                        const SizedBox(width: 2),
-                        Text(
-                          'Get a Wallet',
-                          style: TextStyle(
-                            fontFamily: themeData.fontFamily,
-                            color: themeData.inverse100,
-                          ),
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        'Get a Wallet',
+                        style: TextStyle(
+                          fontFamily: themeData.fontFamily,
+                          color: Colors.white,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
-                Expanded(
-                  child: WalletConnectModalButton(
-                    onPressed: () {
-                      launchUrl(
-                        Uri.parse(
-                          'https://ethereum.org/en/wallets/',
+                WalletConnectModalButton(
+                  onPressed: () {
+                    urlUtils.instance.launchUrl(
+                      Uri.parse(
+                        'https://ethereum.org/en/wallets/',
+                      ),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  },
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 2,
+                    horizontal: 10,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Learn More',
+                        style: TextStyle(
+                          fontFamily: themeData.fontFamily,
+                          color: Colors.white,
                         ),
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Learn More',
-                          style: TextStyle(
-                            fontFamily: themeData.fontFamily,
-                            color: themeData.inverse100,
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_outward,
-                          color: themeData.inverse100,
-                        ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(width: 2),
+                      const Icon(
+                        size: 18,
+                        Icons.arrow_outward,
+                        color: Colors.white,
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -288,8 +296,8 @@ class _HelpPageState extends State<HelpPage> {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
               color: themeData.foreground100,
             ),
           ),
@@ -298,7 +306,8 @@ class _HelpPageState extends State<HelpPage> {
             description,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
               color: themeData.foreground200,
             ),
           ),

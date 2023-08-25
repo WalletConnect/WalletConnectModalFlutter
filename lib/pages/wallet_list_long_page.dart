@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:walletconnect_modal_flutter/constants/constants.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
-import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/walletconnect_modal/i_walletconnect_modal_service.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_navbar.dart';
@@ -22,8 +21,7 @@ class WalletListLongPage extends StatelessWidget {
 
     return WalletConnectModalNavBar(
       title: WalletConnectModalSearchBar(
-        hintText:
-            'Search ${platformUtils.instance.getPlatformType().name} wallets',
+        hintText: 'Search wallets',
         onSearch: (String query) {
           explorerService.instance!.filterList(
             query: query,

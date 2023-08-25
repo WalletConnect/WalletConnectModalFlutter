@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/services/utils/toast/toast_message.dart';
+import 'package:walletconnect_modal_flutter/services/utils/toast/toast_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
 
 class WalletConnectModalToast extends StatefulWidget {
@@ -43,8 +44,13 @@ class _WalletConnectModalToastState extends State<WalletConnectModalToast>
           return;
         }
         _controller.reverse().then(
-              widget.message.completer.complete,
+              (value) => toastUtils.instance.clear(),
             );
+        // .then(
+        //   () async {
+        //     widget.message.completer.complete();
+        //   },
+        // );
       });
     });
   }
@@ -82,7 +88,7 @@ class _WalletConnectModalToastState extends State<WalletConnectModalToast>
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 8.0,
-                vertical: 4.0,
+                vertical: 2.0,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

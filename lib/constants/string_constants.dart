@@ -9,4 +9,7 @@ class StringConstants {
   static const String connectButtonIdle = 'Connect Wallet';
   static const String connectButtonConnecting = 'Connecting...';
   static const String connectButtonConnected = 'Disconnect';
+
+  // Misc
+  static const String noResults = 'No results found';
 }

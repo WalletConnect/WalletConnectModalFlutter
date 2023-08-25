@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/walletconnect_modal/i_walletconnect_modal_service.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
@@ -55,6 +56,9 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
 
   @override
   Widget build(BuildContext context) {
+    WalletConnectModalThemeData themeData =
+        WalletConnectModalTheme.getData(context);
+
     bool isLongBottomSheet = platformUtils.instance.isLongBottomSheet(
       MediaQuery.of(context).orientation,
     );
@@ -87,7 +91,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(
-          WalletConnectModalTheme.getData(context).radiusXS,
+          WalletConnectModalTheme.getData(context).radiusL,
         ),
       ),
       constraints: isLongBottomSheet
@@ -111,14 +115,17 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
             dataModuleShape: QrDataModuleShape.circle,
             color: Colors.black,
           ),
-          // embeddedImage: Image.asset(
+          // gapless: true,
+          // embeddedImage: const AssetImage(
           //   'assets/walletconnect_logo_white.png',
           //   package: 'walletconnect_modal_flutter',
-          // ).image,
-          // embeddedImageStyle: QrEmbeddedImageStyle(
-          //   size: const Size(120, 120),
-          //   color: Web3ModalTheme.of(context).backgroundColor,
+          //   // color: themeData.primary100,
           // ),
+          // embeddedImageStyle: QrEmbeddedImageStyle(
+          //   size: const Size(100, 60),
+          //   color: themeData.primary100,
+          // ),
+          // embeddedImageEmitsError: true,
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:walletconnect_modal_flutter/constants/constants.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
@@ -34,6 +35,25 @@ class GetWalletPage extends StatelessWidget {
         .take(listCount)
         .toList();
 
+    final List<Widget> walletWidgets = [];
+
+    for (int i = 0; i < wallets.length; i++) {
+      walletWidgets.add(
+        WalletItem(wallet: wallets[i]),
+      );
+      if (i < wallets.length - 1) {
+        walletWidgets.add(
+          Divider(
+            height: 0,
+            thickness: 1,
+            indent: 20,
+            endIndent: 20,
+            color: themeData.background300,
+          ),
+        );
+      }
+    }
+
     return WalletConnectModalNavBar(
       title: const WalletConnectModalNavbarTitle(
         title: 'Get a wallet',
@@ -43,8 +63,14 @@ class GetWalletPage extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
-            children:
-                wallets.map((wallet) => WalletItem(wallet: wallet)).toList(),
+            children: walletWidgets,
+          ),
+          Divider(
+            height: 0,
+            thickness: 1,
+            // indent: 20,
+            // endIndent: 20,
+            color: themeData.background300,
           ),
           const SizedBox(height: 8.0),
           Text(
@@ -56,12 +82,17 @@ class GetWalletPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4.0),
-          Text(
-            "With hundreds of wallets out there, there's something for everyone",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16.0,
-              color: themeData.foreground200,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 40,
+            ),
+            child: Text(
+              "With hundreds of wallets out there, there's something for everyone",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14.0,
+                color: themeData.foreground200,
+              ),
             ),
           ),
           const SizedBox(height: 8.0),
@@ -71,6 +102,10 @@ class GetWalletPage extends StatelessWidget {
                 StringConstants.getAWalletExploreWalletsUrl,
               ),
             ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10.0,
+              vertical: 2.0,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -79,13 +114,13 @@ class GetWalletPage extends StatelessWidget {
                   'Explore Wallets',
                   style: TextStyle(
                     fontFamily: themeData.fontFamily,
-                    color: themeData.inverse100,
+                    color: Colors.white,
                   ),
                 ),
-                Icon(
+                const Icon(
                   Icons.arrow_outward,
-                  size: 12,
-                  color: themeData.inverse100,
+                  size: 18,
+                  color: Colors.white,
                 ),
               ],
             ),
@@ -119,9 +154,10 @@ class WalletItem extends StatelessWidget {
         bottom: 4.0,
       ),
       child: ListTile(
+        // dense: true,
         leading: WalletImage(
           imageUrl: wallet.image,
-          imageSize: 50,
+          imageSize: 40,
         ),
         title: Text(
           wallet.title,
@@ -130,40 +166,49 @@ class WalletItem extends StatelessWidget {
             color: themeData.foreground100,
           ),
         ),
-        trailing: WalletConnectModalButton(
-          onPressed: () => urlUtils.instance.launchUrl(
-            Uri.parse(
-              wallet.data.listing.homepage,
+        trailing: SizedBox(
+          height: 28,
+          width: 60,
+          child: WalletConnectModalButton(
+            onPressed: () => urlUtils.instance.launchUrl(
+              Uri.parse(
+                wallet.data.listing.homepage,
+              ),
+              mode: LaunchMode.externalApplication,
             ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Get',
-                style: TextStyle(
-                  fontFamily: themeData.fontFamily,
-                  color: themeData.inverse100,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10.0,
+              vertical: 0.0,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Get',
+                  style: TextStyle(
+                    fontFamily: themeData.fontFamily,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 4.0),
-              SvgPicture.asset(
-                'assets/icons/forward.svg',
-                width: 12,
-                height: 12,
-                package: 'walletconnect_modal_flutter',
-                colorFilter: ColorFilter.mode(
-                  themeData.inverse100,
-                  BlendMode.srcIn,
+                const SizedBox(width: 4.0),
+                SvgPicture.asset(
+                  'assets/icons/forward.svg',
+                  width: 12,
+                  height: 12,
+                  package: 'walletconnect_modal_flutter',
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
                 ),
-              ),
-              // Icon(
-              //   Icons.arrow_forward_ios,
-              //   size: 12,
-              //   color: themeData.inverse100,
-              // ),
-            ],
+                // Icon(
+                //   Icons.arrow_forward_ios,
+                //   size: 12,
+                //   color: themeData.inverse100,
+                // ),
+              ],
+            ),
           ),
         ),
       ),

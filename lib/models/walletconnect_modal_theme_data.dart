@@ -84,7 +84,7 @@ class WalletConnectModalThemeData with _$WalletConnectModalThemeData {
     foreground300: Color(0xFF9EA9A9),
     background100: Color(0xFFFFFFFF),
     background200: Color(0xFFEAF1F1),
-    background300: Color(0xFFD8E3E2),
+    background300: Color(0xFFD8E3E3),
     inverse000: Color(0xFFFFFFFF),
     inverse100: Color(0xFF000000),
     error: Color(0xFFF05142),

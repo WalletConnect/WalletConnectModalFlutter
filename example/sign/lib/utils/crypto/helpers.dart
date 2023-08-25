@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:sign/models/chain_metadata.dart';
-import 'package:sign/utils/crypto/chain_data.dart';
-import 'package:sign/utils/crypto/eip155.dart';
-import 'package:sign/utils/crypto/solana_data.dart';
+import 'package:walletconnect_flutter_dapp/models/chain_metadata.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/chain_data_wrapper.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/eip155.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/solana_data.dart';
 
 String getChainName(String chain) {
   try {
-    return ChainData.allChains
-        .where((element) => element.chainId == chain)
+    return ChainData.chains
+        .where((element) => element.namespace == chain)
         .first
-        .name;
+        .chainName;
   } catch (e) {
-    debugPrint('Invalid chain');
+    debugPrint('getChainName, Invalid chain: $chain');
   }
   return 'Unknown';
 }
 
-ChainMetadata getChainMetadataFromChain(String chain) {
+ChainMetadata getChainMetadataFromChain(String namespace) {
   try {
-    return ChainData.allChains
-        .where((element) => element.chainId == chain)
+    return ChainData.chains
+        .where((element) => element.namespace == namespace)
         .first;
   } catch (e) {
-    debugPrint('Invalid chain');
+    debugPrint('getChainMetadataFromChain, Invalid chain: $namespace');
   }
-  return ChainData.mainChains[0];
+  return ChainData.chains[0];
 }
 
 List<String> getChainMethods(ChainType value) {

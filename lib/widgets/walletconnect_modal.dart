@@ -111,17 +111,13 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
           );
 
     final double width = bottomSheet ? double.infinity : 600;
-    const double modalWidgetHeight = 32;
+    const double modalWidgetHeight = 30;
 
     return Container(
       decoration: BoxDecoration(
         color: themeData.primary100,
         borderRadius: outerContainerBorderRadius,
       ),
-      // constraints: const BoxConstraints(
-      //   maxHeight: 2000,
-      // ),
-      // height: 1000,
       width: width,
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -129,8 +125,8 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
         children: <Widget>[
           Container(
             padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 8,
+              horizontal: 12,
+              vertical: 10,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

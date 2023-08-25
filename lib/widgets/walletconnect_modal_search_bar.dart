@@ -18,33 +18,53 @@ class WalletConnectModalSearchBar extends StatelessWidget {
         WalletConnectModalTheme.getData(context);
 
     return Container(
-      height: 36,
+      height: 30,
       decoration: BoxDecoration(
         color: themeData.overlay005,
         borderRadius: BorderRadius.circular(
           themeData.radiusXS,
-        ),
-        border: Border.all(
-          color: themeData.overlay005,
-          width: 2,
         ),
       ),
       child: TextFormField(
         onChanged: onSearch,
         textAlignVertical: TextAlignVertical.center,
         style: TextStyle(
-          color: themeData.foreground275,
+          color: themeData.inverse100,
         ),
+        cursorColor: themeData.primary100,
+        cursorHeight: 20,
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.search,
             color: themeData.foreground275,
           ),
+          labelStyle: TextStyle(
+            color: themeData.inverse000,
+          ),
           hintText: hintText,
           hintStyle: TextStyle(
             color: themeData.foreground275,
           ),
-          border: InputBorder.none,
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: themeData.overlay005,
+            ),
+            borderRadius: BorderRadius.circular(
+              100,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: themeData.primary100,
+            ),
+            borderRadius: BorderRadius.circular(
+              100,
+            ),
+          ),
+          // contentPadding: const EdgeInsets.symmetric(
+          //   vertical: 0,
+          //   horizontal: 10,
+          // ),
           isCollapsed: true,
           // contentPadding: const EdgeInsets.symmetric(vertical: 2.0),
         ),

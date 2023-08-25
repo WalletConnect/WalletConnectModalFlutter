@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
-import 'package:sign/models/page_data.dart';
-import 'package:sign/pages/auth_page.dart';
-import 'package:sign/pages/sign_page.dart';
-import 'package:sign/utils/constants.dart';
-import 'package:sign/utils/dart_defines.dart';
-import 'package:sign/utils/string_constants.dart';
-import 'package:sign/widgets/event_widget.dart';
+import 'package:walletconnect_flutter_dapp/models/chain_metadata.dart';
+import 'package:walletconnect_flutter_dapp/pages/wcm_page.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/chain_data_wrapper.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/helpers.dart';
+import 'package:walletconnect_flutter_dapp/utils/dart_defines.dart';
+import 'package:walletconnect_flutter_dapp/utils/string_constants.dart';
+import 'package:walletconnect_flutter_dapp/widgets/event_widget.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
     super.key,
+    required this.swapTheme,
   });
+
+  final void Function() swapTheme;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -23,14 +25,9 @@ class _MyHomePageState extends State<MyHomePage> {
   IWeb3App? _web3App;
   bool _initialized = false;
 
-  List<PageData> _pageDatas = [];
-  int _selectedIndex = 0;
-
   @override
   void initState() {
     super.initState();
-
-    Logger.level = Level.verbose;
 
     initialize();
   }
@@ -55,30 +52,21 @@ class _MyHomePageState extends State<MyHomePage> {
     _web3App!.onSessionPing.subscribe(_onSessionPing);
     _web3App!.onSessionEvent.subscribe(_onSessionEvent);
 
-    setState(() {
-      _pageDatas = [
-        PageData(
-          page: SignPage(web3App: _web3App!),
-          title: StringConstants.signPageTitle,
-          icon: Icons.home,
-        ),
-        // PageData(
-        //   page: PairingsPage(web3App: _web3App!),
-        //   title: StringConstants.pairingsPageTitle,
-        //   icon: Icons.connect_without_contact_sharp,
-        // ),
-        // PageData(
-        //   page: SessionsPage(web3App: _web3App!),
-        //   title: StringConstants.sessionsPageTitle,
-        //   icon: Icons.confirmation_number_outlined,
-        // ),
-        PageData(
-          page: AuthPage(web3App: _web3App!),
-          title: StringConstants.authPageTitle,
-          icon: Icons.lock,
-        ),
-      ];
+    await _web3App!.init();
 
+    // Loop through all the chain data
+    for (final ChainMetadata chain in ChainData.chains) {
+      // Loop through the events for that chain
+      for (final event in getChainEvents(chain.type)) {
+        _web3App!.registerEventHandler(
+          chainId: chain.namespace,
+          event: event,
+          handler: null,
+        );
+      }
+    }
+
+    setState(() {
       _initialized = true;
     });
   }
@@ -100,68 +88,43 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
 
-    final List<Widget> navRail = [];
-    if (MediaQuery.of(context).size.width >= Constants.smallScreen) {
-      navRail.add(_buildNavigationRail());
-    }
-    navRail.add(
-      Expanded(
-        child: _pageDatas[_selectedIndex].page,
-      ),
-    );
-
     return Scaffold(
-      bottomNavigationBar:
-          MediaQuery.of(context).size.width < Constants.smallScreen
-              ? _buildBottomNavBar()
-              : null,
-      body: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: navRail,
+      body: Stack(
+        children: [
+          WCMPage(web3App: _web3App!),
+          Positioned(
+            bottom: 20,
+            right: 20,
+            child: Row(
+              children: [
+                _buildIconButton(
+                  Icons.theater_comedy_outlined,
+                  widget.swapTheme,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildBottomNavBar() {
-    return BottomNavigationBar(
-      currentIndex: _selectedIndex,
-      unselectedItemColor: Colors.grey,
-      selectedItemColor: Colors.indigoAccent,
-      // called when one tab is selected
-      onTap: (int index) {
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
-      // bottom tab items
-      items: _pageDatas
-          .map(
-            (e) => BottomNavigationBarItem(
-              icon: Icon(e.icon),
-              label: e.title,
-            ),
-          )
-          .toList(),
-    );
-  }
-
-  Widget _buildNavigationRail() {
-    return NavigationRail(
-      selectedIndex: _selectedIndex,
-      onDestinationSelected: (int index) {
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
-      labelType: NavigationRailLabelType.selected,
-      destinations: _pageDatas
-          .map(
-            (e) => NavigationRailDestination(
-              icon: Icon(e.icon),
-              label: Text(e.title),
-            ),
-          )
-          .toList(),
+  Widget _buildIconButton(IconData icon, void Function()? onPressed) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(
+          48,
+        ),
+      ),
+      child: IconButton(
+        icon: Icon(
+          icon,
+          color: Colors.white,
+        ),
+        iconSize: 24,
+        onPressed: onPressed,
+      ),
     );
   }
 

@@ -23,7 +23,7 @@ class QRCodePage extends StatelessWidget {
 
     return WalletConnectModalNavBar(
       title: const WalletConnectModalNavbarTitle(
-        title: 'Scan QR Code',
+        title: 'Scan the code',
       ),
       actionWidget: WalletConnectIconButton(
         iconPath: 'assets/icons/copy.svg',
@@ -49,7 +49,7 @@ class QRCodePage extends StatelessWidget {
     toastUtils.instance.show(
       ToastMessage(
         type: ToastType.info,
-        text: 'QR Copied',
+        text: 'Link copied',
       ),
     );
   }

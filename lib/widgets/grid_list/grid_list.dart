@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:walletconnect_modal_flutter/constants/constants.dart';
+import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
 import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list_item.dart';
@@ -89,10 +90,9 @@ class GridList<T> extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.all(8.0),
             height: height,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+            child: Center(
               child: Text(
-                'No items found.',
+                StringConstants.noResults,
                 style: TextStyle(
                   color: themeData.foreground200,
                   fontFamily: themeData.fontFamily,
