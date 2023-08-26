@@ -3,6 +3,8 @@
 - Multiple UI improvements
 - Added additional tests
 - Wallet list is now displayed properly
+- "Recent" wallet is now displayed based on the last used wallet
+- Disabled `WalletConnectModalConnect` button if there is no requiredNamespaces set
 
 ## 2.1.1
 
