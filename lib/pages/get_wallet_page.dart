@@ -101,6 +101,7 @@ class GetWalletPage extends StatelessWidget {
               Uri.parse(
                 StringConstants.getAWalletExploreWalletsUrl,
               ),
+              mode: LaunchMode.externalApplication,
             ),
             padding: const EdgeInsets.symmetric(
               horizontal: 10.0,

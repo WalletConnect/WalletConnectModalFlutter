@@ -261,16 +261,26 @@ class ExplorerService implements IExplorerService {
     return res.listings.values.toList();
   }
 
+  final Map<String, String> _storedAndroidPackageIds = {};
+
   String? getAndroidPackageId(String? playstoreLink) {
     if (playstoreLink == null) {
       return null;
     }
 
-    final Uri playstore = Uri.parse(playstoreLink);
+    // If we have stored the package id, return it
+    if (_storedAndroidPackageIds.containsKey(playstoreLink)) {
+      return _storedAndroidPackageIds[playstoreLink];
+    }
 
+    final Uri playstore = Uri.parse(playstoreLink);
     LoggerUtil.logger.i(
       'getAndroidPackageId: $playstoreLink, id: ${playstore.queryParameters['id']}',
     );
+
+    _storedAndroidPackageIds[playstoreLink] =
+        playstore.queryParameters['id'] ?? '';
+
     return playstore.queryParameters['id'];
   }
 
