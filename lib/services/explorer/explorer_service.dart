@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:universal_io/io.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
 import 'dart:convert';
 
 import 'package:walletconnect_modal_flutter/models/listings.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/i_explorer_service.dart';
+import 'package:walletconnect_modal_flutter/services/storage_service/storage_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/core/core_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
@@ -54,112 +56,130 @@ class ExplorerService implements IExplorerService {
   }) : client = client ?? http.Client();
 
   @override
-  Future<void> init() async {
-    if (initialized.value) {
-      return;
-    }
-
-    String? platform;
-    switch (platformUtils.instance.getPlatformType()) {
-      case PlatformType.desktop:
-        platform = 'Desktop';
-        break;
-      case PlatformType.mobile:
-        if (Platform.isIOS) {
-          platform = 'iOS';
-        } else if (Platform.isAndroid) {
-          platform = 'Android';
-        } else {
-          platform = 'Mobile';
-        }
-        break;
-      case PlatformType.web:
-        platform = 'Injected';
-        break;
-      default:
-        platform = null;
-    }
-
-    LoggerUtil.logger.i('Fetching wallet listings. Platform: $platform');
-    _listings = await fetchListings(
-      endpoint: '/w3m/v1/get${platform}Listings',
-      referer: referer,
-      // params: params,
-    );
-
-    if (excludedWalletState == ExcludedWalletState.list) {
-      // If we are excluding all wallets, take out the excluded listings, if they exist
-      if (excludedWalletIds != null) {
-        _listings = filterExcludedListings(
-          listings: _listings,
-        );
+  Future<void> init({bool refetch = false}) async {
+    if (!initialized.value || refetch) {
+      String? platform;
+      switch (platformUtils.instance.getPlatformType()) {
+        case PlatformType.desktop:
+          platform = 'Desktop';
+          break;
+        case PlatformType.mobile:
+          if (Platform.isIOS) {
+            platform = 'iOS';
+          } else if (Platform.isAndroid) {
+            platform = 'Android';
+          } else {
+            platform = 'Mobile';
+          }
+          break;
+        case PlatformType.web:
+          platform = 'Injected';
+          break;
+        default:
+          platform = null;
       }
-    } else if (excludedWalletState == ExcludedWalletState.all &&
-        recommendedWalletIds != null) {
-      // Filter down to only the included
-      _listings = _listings
-          .where(
-            (listing) => recommendedWalletIds!.contains(
-              listing.id,
-            ),
-          )
-          .toList();
-    } else {
-      // If we are excluding all wallets and have no recommended wallets,
-      // return an empty list
-      _walletList = [];
-      itemList.value = [];
-      return;
+
+      LoggerUtil.logger.i('Fetching wallet listings. Platform: $platform');
+      _listings = await fetchListings(
+        endpoint: '/w3m/v1/get${platform}Listings',
+        referer: referer,
+        // params: params,
+      );
+
+      if (excludedWalletState == ExcludedWalletState.list) {
+        // If we are excluding all wallets, take out the excluded listings, if they exist
+        if (excludedWalletIds != null) {
+          _listings = filterExcludedListings(
+            listings: _listings,
+          );
+        }
+      } else if (excludedWalletState == ExcludedWalletState.all &&
+          recommendedWalletIds != null) {
+        // Filter down to only the included
+        _listings = _listings
+            .where(
+              (listing) => recommendedWalletIds!.contains(
+                listing.id,
+              ),
+            )
+            .toList();
+      } else {
+        // If we are excluding all wallets and have no recommended wallets,
+        // return an empty list
+        _walletList = [];
+        itemList.value = [];
+        return;
+      }
     }
+
     _walletList.clear();
 
+    final List<GridListItemModel<WalletData>> newList = [];
+
+    // Get the recent wallet
+    final String? recentWallet =
+        storageService.instance.getString(StringConstants.recentWallet);
+
     for (Listing item in _listings) {
-      bool installed = await urlUtils.instance.isInstalled(item.mobile.native);
-      if (installed) {
-        LoggerUtil.logger.i('Wallet ${item.name} installed: $installed');
+      String? uri = item.mobile.native;
+      // If we are on android, and we have an android link, get the package id and use that
+      if (Platform.isAndroid && item.app.android != null) {
+        uri = getAndroidPackageId(item.app.android);
       }
-      _walletList.add(
+      bool installed = await urlUtils.instance.isInstalled(uri);
+      bool recent = recentWallet == item.id;
+      if (installed) {
+        LoggerUtil.logger.v('Wallet ${item.name} installed: $installed');
+      }
+      newList.add(
         GridListItemModel<WalletData>(
           title: item.name,
           id: item.id,
-          description: installed ? 'Installed' : null,
+          description: recent
+              ? 'Recent'
+              : installed
+                  ? 'Installed'
+                  : null,
           image: getWalletImageUrl(
             imageId: item.imageId,
           ),
           data: WalletData(
             listing: item,
             installed: installed,
+            recent: recent,
           ),
         ),
       );
     }
 
     // Sort the installed wallets to the top
+    int insertAt = 0;
     if (recommendedWalletIds != null) {
-      _walletList.sort((a, b) {
-        if ((a.data.installed && !b.data.installed) ||
-            recommendedWalletIds!.contains(a.id)) {
-          LoggerUtil.logger.i('Sorting ${a.title} to the top. ID: ${a.id}');
-          return -1;
-        } else if ((recommendedWalletIds!.contains(a.id) &&
-                recommendedWalletIds!.contains(b.id)) ||
-            (a.data.installed == b.data.installed)) {
-          return 0;
+      for (int i = 0; i < newList.length; i++) {
+        if (newList[i].data.recent == true) {
+          _walletList.insert(0, newList[i]);
+          insertAt++;
+        } else if (newList[i].data.installed) {
+          _walletList.insert(insertAt, newList[i]);
+          insertAt++;
+        } else if (recommendedWalletIds!.contains(newList[i].id)) {
+          _walletList.insert(insertAt, newList[i]);
         } else {
-          return 1;
+          _walletList.add(newList[i]);
         }
-      });
+      }
     } else {
-      _walletList.sort((a, b) {
-        if (a.data.installed && !b.data.installed) {
-          LoggerUtil.logger.v('Sorting ${a.title} to the top. ID: ${a.id}');
-          return -1;
-        } else if (a.data.installed == b.data.installed) {
-          return 0;
+      for (int i = 0; i < newList.length; i++) {
+        if (newList[i].data.recent == true) {
+          _walletList.insert(0, newList[i]);
+          insertAt++;
+        } else if (newList[i].data.installed) {
+          _walletList.insert(insertAt, newList[i]);
+          insertAt++;
         } else {
-          return 1;
+          _walletList.add(newList[i]);
         }
-      });
+      }
     }
 
     itemList.value = _walletList;
@@ -239,6 +259,19 @@ class ExplorerService implements IExplorerService {
     // print(json.decode(response.body)['listings'].entries.first);
     ListingResponse res = ListingResponse.fromJson(json.decode(response.body));
     return res.listings.values.toList();
+  }
+
+  String? getAndroidPackageId(String? playstoreLink) {
+    if (playstoreLink == null) {
+      return null;
+    }
+
+    final Uri playstore = Uri.parse(playstoreLink);
+
+    LoggerUtil.logger.i(
+      'getAndroidPackageId: $playstoreLink, id: ${playstore.queryParameters['id']}',
+    );
+    return playstore.queryParameters['id'];
   }
 
   List<Listing> filterExcludedListings({

@@ -16,12 +16,12 @@ import 'package:walletconnect_modal_flutter/services/utils/widget_stack/widget_s
 
 class WalletConnectModalServices {
   static IExplorerService get explorer => explorerService.instance!;
+  static IStorageService get storage => storageService.instance;
   static ICoreUtils get core => coreUtils.instance;
   static IToastUtils get toast => toastUtils.instance;
   static IUrlUtils get url => urlUtils.instance;
   static IWidgetStack get stack => widgetStack.instance;
   static IPlatformUtils get platform => platformUtils.instance;
-  static IStorageService get storage => storageService.instance;
 
   static final Map<String, Function> _initFunctions = {};
 
@@ -35,6 +35,7 @@ class WalletConnectModalServices {
 
   static Future<void> init() async {
     LoggerUtil.logger.i('WalletConnectModalServices init');
+    await storage.init();
     await explorer.init();
     for (final entry in _initFunctions.entries) {
       LoggerUtil.logger

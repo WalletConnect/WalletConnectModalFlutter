@@ -10,12 +10,14 @@ _$_WalletData _$$_WalletDataFromJson(Map<String, dynamic> json) =>
     _$_WalletData(
       listing: Listing.fromJson(json['listing'] as Map<String, dynamic>),
       installed: json['installed'] as bool,
+      recent: json['recent'] as bool,
     );
 
 Map<String, dynamic> _$$_WalletDataToJson(_$_WalletData instance) =>
     <String, dynamic>{
       'listing': instance.listing.toJson(),
       'installed': instance.installed,
+      'recent': instance.recent,
     };
 
 _$_ListingResponse _$$_ListingResponseFromJson(Map<String, dynamic> json) =>

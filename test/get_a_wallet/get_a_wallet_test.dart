@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:network_image_mock/network_image_mock.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
 import 'package:walletconnect_modal_flutter/pages/get_wallet_page.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
@@ -13,7 +14,6 @@ import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_button.d
 
 import '../mock_classes.mocks.dart';
 import '../test_data.dart';
-import '../test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -51,30 +51,35 @@ void main() {
 
     testWidgets('should load in wallets and their buttons',
         (WidgetTester tester) async {
-      FlutterError.onError = ignoreOverflowErrors;
+      // FlutterError.onError = ignoreOverflowErrors;
 
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: GetWalletPage(),
-        ),
-      );
+      await tester.binding.setSurfaceSize(const Size(1000, 1000));
+      await mockNetworkImagesFor(() async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: GetWalletPage(),
+            ),
+          ),
+        );
 
-      expect(
-        find.byType(WalletConnectModalButton),
-        findsOneWidget,
-      );
+        expect(
+          find.byType(WalletConnectModalButton),
+          findsOneWidget,
+        );
 
-      // Tap on the explorer button and verify it calls the launch URL we expect
-      await tester.tap(find.byType(WalletConnectModalButton));
+        // Tap on the explorer button and verify it calls the launch URL we expect
+        await tester.tap(find.byType(WalletConnectModalButton));
 
-      verify(mockUrlUtils.launchUrl(
-        Uri.parse(StringConstants.getAWalletExploreWalletsUrl),
-      )).called(1);
+        verify(mockUrlUtils.launchUrl(
+          Uri.parse(StringConstants.getAWalletExploreWalletsUrl),
+        )).called(1);
+      });
     });
 
     testWidgets('should load in wallets and their buttons',
         (WidgetTester tester) async {
-      FlutterError.onError = ignoreOverflowErrors;
+      // FlutterError.onError = ignoreOverflowErrors;
 
       final List<GridListItemModel<WalletData>> wallets = [
         GridListItemModel(
@@ -84,6 +89,7 @@ void main() {
           data: WalletData(
             listing: testListings1[0],
             installed: false,
+            recent: false,
           ),
         ),
         GridListItemModel(
@@ -93,21 +99,27 @@ void main() {
           data: WalletData(
             listing: testListings1[1],
             installed: false,
+            recent: false,
           ),
         ),
       ];
       walletData.value = wallets;
 
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: GetWalletPage(),
-        ),
-      );
+      await tester.binding.setSurfaceSize(const Size(1000, 1000));
+      await mockNetworkImagesFor(() async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: GetWalletPage(),
+            ),
+          ),
+        );
 
-      expect(
-        find.byType(WalletItem, skipOffstage: false),
-        findsNWidgets(2),
-      );
+        expect(
+          find.byType(WalletItem, skipOffstage: false),
+          findsNWidgets(2),
+        );
+      });
     });
   });
 }

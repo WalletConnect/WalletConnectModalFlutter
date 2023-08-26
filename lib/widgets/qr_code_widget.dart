@@ -80,7 +80,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: CircularProgressIndicator(
-              color: WalletConnectModalTheme.getData(context).primary100,
+              color: themeData.primary100,
             ),
           ),
         ),
@@ -91,7 +91,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(
-          WalletConnectModalTheme.getData(context).radiusL,
+          themeData.radiusL,
         ),
       ),
       constraints: isLongBottomSheet

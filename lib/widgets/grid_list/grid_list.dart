@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:walletconnect_modal_flutter/constants/constants.dart';
 import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
 import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
@@ -89,20 +90,29 @@ class GridList<T> extends StatelessWidget {
         }
 
         if (value.isEmpty) {
-          return Container(
-            padding: const EdgeInsets.all(8.0),
-            height: height,
-            child: Center(
-              child: Text(
-                StringConstants.noResults,
-                style: TextStyle(
-                  color: themeData.foreground200,
-                  fontFamily: themeData.fontFamily,
-                  fontSize: 16,
-                ),
+          return KeyboardVisibilityBuilder(
+              builder: (context, isKeyboardVisible) {
+            final Widget t = Text(
+              StringConstants.noResults,
+              style: TextStyle(
+                color: themeData.foreground200,
+                fontFamily: themeData.fontFamily,
+                fontSize: 16,
               ),
-            ),
-          );
+            );
+            return Container(
+              padding: const EdgeInsets.all(8.0),
+              height: height,
+              child: isKeyboardVisible
+                  ? Padding(
+                      padding: EdgeInsets.only(top: height / 4),
+                      child: t,
+                    )
+                  : Center(
+                      child: t,
+                    ),
+            );
+          });
         }
 
         return Container(

@@ -6,11 +6,13 @@ import 'package:event/event.dart';
 import 'package:flutter/material.dart';
 import 'package:w_common/disposable.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
 import 'package:walletconnect_modal_flutter/models/launch_url_exception.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/i_explorer_service.dart';
+import 'package:walletconnect_modal_flutter/services/storage_service/storage_service_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/core/core_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/toast/toast_message.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
@@ -247,6 +249,8 @@ class WalletConnectModalService extends ChangeNotifier
       // _isOpen and notifyListeners() are handled when we call Navigator.pop()
       // by the open() method
       Navigator.pop(context!);
+    } else {
+      notifyListeners();
     }
   }
 
@@ -323,6 +327,33 @@ class WalletConnectModalService extends ChangeNotifier
     }
   }
 
+  @override
+  Future<void> rebuildConnectionUri() async {
+    // If we aren't connected, connect!
+    if (!_isConnected) {
+      LoggerUtil.logger.i(
+        'Connecting to WalletConnect, required namespaces: $requiredNamespaces, optional namespaces: $optionalNamespaces',
+      );
+
+      if (connectResponse != null) {
+        try {
+          sessionFuture!.timeout(Duration.zero);
+        } on TimeoutException {
+          // Ignore this error, just wanted to cancel the previous future.
+        }
+      }
+
+      connectResponse = await web3App!.connect(
+        requiredNamespaces: requiredNamespaces,
+        optionalNamespaces: optionalNamespaces,
+      );
+
+      notifyListeners();
+
+      awaitConnectResponse();
+    }
+  }
+
   bool _connectingWallet = false;
 
   @override
@@ -335,6 +366,14 @@ class WalletConnectModalService extends ChangeNotifier
       return;
     }
     _connectingWallet = true;
+
+    // Set the recent
+    await storageService.instance.setString(
+      StringConstants.recentWallet,
+      walletData.listing.id,
+    );
+    // Update explorer service with new recent
+    await explorerService.instance!.init();
 
     try {
       await rebuildConnectionUri();
@@ -386,33 +425,6 @@ class WalletConnectModalService extends ChangeNotifier
     checkInitialized();
 
     return _web3App!.metadata.name.replaceAll(' ', '');
-  }
-
-  @override
-  Future<void> rebuildConnectionUri() async {
-    // If we aren't connected, connect!
-    if (!_isConnected) {
-      LoggerUtil.logger.i(
-        'Connecting to WalletConnect, required namespaces: $_requiredNamespaces',
-      );
-
-      if (connectResponse != null) {
-        try {
-          sessionFuture!.timeout(Duration.zero);
-        } on TimeoutException {
-          // Ignore this error, just wanted to cancel the previous future.
-        }
-      }
-
-      connectResponse = await web3App!.connect(
-        requiredNamespaces: _requiredNamespaces,
-        optionalNamespaces: optionalNamespaces,
-      );
-
-      notifyListeners();
-
-      awaitConnectResponse();
-    }
   }
 
   ////// Private methods //////

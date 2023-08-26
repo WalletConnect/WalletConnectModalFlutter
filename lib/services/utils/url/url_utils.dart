@@ -1,3 +1,4 @@
+import 'package:appcheck/appcheck.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:walletconnect_modal_flutter/models/launch_url_exception.dart';
 import 'package:walletconnect_modal_flutter/services/utils/core/core_utils_singleton.dart';
@@ -23,12 +24,18 @@ Future<bool> _launchUrl(Uri url, {LaunchMode? mode}) async {
   }
 }
 
+Future<bool> _androidLaunch(String uri) async {
+  return await AppCheck.isAppEnabled(uri);
+}
+
 class UrlUtils extends IUrlUtils {
   UrlUtils({
+    this.androidAppCheck = _androidLaunch,
     this.launchUrlFunc = _launchUrl,
     this.canLaunchUrlFunc = canLaunchUrl,
   });
 
+  final Future<bool> Function(String uri) androidAppCheck;
   final Future<bool> Function(Uri url, {LaunchMode? mode}) launchUrlFunc;
   final Future<bool> Function(Uri url) canLaunchUrlFunc;
 
@@ -44,14 +51,17 @@ class UrlUtils extends IUrlUtils {
     }
 
     if (platformUtils.instance.canDetectInstalledApps()) {
+      final PlatformExact p = platformUtils.instance.getPlatformExact();
       try {
-        return platformUtils.instance.getPlatformType() ==
-                PlatformType.mobile &&
-            await canLaunchUrlFunc(
-              Uri.parse(
-                uri,
-              ),
-            );
+        if (p == PlatformExact.android) {
+          return await androidAppCheck(uri);
+        } else if (p == PlatformExact.iOS) {
+          await canLaunchUrlFunc(
+            Uri.parse(
+              uri,
+            ),
+          );
+        }
       } catch (_) {
         // print(e);
       }

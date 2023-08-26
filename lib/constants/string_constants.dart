@@ -12,4 +12,7 @@ class StringConstants {
 
   // Misc
   static const String noResults = 'No results found';
+
+  // Storage
+  static const String recentWallet = 'recentWallet';
 }

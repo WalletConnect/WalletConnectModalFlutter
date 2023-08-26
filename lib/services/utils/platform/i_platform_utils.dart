@@ -6,7 +6,18 @@ enum PlatformType {
   web,
 }
 
+enum PlatformExact {
+  iOS,
+  android,
+  web,
+  macOS,
+  windows,
+  linux,
+}
+
 abstract class IPlatformUtils {
+  PlatformExact getPlatformExact();
+
   PlatformType getPlatformType();
 
   bool canDetectInstalledApps();

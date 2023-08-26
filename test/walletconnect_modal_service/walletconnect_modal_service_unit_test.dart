@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:event/event.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:walletconnect_modal_flutter/models/launch_url_exception.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
+import 'package:walletconnect_modal_flutter/services/storage_service/storage_service_singleton.dart';
+import 'package:walletconnect_modal_flutter/services/utils/toast/toast_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/utils/url/url_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 
@@ -15,13 +20,23 @@ void main() {
     late MockWeb3App web3App;
     late MockSessions sessions;
     late MockExplorerService es;
+    late MockStorageService storage;
     late Core core;
     late MockRelayClient mockRelayClient;
+    late MockUrlUtils mockUrlUtils;
+    late MockToastUtils mockToastUtils;
 
     setUp(() {
       web3App = MockWeb3App();
-      core = Core(projectId: 'projectId');
+      sessions = MockSessions();
+      es = MockExplorerService();
+      storage = MockStorageService();
       mockRelayClient = MockRelayClient();
+      mockUrlUtils = MockUrlUtils();
+      mockToastUtils = MockToastUtils();
+
+      // WEB3APP, RELAY, SESSION
+      core = Core(projectId: 'projectId');
       when(mockRelayClient.onRelayClientError).thenReturn(Event<ErrorEvent>());
       when(mockRelayClient.onRelayClientConnect).thenReturn(Event<EventArgs>());
       core.relayClient = mockRelayClient;
@@ -37,8 +52,6 @@ void main() {
       when(web3App.onSessionConnect).thenReturn(
         Event<SessionConnect>(),
       );
-
-      sessions = MockSessions();
       when(web3App.sessions).thenReturn(
         sessions,
       );
@@ -46,12 +59,28 @@ void main() {
         [],
       );
 
+      // URL UTILS
+      urlUtils.instance = mockUrlUtils;
+      when(mockUrlUtils.launchUrl(any)).thenAnswer((inv) => Future.value(true));
+      when(mockUrlUtils.launchRedirect(
+        nativeUri: anyNamed('nativeUri'),
+        universalUri: anyNamed('universalUri'),
+      )).thenAnswer((inv) => Future.value());
+
+      // TOAST UTILS
+      toastUtils.instance = mockToastUtils;
+
+      // Create the service
       service = WalletConnectModalService(
         web3App: web3App,
       );
 
-      es = MockExplorerService();
+      // These are here because the service will create its own when it is constructed
       explorerService.instance = es;
+      storageService.instance = storage;
+      when(storage.setString(any, any)).thenAnswer(
+        (realInvocation) => Future.value(true),
+      );
     });
 
     group('Constructor', () {
@@ -89,7 +118,7 @@ void main() {
 
     group('init', () {
       test(
-          'should call init on _web3App and explorerService, then skip init again',
+          'should call init on _web3App, explorerService, and storage, then skip init again',
           () async {
         when(web3App.init()).thenAnswer((_) async {});
         when(es.init()).thenAnswer((_) async {});
@@ -101,6 +130,7 @@ void main() {
         await service.init();
 
         verify(web3App.init()).called(1);
+        verify(storage.init()).called(1);
         verify(es.init()).called(1);
         verify(web3App.onSessionDelete).called(1);
         expect(count, 1);
@@ -227,7 +257,7 @@ void main() {
 
       test('throws if _checkInitialized fails', () async {
         expect(
-          () => service.disconnect(),
+          () => service.launchCurrentWallet(),
           throwsA(isA<StateError>()),
         );
 
@@ -302,6 +332,149 @@ void main() {
               '${redirect.universal!}wc?sessionTopic=${testSession.topic}'),
         )).called(1);
         verifyNever(mockUrlUtils.launchUrl(any));
+      });
+    });
+
+    group('rebuildConnectionUri', () {
+      Event<SessionConnect> onSessionConnect = Event<SessionConnect>();
+
+      setUp(() {
+        when(web3App.connect(
+          requiredNamespaces: anyNamed('requiredNamespaces'),
+          optionalNamespaces: anyNamed('optionalNamespaces'),
+        )).thenAnswer(
+          (realInvocation) => Future.value(
+            ConnectResponse(
+              pairingTopic: 'pTopic',
+              session: Completer<SessionData>(),
+              uri: Uri.parse('https://www.example.com'),
+            ),
+          ),
+        );
+        when(web3App.onSessionConnect).thenReturn(onSessionConnect);
+      });
+
+      test('connects if not connected', () async {
+        await service.init();
+        await service.rebuildConnectionUri();
+
+        // Didn't get past set string
+        verify(web3App.connect(
+          requiredNamespaces: anyNamed('requiredNamespaces'),
+          optionalNamespaces: anyNamed('optionalNamespaces'),
+        )).called(1);
+        expect(service.connectResponse != null, true);
+
+        onSessionConnect.broadcast(
+          SessionConnect(testSession),
+        );
+
+        expect(service.isConnected, true);
+        await service.rebuildConnectionUri();
+        verifyNever(web3App.connect(
+          requiredNamespaces: anyNamed('requiredNamespaces'),
+          optionalNamespaces: anyNamed('optionalNamespaces'),
+        ));
+      });
+    });
+
+    group('connectWallet', () {
+      setUp(() {
+        when(web3App.connect(
+          requiredNamespaces: anyNamed('requiredNamespaces'),
+          optionalNamespaces: anyNamed('optionalNamespaces'),
+        )).thenAnswer(
+          (realInvocation) => Future.value(
+            ConnectResponse(
+              pairingTopic: 'pTopic',
+              session: Completer<SessionData>(),
+              uri: Uri.parse('https://www.example.com'),
+            ),
+          ),
+        );
+      });
+
+      test('throws if _checkInitialized fails', () async {
+        expect(
+          () => service.connectWallet(
+            walletData: walletData,
+          ),
+          throwsA(isA<StateError>()),
+        );
+      });
+
+      test('updates recent, updates explorer, navigates deep link', () async {
+        await service.init();
+        verify(es.init()).called(1);
+
+        await service.connectWallet(
+          walletData: walletData,
+        );
+
+        // Didn't get past set string
+        verify(storage.setString(any, any)).called(1);
+        verify(es.init()).called(1);
+        verify(mockUrlUtils.navigateDeepLink(
+          nativeLink: anyNamed('nativeLink'),
+          universalLink: anyNamed('universalLink'),
+          wcURI: anyNamed('wcURI'),
+        )).called(1);
+      });
+
+      test('does nothing if already opening a wallet', () async {
+        await service.init();
+        verify(es.init()).called(1);
+
+        final Completer<bool> c = Completer<bool>();
+        when(storage.setString(any, any)).thenAnswer(
+          (realInvocation) => c.future,
+        );
+
+        service.connectWallet(
+          walletData: walletData,
+        );
+
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        // Didn't get past set string
+        verify(storage.setString(any, any)).called(1);
+        verifyNever(es.init());
+
+        // Does nothing
+        await service.connectWallet(
+          walletData: walletData,
+        );
+        verifyNever(storage.setString(any, any));
+        verifyNever(es.init());
+
+        c.complete(true);
+
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        verify(es.init()).called(1);
+        verify(mockUrlUtils.navigateDeepLink(
+          nativeLink: anyNamed('nativeLink'),
+          universalLink: anyNamed('universalLink'),
+          wcURI: anyNamed('wcURI'),
+        )).called(1);
+      });
+
+      test('shows toast if anything fails', () async {
+        await service.init();
+
+        when(mockUrlUtils.navigateDeepLink(
+          nativeLink: anyNamed('nativeLink'),
+          universalLink: anyNamed('universalLink'),
+          wcURI: anyNamed('wcURI'),
+        )).thenThrow(
+          LaunchUrlException('test'),
+        );
+
+        await service.connectWallet(
+          walletData: walletData,
+        );
+
+        verify(mockToastUtils.show(any)).called(1);
       });
     });
 

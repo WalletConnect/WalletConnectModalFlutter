@@ -25,6 +25,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.0"
+  appcheck:
+    dependency: "direct main"
+    description:
+      name: appcheck
+      sha256: a9e5852e8c9d14342cfa3569fc464a1d49a49eac41e3d006f5825ce54663678f
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.6"
   args:
     dependency: transitive
     description:

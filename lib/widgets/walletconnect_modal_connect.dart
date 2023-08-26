@@ -10,6 +10,7 @@ import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.da
 enum WalletConnectModalConnectButtonState {
   error,
   idle,
+  disabled,
   connecting,
   connected,
   reconnecting,
@@ -126,6 +127,36 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
           ],
         ),
       );
+    } else if (_state == WalletConnectModalConnectButtonState.disabled) {
+      return WalletConnectModalButton(
+        borderRadius: widget.buttonRadius ?? _defaultButtonRadius,
+        disabled: true,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              'assets/walletconnect_logo_white.svg',
+              width: 14,
+              height: 16,
+              package: 'walletconnect_modal_flutter',
+              colorFilter: ColorFilter.mode(
+                themeData.foreground300,
+                BlendMode.srcIn,
+              ),
+            ),
+            const SizedBox(width: 8.0),
+            Text(
+              StringConstants.connectButtonIdle,
+              style: TextStyle(
+                color: themeData.foreground300,
+                fontFamily: themeData.fontFamily,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
     } else if (_state == WalletConnectModalConnectButtonState.idle) {
       return WalletConnectModalButton(
         borderRadius: widget.buttonRadius ?? _defaultButtonRadius,
@@ -139,8 +170,8 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
               width: 14,
               height: 16,
               package: 'walletconnect_modal_flutter',
-              colorFilter: const ColorFilter.mode(
-                Colors.white,
+              colorFilter: ColorFilter.mode(
+                themeData.inverse100,
                 BlendMode.srcIn,
               ),
             ),
@@ -148,7 +179,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
             Text(
               StringConstants.connectButtonIdle,
               style: TextStyle(
-                color: Colors.white,
+                color: themeData.inverse100,
                 fontFamily: themeData.fontFamily,
                 fontWeight: FontWeight.w600,
               ),
@@ -202,7 +233,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
               Text(
                 StringConstants.connectButtonConnected,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: themeData.inverse100,
                   fontFamily: themeData.fontFamily,
                   fontWeight: FontWeight.w600,
                 ),
@@ -252,6 +283,13 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
     else if (widget.service.isConnected) {
       setState(() {
         _state = WalletConnectModalConnectButtonState.connected;
+      });
+      return;
+    }
+    // Case 1.5: No required namespaces
+    else if (widget.service.requiredNamespaces.isEmpty) {
+      setState(() {
+        _state = WalletConnectModalConnectButtonState.disabled;
       });
       return;
     }

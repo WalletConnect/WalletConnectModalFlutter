@@ -28,25 +28,38 @@ class MockCanLaunchUrl extends Mock {
       );
 }
 
+class MockAndroidAppCheck extends Mock {
+  Future<bool> call(String uri) => super.noSuchMethod(
+        Invocation.method(#call, [uri]),
+        returnValue: Future.value(true),
+        returnValueForMissingStub: Future.value(true),
+      );
+}
+
 void main() {
-  final mockLaunchUrl = MockLaunchUrl();
-  final mockCanLaunchUrl = MockCanLaunchUrl();
-  final mockPlatformUtils = MockPlatformUtils();
-
-  final utils = UrlUtils(
-    launchUrlFunc: mockLaunchUrl.call,
-    canLaunchUrlFunc: mockCanLaunchUrl.call,
-  );
-
-  platformUtils.instance = mockPlatformUtils;
-  when(
-    mockPlatformUtils.getPlatformType(),
-  ).thenReturn(PlatformType.mobile);
-  when(
-    mockPlatformUtils.canDetectInstalledApps(),
-  ).thenReturn(true);
-
   group('Url Utils', () {
+    final mockLaunchUrl = MockLaunchUrl();
+    final mockCanLaunchUrl = MockCanLaunchUrl();
+    final mockAndroidAppCheck = MockAndroidAppCheck();
+    final mockPlatformUtils = MockPlatformUtils();
+    late UrlUtils utils;
+
+    setUp(() {
+      utils = UrlUtils(
+        androidAppCheck: mockAndroidAppCheck.call,
+        launchUrlFunc: mockLaunchUrl.call,
+        canLaunchUrlFunc: mockCanLaunchUrl.call,
+      );
+
+      platformUtils.instance = mockPlatformUtils;
+      when(
+        mockPlatformUtils.getPlatformType(),
+      ).thenReturn(PlatformType.mobile);
+      when(
+        mockPlatformUtils.canDetectInstalledApps(),
+      ).thenReturn(true);
+    });
+
     group('isInstalled', () {
       test('returns false when URI is null or empty', () async {
         expect(await utils.isInstalled(null), isFalse);
@@ -64,21 +77,34 @@ void main() {
         ).called(1);
       });
 
-      test('isInstalled calls canLaunchUrl function when URI is valid',
+      test(
+          'isInstalled calls canLaunchUrl/androidAppCheck function when URI is valid',
           () async {
+        // canLaunchUrl
         when(
-          mockPlatformUtils.canDetectInstalledApps(),
-        ).thenReturn(true);
+          mockPlatformUtils.getPlatformExact(),
+        ).thenReturn(PlatformExact.iOS);
         await utils.isInstalled('https://example.com');
         verify(
-          mockPlatformUtils.canDetectInstalledApps(),
-        ).called(1);
-        verify(
-          mockPlatformUtils.getPlatformType(),
+          mockPlatformUtils.getPlatformExact(),
         ).called(1);
         verify(
           mockCanLaunchUrl.call(
             Uri.parse('https://example.com'),
+          ),
+        ).called(1);
+
+        // Android app check
+        when(
+          mockPlatformUtils.getPlatformExact(),
+        ).thenReturn(PlatformExact.android);
+        await utils.isInstalled('https://example.com');
+        verify(
+          mockPlatformUtils.getPlatformExact(),
+        ).called(1);
+        verify(
+          mockAndroidAppCheck.call(
+            'https://example.com',
           ),
         ).called(1);
       });

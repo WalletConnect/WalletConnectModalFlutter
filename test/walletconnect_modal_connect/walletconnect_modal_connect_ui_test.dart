@@ -41,6 +41,9 @@ void main() {
       when(service.initError).thenReturn(null);
       when(service.isConnected).thenReturn(false);
       when(service.isOpen).thenReturn(false);
+      when(service.requiredNamespaces).thenReturn(
+        {'1': const RequiredNamespace(methods: [], events: [])},
+      );
     });
 
     testWidgets('should open or disconnect on tap',
@@ -51,6 +54,7 @@ void main() {
       // late BuildContext context;
 
       // Build our app and trigger a frame.
+      await tester.binding.setSurfaceSize(const Size(1000, 1000));
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

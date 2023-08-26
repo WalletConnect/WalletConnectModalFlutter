@@ -5,6 +5,24 @@ import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_u
 
 class PlatformUtils extends IPlatformUtils {
   @override
+  PlatformExact getPlatformExact() {
+    if (Platform.isAndroid) {
+      return PlatformExact.android;
+    } else if (Platform.isIOS) {
+      return PlatformExact.iOS;
+    } else if (Platform.isLinux) {
+      return PlatformExact.linux;
+    } else if (Platform.isMacOS) {
+      return PlatformExact.macOS;
+    } else if (Platform.isWindows) {
+      return PlatformExact.windows;
+    } else if (kIsWeb) {
+      return PlatformExact.web;
+    }
+    return PlatformExact.web;
+  }
+
+  @override
   PlatformType getPlatformType() {
     if (Platform.isAndroid || Platform.isIOS) {
       return PlatformType.mobile;

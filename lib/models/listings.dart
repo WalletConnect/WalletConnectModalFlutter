@@ -10,6 +10,7 @@ class WalletData with _$WalletData {
   const factory WalletData({
     required Listing listing,
     required bool installed,
+    required bool recent,
   }) = _WalletData;
 
   factory WalletData.fromJson(Map<String, dynamic> json) =>

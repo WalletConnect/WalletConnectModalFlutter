@@ -22,6 +22,7 @@ WalletData _$WalletDataFromJson(Map<String, dynamic> json) {
 mixin _$WalletData {
   Listing get listing => throw _privateConstructorUsedError;
   bool get installed => throw _privateConstructorUsedError;
+  bool get recent => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $WalletDataCopyWith<$Res> {
           WalletData value, $Res Function(WalletData) then) =
       _$WalletDataCopyWithImpl<$Res, WalletData>;
   @useResult
-  $Res call({Listing listing, bool installed});
+  $Res call({Listing listing, bool installed, bool recent});
 
   $ListingCopyWith<$Res> get listing;
 }
@@ -55,6 +56,7 @@ class _$WalletDataCopyWithImpl<$Res, $Val extends WalletData>
   $Res call({
     Object? listing = null,
     Object? installed = null,
+    Object? recent = null,
   }) {
     return _then(_value.copyWith(
       listing: null == listing
@@ -64,6 +66,10 @@ class _$WalletDataCopyWithImpl<$Res, $Val extends WalletData>
       installed: null == installed
           ? _value.installed
           : installed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      recent: null == recent
+          ? _value.recent
+          : recent // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -85,7 +91,7 @@ abstract class _$$_WalletDataCopyWith<$Res>
       __$$_WalletDataCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Listing listing, bool installed});
+  $Res call({Listing listing, bool installed, bool recent});
 
   @override
   $ListingCopyWith<$Res> get listing;
@@ -104,6 +110,7 @@ class __$$_WalletDataCopyWithImpl<$Res>
   $Res call({
     Object? listing = null,
     Object? installed = null,
+    Object? recent = null,
   }) {
     return _then(_$_WalletData(
       listing: null == listing
@@ -114,6 +121,10 @@ class __$$_WalletDataCopyWithImpl<$Res>
           ? _value.installed
           : installed // ignore: cast_nullable_to_non_nullable
               as bool,
+      recent: null == recent
+          ? _value.recent
+          : recent // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -122,7 +133,8 @@ class __$$_WalletDataCopyWithImpl<$Res>
 
 @JsonSerializable(includeIfNull: false)
 class _$_WalletData implements _WalletData {
-  const _$_WalletData({required this.listing, required this.installed});
+  const _$_WalletData(
+      {required this.listing, required this.installed, required this.recent});
 
   factory _$_WalletData.fromJson(Map<String, dynamic> json) =>
       _$$_WalletDataFromJson(json);
@@ -131,10 +143,12 @@ class _$_WalletData implements _WalletData {
   final Listing listing;
   @override
   final bool installed;
+  @override
+  final bool recent;
 
   @override
   String toString() {
-    return 'WalletData(listing: $listing, installed: $installed)';
+    return 'WalletData(listing: $listing, installed: $installed, recent: $recent)';
   }
 
   @override
@@ -144,12 +158,13 @@ class _$_WalletData implements _WalletData {
             other is _$_WalletData &&
             (identical(other.listing, listing) || other.listing == listing) &&
             (identical(other.installed, installed) ||
-                other.installed == installed));
+                other.installed == installed) &&
+            (identical(other.recent, recent) || other.recent == recent));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, listing, installed);
+  int get hashCode => Object.hash(runtimeType, listing, installed, recent);
 
   @JsonKey(ignore: true)
   @override
@@ -168,7 +183,8 @@ class _$_WalletData implements _WalletData {
 abstract class _WalletData implements WalletData {
   const factory _WalletData(
       {required final Listing listing,
-      required final bool installed}) = _$_WalletData;
+      required final bool installed,
+      required final bool recent}) = _$_WalletData;
 
   factory _WalletData.fromJson(Map<String, dynamic> json) =
       _$_WalletData.fromJson;
@@ -177,6 +193,8 @@ abstract class _WalletData implements WalletData {
   Listing get listing;
   @override
   bool get installed;
+  @override
+  bool get recent;
   @override
   @JsonKey(ignore: true)
   _$$_WalletDataCopyWith<_$_WalletData> get copyWith =>

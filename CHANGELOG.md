@@ -1,3 +1,9 @@
+## 2.1.2
+
+- Multiple UI improvements
+- Added additional tests
+- Wallet list is now displayed properly
+
 ## 2.1.1
 
 - Some functions updated to be protected instead of private for easier inheritance

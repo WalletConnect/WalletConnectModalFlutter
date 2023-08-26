@@ -92,6 +92,12 @@ final List<Listing> testListings2 = [
   ),
 ];
 
+final WalletData walletData = WalletData(
+  listing: testListings1[0],
+  installed: false,
+  recent: false,
+);
+
 final List<GridListItemModel<WalletData>> itemList = testListings2.map((e) {
   return GridListItemModel<WalletData>(
     image: e.imageId,
@@ -100,6 +106,7 @@ final List<GridListItemModel<WalletData>> itemList = testListings2.map((e) {
     data: WalletData(
       listing: e,
       installed: false,
+      recent: false,
     ),
   );
 }).toList();

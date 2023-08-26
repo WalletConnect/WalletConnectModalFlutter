@@ -4,8 +4,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
-import 'dart:convert' as _i28;
-import 'dart:typed_data' as _i29;
+import 'dart:convert' as _i29;
+import 'dart:typed_data' as _i30;
 import 'dart:ui' as _i18;
 
 import 'package:event/event.dart' as _i7;
@@ -33,6 +33,8 @@ import 'package:walletconnect_modal_flutter/services/explorer/explorer_service.d
     as _i13;
 import 'package:walletconnect_modal_flutter/services/explorer/i_explorer_service.dart'
     as _i14;
+import 'package:walletconnect_modal_flutter/services/storage_service/storage_service.dart'
+    as _i28;
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart'
     as _i23;
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils.dart'
@@ -401,10 +403,11 @@ class MockExplorerService extends _i1.Mock implements _i13.ExplorerService {
         returnValue: '',
       ) as String);
   @override
-  _i4.Future<void> init() => (super.noSuchMethod(
+  _i4.Future<void> init({bool? refetch = false}) => (super.noSuchMethod(
         Invocation.method(
           #init,
           [],
+          {#refetch: refetch},
         ),
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),
@@ -687,6 +690,71 @@ class MockWalletConnectModalService extends _i1.Mock
         returnValueForMissingStub: _i4.Future<void>.value(),
       ) as _i4.Future<void>);
   @override
+  void registerListeners() => super.noSuchMethod(
+        Invocation.method(
+          #registerListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void unregisterListeners() => super.noSuchMethod(
+        Invocation.method(
+          #unregisterListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void onSessionConnect(_i6.SessionConnect? args) => super.noSuchMethod(
+        Invocation.method(
+          #onSessionConnect,
+          [args],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void onSessionDelete(_i6.SessionDelete? args) => super.noSuchMethod(
+        Invocation.method(
+          #onSessionDelete,
+          [args],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void onRelayClientConnect(_i7.EventArgs? args) => super.noSuchMethod(
+        Invocation.method(
+          #onRelayClientConnect,
+          [args],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void onRelayClientError(_i6.ErrorEvent? args) => super.noSuchMethod(
+        Invocation.method(
+          #onRelayClientError,
+          [args],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i4.Future<void> awaitConnectResponse() => (super.noSuchMethod(
+        Invocation.method(
+          #awaitConnectResponse,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  void checkInitialized() => super.noSuchMethod(
+        Invocation.method(
+          #checkInitialized,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   void addListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
@@ -954,6 +1022,11 @@ class MockUrlUtils extends _i1.Mock implements _i20.UrlUtils {
   }
 
   @override
+  _i4.Future<bool> Function(String) get androidAppCheck => (super.noSuchMethod(
+        Invocation.getter(#androidAppCheck),
+        returnValue: (String uri) => _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool> Function(String));
+  @override
   _i4.Future<bool> Function(
     Uri, {
     _i21.LaunchMode? mode,
@@ -1040,6 +1113,14 @@ class MockPlatformUtils extends _i1.Mock implements _i22.PlatformUtils {
     _i1.throwOnMissingStub(this);
   }
 
+  @override
+  _i23.PlatformExact getPlatformExact() => (super.noSuchMethod(
+        Invocation.method(
+          #getPlatformExact,
+          [],
+        ),
+        returnValue: _i23.PlatformExact.iOS,
+      ) as _i23.PlatformExact);
   @override
   _i23.PlatformType getPlatformType() => (super.noSuchMethod(
         Invocation.method(
@@ -1142,14 +1223,6 @@ class MockToastUtils extends _i1.Mock implements _i24.ToastUtils {
         ),
         returnValueForMissingStub: null,
       );
-  @override
-  _i4.Future<Null> onDispose() => (super.noSuchMethod(
-        Invocation.method(
-          #onDispose,
-          [],
-        ),
-        returnValue: _i4.Future<Null>.value(),
-      ) as _i4.Future<Null>);
   @override
   _i4.Future<T> awaitBeforeDispose<T>(_i4.Future<T>? future) =>
       (super.noSuchMethod(
@@ -1375,6 +1448,14 @@ class MockToastUtils extends _i1.Mock implements _i24.ToastUtils {
         ),
         returnValueForMissingStub: null,
       );
+  @override
+  _i4.Future<Null> onDispose() => (super.noSuchMethod(
+        Invocation.method(
+          #onDispose,
+          [],
+        ),
+        returnValue: _i4.Future<Null>.value(),
+      ) as _i4.Future<Null>);
   @override
   _i4.Future<Null> onWillDispose() => (super.noSuchMethod(
         Invocation.method(
@@ -2234,6 +2315,45 @@ class MockRelayClient extends _i1.Mock implements _i26.RelayClient {
       ) as _i4.Future<bool>);
 }
 
+/// A class which mocks [StorageService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockStorageService extends _i1.Mock implements _i28.StorageService {
+  MockStorageService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<void> init() => (super.noSuchMethod(
+        Invocation.method(
+          #init,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  String? getString(String? key) => (super.noSuchMethod(Invocation.method(
+        #getString,
+        [key],
+      )) as String?);
+  @override
+  _i4.Future<bool> setString(
+    String? key,
+    String? value,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #setString,
+          [
+            key,
+            value,
+          ],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
+}
+
 /// A class which mocks [Client].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -2287,7 +2407,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i28.Encoding? encoding,
+    _i29.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2317,7 +2437,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i28.Encoding? encoding,
+    _i29.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2347,7 +2467,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i28.Encoding? encoding,
+    _i29.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2377,7 +2497,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i28.Encoding? encoding,
+    _i29.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2416,7 +2536,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
         returnValue: _i4.Future<String>.value(''),
       ) as _i4.Future<String>);
   @override
-  _i4.Future<_i29.Uint8List> readBytes(
+  _i4.Future<_i30.Uint8List> readBytes(
     Uri? url, {
     Map<String, String>? headers,
   }) =>
@@ -2426,8 +2546,8 @@ class MockClient extends _i1.Mock implements _i3.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i4.Future<_i29.Uint8List>.value(_i29.Uint8List(0)),
-      ) as _i4.Future<_i29.Uint8List>);
+        returnValue: _i4.Future<_i30.Uint8List>.value(_i30.Uint8List(0)),
+      ) as _i4.Future<_i30.Uint8List>);
   @override
   _i4.Future<_i3.StreamedResponse> send(_i3.BaseRequest? request) =>
       (super.noSuchMethod(
