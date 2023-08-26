@@ -413,7 +413,7 @@ void main() {
 
         // Didn't get past set string
         verify(storage.setString(any, any)).called(1);
-        verify(es.init()).called(1);
+        verify(es.updateSort()).called(1);
         verify(mockUrlUtils.navigateDeepLink(
           nativeLink: anyNamed('nativeLink'),
           universalLink: anyNamed('universalLink'),
@@ -438,20 +438,20 @@ void main() {
 
         // Didn't get past set string
         verify(storage.setString(any, any)).called(1);
-        verifyNever(es.init());
+        verifyNever(es.updateSort());
 
         // Does nothing
         await service.connectWallet(
           walletData: walletData,
         );
         verifyNever(storage.setString(any, any));
-        verifyNever(es.init());
+        verifyNever(es.updateSort());
 
         c.complete(true);
 
         await Future.delayed(const Duration(milliseconds: 500));
 
-        verify(es.init()).called(1);
+        verify(es.updateSort()).called(1);
         verify(mockUrlUtils.navigateDeepLink(
           nativeLink: anyNamed('nativeLink'),
           universalLink: anyNamed('universalLink'),

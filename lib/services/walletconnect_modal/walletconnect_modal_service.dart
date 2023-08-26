@@ -373,7 +373,7 @@ class WalletConnectModalService extends ChangeNotifier
       walletData.listing.id,
     );
     // Update explorer service with new recent
-    await explorerService.instance!.init();
+    await explorerService.instance!.updateSort();
 
     try {
       await rebuildConnectionUri();

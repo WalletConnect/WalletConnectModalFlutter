@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:network_image_mock/network_image_mock.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
 import 'package:walletconnect_modal_flutter/pages/get_wallet_page.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_singleton.dart';
@@ -35,7 +36,10 @@ void main() {
       when(mockPlatformUtils.isMobileWidth(any)).thenReturn(true);
       platformUtils.instance = mockPlatformUtils;
 
-      when(mockUrlUtils.launchUrl(any)).thenAnswer(
+      when(mockUrlUtils.launchUrl(
+        any,
+        mode: anyNamed("mode"),
+      )).thenAnswer(
         (_) => Future.value(true),
       );
       urlUtils.instance = mockUrlUtils;
@@ -73,11 +77,13 @@ void main() {
 
         verify(mockUrlUtils.launchUrl(
           Uri.parse(StringConstants.getAWalletExploreWalletsUrl),
+          mode: LaunchMode.externalApplication,
         )).called(1);
       });
     });
 
-    testWidgets('should load in wallets and their buttons',
+    testWidgets(
+        'should load in wallets, their buttons, and their buttons should launch the correct URL',
         (WidgetTester tester) async {
       // FlutterError.onError = ignoreOverflowErrors;
 
@@ -119,6 +125,15 @@ void main() {
           find.byType(WalletItem, skipOffstage: false),
           findsNWidgets(2),
         );
+
+        await tester.tap(
+          find.byType(WalletConnectModalButton).first,
+        );
+
+        verify(mockUrlUtils.launchUrl(
+          Uri.parse(testListings1[0].homepage),
+          mode: LaunchMode.externalApplication,
+        )).called(1);
       });
     });
   });

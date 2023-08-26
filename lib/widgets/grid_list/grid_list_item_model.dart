@@ -12,4 +12,20 @@ class GridListItemModel<T> {
     this.description,
     required this.data,
   });
+
+  GridListItemModel<T> copyWith({
+    String? image,
+    String? id,
+    String? title,
+    String? description,
+    T? data,
+  }) {
+    return GridListItemModel<T>(
+      image: image ?? this.image,
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      data: data ?? this.data,
+    );
+  }
 }

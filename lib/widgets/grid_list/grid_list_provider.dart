@@ -8,4 +8,6 @@ abstract class GridListProvider<T> {
   void filterList({
     String? query,
   });
+
+  Future<void> updateSort();
 }

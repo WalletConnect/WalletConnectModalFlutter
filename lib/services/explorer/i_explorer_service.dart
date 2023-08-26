@@ -25,7 +25,7 @@ abstract class IExplorerService implements GridListProvider<WalletData> {
   /// The wallets that will be excluded from the modal.
   Set<String>? excludedWalletIds;
 
-  Future<void> init({bool refetch = false});
+  Future<void> init();
 
   String getWalletImageUrl({
     required String imageId,

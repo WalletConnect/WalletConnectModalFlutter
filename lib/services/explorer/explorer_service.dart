@@ -33,7 +33,8 @@ class ExplorerService implements IExplorerService {
   Set<String>? excludedWalletIds;
 
   List<Listing> _listings = [];
-  List<GridListItemModel<WalletData>> _walletList = [];
+  List<GridListItemModel<WalletData>> _walletListUnsorted = [];
+  List<GridListItemModel<WalletData>> _walletListSorted = [];
   @override
   ValueNotifier<List<GridListItemModel<WalletData>>> itemList =
       ValueNotifier([]);
@@ -44,6 +45,8 @@ class ExplorerService implements IExplorerService {
   final http.Client client;
 
   final String referer;
+
+  String? previousRecentWallet;
 
   ExplorerService({
     required this.projectId,
@@ -56,69 +59,68 @@ class ExplorerService implements IExplorerService {
   }) : client = client ?? http.Client();
 
   @override
-  Future<void> init({bool refetch = false}) async {
-    if (!initialized.value || refetch) {
-      String? platform;
-      switch (platformUtils.instance.getPlatformType()) {
-        case PlatformType.desktop:
-          platform = 'Desktop';
-          break;
-        case PlatformType.mobile:
-          if (Platform.isIOS) {
-            platform = 'iOS';
-          } else if (Platform.isAndroid) {
-            platform = 'Android';
-          } else {
-            platform = 'Mobile';
-          }
-          break;
-        case PlatformType.web:
-          platform = 'Injected';
-          break;
-        default:
-          platform = null;
-      }
-
-      LoggerUtil.logger.i('Fetching wallet listings. Platform: $platform');
-      _listings = await fetchListings(
-        endpoint: '/w3m/v1/get${platform}Listings',
-        referer: referer,
-        // params: params,
-      );
-
-      if (excludedWalletState == ExcludedWalletState.list) {
-        // If we are excluding all wallets, take out the excluded listings, if they exist
-        if (excludedWalletIds != null) {
-          _listings = filterExcludedListings(
-            listings: _listings,
-          );
-        }
-      } else if (excludedWalletState == ExcludedWalletState.all &&
-          recommendedWalletIds != null) {
-        // Filter down to only the included
-        _listings = _listings
-            .where(
-              (listing) => recommendedWalletIds!.contains(
-                listing.id,
-              ),
-            )
-            .toList();
-      } else {
-        // If we are excluding all wallets and have no recommended wallets,
-        // return an empty list
-        _walletList = [];
-        itemList.value = [];
-        return;
-      }
+  Future<void> init() async {
+    if (initialized.value) {
+      return;
     }
 
-    _walletList.clear();
+    String? platform;
+    switch (platformUtils.instance.getPlatformType()) {
+      case PlatformType.desktop:
+        platform = 'Desktop';
+        break;
+      case PlatformType.mobile:
+        if (Platform.isIOS) {
+          platform = 'iOS';
+        } else if (Platform.isAndroid) {
+          platform = 'Android';
+        } else {
+          platform = 'Mobile';
+        }
+        break;
+      case PlatformType.web:
+        platform = 'Injected';
+        break;
+      default:
+        platform = null;
+    }
 
-    final List<GridListItemModel<WalletData>> newList = [];
+    LoggerUtil.logger.i('Fetching wallet listings. Platform: $platform');
+    _listings = await fetchListings(
+      endpoint: '/w3m/v1/get${platform}Listings',
+      referer: referer,
+      // params: params,
+    );
+
+    if (excludedWalletState == ExcludedWalletState.list) {
+      // If we are excluding all wallets, take out the excluded listings, if they exist
+      if (excludedWalletIds != null) {
+        _listings = filterExcludedListings(
+          listings: _listings,
+        );
+      }
+    } else if (excludedWalletState == ExcludedWalletState.all &&
+        recommendedWalletIds != null) {
+      // Filter down to only the included
+      _listings = _listings
+          .where(
+            (listing) => recommendedWalletIds!.contains(
+              listing.id,
+            ),
+          )
+          .toList();
+    } else {
+      // If we are excluding all wallets and have no recommended wallets,
+      // return an empty list
+      _walletListUnsorted = [];
+      itemList.value = [];
+      return;
+    }
 
     // Get the recent wallet
     final String? recentWallet =
         storageService.instance.getString(StringConstants.recentWallet);
+    previousRecentWallet = recentWallet;
 
     for (Listing item in _listings) {
       String? uri = item.mobile.native;
@@ -131,7 +133,7 @@ class ExplorerService implements IExplorerService {
       if (installed) {
         LoggerUtil.logger.v('Wallet ${item.name} installed: $installed');
       }
-      newList.add(
+      _walletListUnsorted.add(
         GridListItemModel<WalletData>(
           title: item.name,
           id: item.id,
@@ -152,37 +154,8 @@ class ExplorerService implements IExplorerService {
       );
     }
 
-    // Sort the installed wallets to the top
-    int insertAt = 0;
-    if (recommendedWalletIds != null) {
-      for (int i = 0; i < newList.length; i++) {
-        if (newList[i].data.recent == true) {
-          _walletList.insert(0, newList[i]);
-          insertAt++;
-        } else if (newList[i].data.installed) {
-          _walletList.insert(insertAt, newList[i]);
-          insertAt++;
-        } else if (recommendedWalletIds!.contains(newList[i].id)) {
-          _walletList.insert(insertAt, newList[i]);
-        } else {
-          _walletList.add(newList[i]);
-        }
-      }
-    } else {
-      for (int i = 0; i < newList.length; i++) {
-        if (newList[i].data.recent == true) {
-          _walletList.insert(0, newList[i]);
-          insertAt++;
-        } else if (newList[i].data.installed) {
-          _walletList.insert(insertAt, newList[i]);
-          insertAt++;
-        } else {
-          _walletList.add(newList[i]);
-        }
-      }
-    }
+    await updateSort();
 
-    itemList.value = _walletList;
     initialized.value = true;
   }
 
@@ -191,11 +164,11 @@ class ExplorerService implements IExplorerService {
     String? query,
   }) {
     if (query == null || query.isEmpty) {
-      itemList.value = _walletList;
+      itemList.value = _walletListSorted;
       return;
     }
 
-    final List<GridListItemModel<WalletData>> filtered = _walletList
+    final List<GridListItemModel<WalletData>> filtered = _walletListSorted
         .where(
           (wallet) => wallet.title.toLowerCase().contains(
                 query.toLowerCase(),
@@ -203,6 +176,57 @@ class ExplorerService implements IExplorerService {
         )
         .toList();
     itemList.value = filtered;
+  }
+
+  @override
+  Future<void> updateSort() async {
+    final List<GridListItemModel<WalletData>> newList = [];
+
+    final String? recentWallet =
+        storageService.instance.getString(StringConstants.recentWallet);
+
+    // Sort the installed wallets to the top
+    int insertAt = 0;
+    for (int i = 0; i < _walletListUnsorted.length; i++) {
+      // If the recent wallet doesn't match the id, then set it to not recent
+      if (_walletListUnsorted[i].data.recent == true &&
+          recentWallet != previousRecentWallet) {
+        _walletListUnsorted[i] = _walletListUnsorted[i].copyWith(
+          description:
+              _walletListUnsorted[i].data.installed ? 'Installed' : null,
+          data: _walletListUnsorted[i].data.copyWith(
+                recent: false,
+              ),
+        );
+      }
+      // If the recent wallet matches the id, then set it to recent
+      else if (_walletListUnsorted[i].id == recentWallet) {
+        _walletListUnsorted[i] = _walletListUnsorted[i].copyWith(
+          description: 'Recent',
+          data: _walletListUnsorted[i].data.copyWith(
+                recent: true,
+              ),
+        );
+      }
+
+      // Handle sorting
+      if (_walletListUnsorted[i].data.recent == true) {
+        newList.insert(0, _walletListUnsorted[i]);
+        insertAt++;
+      } else if (_walletListUnsorted[i].data.installed) {
+        newList.insert(insertAt, _walletListUnsorted[i]);
+        insertAt++;
+      } else if (recommendedWalletIds != null &&
+          recommendedWalletIds!.contains(_walletListUnsorted[i].id)) {
+        newList.insert(insertAt, _walletListUnsorted[i]);
+      } else {
+        newList.add(_walletListUnsorted[i]);
+      }
+    }
+
+    previousRecentWallet = recentWallet;
+    _walletListSorted = newList;
+    itemList.value = newList;
   }
 
   @override

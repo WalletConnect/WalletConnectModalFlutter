@@ -25,12 +25,14 @@ class GridList<T> extends StatelessWidget {
     required this.provider,
     this.viewLongList,
     required this.onSelect,
+    this.visibleRowCount,
   });
 
   final GridListState state;
   final GridListProvider<T> provider;
   final void Function()? viewLongList;
   final void Function(T) onSelect;
+  final int? visibleRowCount;
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +89,10 @@ class GridList<T> extends StatelessWidget {
             itemCount = min(4, value.length);
             height = 120;
             break;
+        }
+
+        if (visibleRowCount != null) {
+          height = 120.0 * visibleRowCount!;
         }
 
         if (value.isEmpty) {

@@ -6,7 +6,7 @@ final List<Listing> testListings1 = [
   const Listing(
     id: '1',
     name: 'Test1',
-    homepage: 'https://test1.com',
+    homepage: 'https://test1homepage.com',
     imageId: 'test',
     app: App(),
     mobile: Redirect(
@@ -18,7 +18,7 @@ final List<Listing> testListings1 = [
   const Listing(
     id: '2',
     name: 'Test2',
-    homepage: 'https://test2.com',
+    homepage: 'https://test2homepage.com',
     imageId: 'test',
     app: App(),
     mobile: Redirect(

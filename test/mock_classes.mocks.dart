@@ -403,11 +403,10 @@ class MockExplorerService extends _i1.Mock implements _i13.ExplorerService {
         returnValue: '',
       ) as String);
   @override
-  _i4.Future<void> init({bool? refetch = false}) => (super.noSuchMethod(
+  _i4.Future<void> init() => (super.noSuchMethod(
         Invocation.method(
           #init,
           [],
-          {#refetch: refetch},
         ),
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),
@@ -418,6 +417,14 @@ class MockExplorerService extends _i1.Mock implements _i13.ExplorerService {
           #filterList,
           [],
           {#query: query},
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void updateSort() => super.noSuchMethod(
+        Invocation.method(
+          #updateSort,
+          [],
         ),
         returnValueForMissingStub: null,
       );
@@ -640,6 +647,15 @@ class MockWalletConnectModalService extends _i1.Mock
         returnValueForMissingStub: _i4.Future<void>.value(),
       ) as _i4.Future<void>);
   @override
+  _i4.Future<void> rebuildConnectionUri() => (super.noSuchMethod(
+        Invocation.method(
+          #rebuildConnectionUri,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
   _i4.Future<void> connectWallet({required _i16.WalletData? walletData}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -680,15 +696,6 @@ class MockWalletConnectModalService extends _i1.Mock
         ),
         returnValue: '',
       ) as String);
-  @override
-  _i4.Future<void> rebuildConnectionUri() => (super.noSuchMethod(
-        Invocation.method(
-          #rebuildConnectionUri,
-          [],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
   @override
   void registerListeners() => super.noSuchMethod(
         Invocation.method(
