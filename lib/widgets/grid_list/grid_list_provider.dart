@@ -9,5 +9,5 @@ abstract class GridListProvider<T> {
     String? query,
   });
 
-  Future<void> updateSort();
+  void updateSort();
 }

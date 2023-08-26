@@ -154,7 +154,7 @@ class ExplorerService implements IExplorerService {
       );
     }
 
-    await updateSort();
+    updateSort();
 
     initialized.value = true;
   }
@@ -179,7 +179,7 @@ class ExplorerService implements IExplorerService {
   }
 
   @override
-  Future<void> updateSort() async {
+  void updateSort() async {
     final List<GridListItemModel<WalletData>> newList = [];
 
     final String? recentWallet =

@@ -99,7 +99,7 @@ void main() {
       );
       verify(
         mockStorageService.getString(StringConstants.recentWallet),
-      ).called(1);
+      ).called(2); // Once in init, once in updateSort
     });
 
     group('After init', () {
@@ -107,7 +107,7 @@ void main() {
         await explorerService.init();
       });
 
-      test('Test Filter Functionality', () async {
+      test('filterList', () async {
         explorerService.filterList(query: 'Test2');
 
         // add assertions based on your expected outcomes
@@ -123,7 +123,65 @@ void main() {
         explorerService.filterList();
       });
 
-      test('Test Redirect Fetching', () {
+      test('updateSort', () async {
+        when(
+          mockStorageService.getString(StringConstants.recentWallet),
+        ).thenReturn('1');
+        explorerService.updateSort();
+
+        expect(
+          explorerService.itemList.value[0].title,
+          'Test1',
+        );
+        expect(
+          explorerService.itemList.value[0].description,
+          'Recent',
+        );
+        expect(
+          explorerService.itemList.value[0].data.recent,
+          true,
+        );
+        expect(explorerService.previousRecentWallet, '1');
+
+        when(
+          mockStorageService.getString(StringConstants.recentWallet),
+        ).thenReturn('2');
+        explorerService.updateSort();
+
+        expect(
+          explorerService.itemList.value[0].title,
+          'Test2',
+        );
+        expect(
+          explorerService.itemList.value[0].description,
+          'Recent',
+        );
+        expect(
+          explorerService.itemList.value[0].data.recent,
+          true,
+        );
+        expect(
+          explorerService.itemList.value[1].title,
+          'Test1',
+        );
+        expect(
+          explorerService.itemList.value[1].description,
+          'Installed',
+        );
+        expect(
+          explorerService.itemList.value[1].data.recent,
+          false,
+        );
+        expect(explorerService.previousRecentWallet, '2');
+
+        when(
+          mockStorageService.getString(StringConstants.recentWallet),
+        ).thenReturn(null);
+
+        explorerService.updateSort();
+      });
+
+      test('getRedirect', () {
         Redirect? redirect = explorerService.getRedirect(name: 'blank');
         expect(redirect, null);
 
@@ -137,7 +195,7 @@ void main() {
       });
     });
 
-    test('Test Image URL Generation', () {
+    test('getWalletImageUrl and getAssetImageUrl', () {
       String imageId = 'test_id';
       expect(
         explorerService.getWalletImageUrl(imageId: imageId),
@@ -153,7 +211,7 @@ void main() {
       );
     });
 
-    test('Test Fetching of Wallet Listings', () async {
+    test('fetchListings', () async {
       final List<Listing> listings = await explorerService.fetchListings(
         endpoint: '/w3m/v1/getDesktopListings',
         referer: 'test_referer',
