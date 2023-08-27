@@ -2,6 +2,7 @@
 
 - Grid list overhauled to allow for increased customization
 - Added press animation to grid list items
+- WalletConnect logo added to QR code
 
 ## 2.1.3
 
