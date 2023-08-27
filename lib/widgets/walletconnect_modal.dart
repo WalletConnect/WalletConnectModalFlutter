@@ -209,9 +209,9 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
               borderRadius: innerContainerBorderRadius,
               color: themeData.background100,
             ),
-            padding: const EdgeInsets.only(
-              bottom: 20,
-            ),
+            // padding: const EdgeInsets.only(
+            //   bottom: 20,
+            // ),
             child: Stack(
               children: [
                 TransitionContainer(
@@ -236,7 +236,7 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
         ),
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: CircularProgressIndicator(
               color: WalletConnectModalTheme.getData(context).primary100,
             ),

@@ -25,14 +25,22 @@ class GridList<T> extends StatelessWidget {
     required this.provider,
     this.viewLongList,
     required this.onSelect,
-    this.visibleRowCount,
+    required this.createListItem,
+    this.heightOverride,
+    this.longBottomSheetHeightOverride,
+    this.longBottomSheetAspectRatio = 0.73,
+    this.itemAspectRatio = 0.85,
   });
 
   final GridListState state;
   final GridListProvider<T> provider;
   final void Function()? viewLongList;
   final void Function(T) onSelect;
-  final int? visibleRowCount;
+  final Widget Function(GridListItemModel<T>, double) createListItem;
+  final double? heightOverride;
+  final double? longBottomSheetHeightOverride;
+  final double longBottomSheetAspectRatio;
+  final double itemAspectRatio;
 
   @override
   Widget build(BuildContext context) {
@@ -91,8 +99,10 @@ class GridList<T> extends StatelessWidget {
             break;
         }
 
-        if (visibleRowCount != null) {
-          height = 120.0 * visibleRowCount!;
+        if (longBottomSheet && longBottomSheetHeightOverride != null) {
+          height = longBottomSheetHeightOverride!;
+        } else if (!longBottomSheet && heightOverride != null) {
+          height = heightOverride!;
         }
 
         if (value.isEmpty) {
@@ -122,14 +132,16 @@ class GridList<T> extends StatelessWidget {
         }
 
         return Container(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           height: height,
           child: GridView.builder(
             key: Key('${value.length}'),
             itemCount: itemCount,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: longBottomSheet ? 8 : 4,
-              childAspectRatio: longBottomSheet ? 0.73 : 0.85,
+              childAspectRatio: longBottomSheet
+                  ? longBottomSheetAspectRatio
+                  : itemAspectRatio,
             ),
             itemBuilder: (context, index) {
               if (index == itemCount - 1 &&
@@ -143,15 +155,12 @@ class GridList<T> extends StatelessWidget {
               } else {
                 return GridListItem(
                   key: Key(value[index].title),
-                  title: value[index].title,
-                  description: value[index].description,
                   onSelect: () => onSelect(value[index].data),
-                  child: WalletImage(
-                    imageUrl: value[index].image,
-                    imageSize: size.height < 700.0
-                        ? GridList.smallTileSize
-                        : GridList.tileSize,
-                  ),
+                  child: createListItem(
+                      value[index],
+                      size.height < 700.0
+                          ? GridList.smallTileSize
+                          : GridList.tileSize),
                 );
               }
             },
@@ -168,7 +177,9 @@ class GridList<T> extends StatelessWidget {
   ) {
     final WalletConnectModalThemeData themeData =
         WalletConnectModalTheme.getData(context);
-    final size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
+    final tileSize =
+        size.height < 700.0 ? GridList.smallTileSize : GridList.tileSize;
 
     List<Widget> images = [];
 
@@ -180,37 +191,50 @@ class GridList<T> extends StatelessWidget {
       images.add(
         WalletImage(
           imageUrl: items[startIndex + i].image,
-          imageSize: GridList.tileSize / 3.0,
+          imageSize: tileSize / 3.0,
         ),
       );
     }
 
     return GridListItem(
       key: WalletConnectModalConstants.gridListViewAllButtonKey,
-      title: 'View All',
       onSelect: viewLongList ?? () {},
-      child: Container(
-        width: GridList.tileSize,
-        height:
-            size.height < 700.0 ? GridList.smallTileSize : GridList.tileSize,
-        padding: const EdgeInsets.all(2.0),
-        decoration: BoxDecoration(
-          color: themeData.background200,
-          border: Border.all(
-            color: themeData.overlay010,
-            strokeAlign: BorderSide.strokeAlignOutside,
+      child: Column(
+        children: [
+          Container(
+            width: tileSize,
+            height: tileSize,
+            padding: const EdgeInsets.all(2.0),
+            decoration: BoxDecoration(
+              color: themeData.background200,
+              border: Border.all(
+                color: themeData.overlay010,
+                strokeAlign: BorderSide.strokeAlignOutside,
+              ),
+              borderRadius: BorderRadius.circular(
+                GridList.getTileBorderRadius(GridList.tileSize),
+              ),
+            ),
+            child: Center(
+              child: Wrap(
+                spacing: 4.0,
+                runSpacing: 4.0,
+                children: images,
+              ),
+            ),
           ),
-          borderRadius: BorderRadius.circular(
-            GridList.getTileBorderRadius(GridList.tileSize),
+          const SizedBox(height: 4.0),
+          Text(
+            'View All',
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.clip,
+            style: TextStyle(
+              fontSize: 12.0,
+              color: themeData.foreground100,
+            ),
           ),
-        ),
-        child: Center(
-          child: Wrap(
-            spacing: 4.0,
-            runSpacing: 4.0,
-            children: images,
-          ),
-        ),
+        ],
       ),
     );
   }

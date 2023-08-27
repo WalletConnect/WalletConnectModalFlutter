@@ -116,16 +116,16 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
             color: Colors.black,
           ),
           // gapless: true,
-          // embeddedImage: const AssetImage(
-          //   'assets/walletconnect_logo_white.png',
-          //   package: 'walletconnect_modal_flutter',
-          //   // color: themeData.primary100,
-          // ),
-          // embeddedImageStyle: QrEmbeddedImageStyle(
-          //   size: const Size(100, 60),
-          //   color: themeData.primary100,
-          // ),
-          // embeddedImageEmitsError: true,
+          embeddedImage: const AssetImage(
+            'assets/walletconnect_logo_blue_solid_background.png',
+            package: 'walletconnect_modal_flutter',
+            // color: themeData.primary100,
+          ),
+          embeddedImageStyle: const QrEmbeddedImageStyle(
+            size: Size(100, 100),
+            // color: themeData.primary100,
+          ),
+          embeddedImageEmitsError: true,
         ),
       ),
     );

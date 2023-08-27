@@ -1,3 +1,12 @@
+## 2.1.4
+
+- Grid list overhauled to allow for increased customization
+- Added press animation to grid list items
+
+## 2.1.3
+
+- Added custom item creation to the grid list
+
 ## 2.1.2
 
 - Multiple UI improvements

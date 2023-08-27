@@ -126,7 +126,7 @@ class GetWalletPage extends StatelessWidget {
               ],
             ),
           ),
-          // URL: https://explorer.walletconnect.com/?type=wallet
+          const SizedBox(height: 8.0),
         ],
       ),
     );

@@ -193,6 +193,7 @@ class _HelpPageState extends State<HelpPage> {
               ],
             ),
           ),
+          const SizedBox(height: 8.0),
         ],
       ),
     );
@@ -233,6 +234,7 @@ class _HelpPageState extends State<HelpPage> {
             activeDotColor: themeData.primary100,
           ),
         ),
+        const SizedBox(height: 8.0),
       ],
     );
   }

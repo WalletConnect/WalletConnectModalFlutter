@@ -7,6 +7,7 @@ import 'package:walletconnect_modal_flutter/services/explorer/explorer_service_s
 import 'package:walletconnect_modal_flutter/services/utils/widget_stack/widget_stack_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/walletconnect_modal/i_walletconnect_modal_service.dart';
 import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list.dart';
+import 'package:walletconnect_modal_flutter/widgets/grid_list/grid_list_wallet_item.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_icon_button.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_navbar.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_navbar_title.dart';
@@ -46,6 +47,12 @@ class WalletListShortPage extends StatelessWidget {
         onSelect: (WalletData data) {
           service.connectWallet(
             walletData: data,
+          );
+        },
+        createListItem: (info, iconSize) {
+          return GridListWalletItem(
+            listItem: info,
+            imageSize: iconSize,
           );
         },
       ),
