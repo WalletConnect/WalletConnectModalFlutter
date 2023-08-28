@@ -1,3 +1,7 @@
+## 2.1.5
+
+- Added height parameter to the `WalletConnectModalConnect` button
+
 ## 2.1.4
 
 - Grid list overhauled to allow for increased customization

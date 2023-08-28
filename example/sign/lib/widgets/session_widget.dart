@@ -151,7 +151,7 @@ class SessionWidgetState extends State<SessionWidget> {
   ) {
     final List<Widget> buttons = [];
     // Add Methods
-    for (final String method in getChainMethods(chainMetadata.type)) {
+    for (final String method in getUIChainMethods(chainMetadata.type)) {
       buttons.add(
         Container(
           width: double.infinity,
@@ -242,6 +242,7 @@ class SessionWidgetState extends State<SessionWidget> {
   ) {
     switch (type) {
       case ChainType.eip155:
+        print('swag');
         return EIP155.callMethod(
           web3App: widget.web3App,
           topic: widget.session.topic,

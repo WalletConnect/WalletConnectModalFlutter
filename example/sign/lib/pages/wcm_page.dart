@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:walletconnect_flutter_dapp/models/chain_metadata.dart';
 import 'package:walletconnect_flutter_dapp/utils/constants.dart';
-import 'package:walletconnect_flutter_dapp/utils/crypto/chain_data_wrapper.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/chain_data.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/helpers.dart';
 import 'package:walletconnect_flutter_dapp/utils/string_constants.dart';
 import 'package:walletconnect_flutter_dapp/widgets/chain_button.dart';
@@ -132,6 +132,11 @@ class _WCMPageState extends State<WCMPage> with SingleTickerProviderStateMixin {
           WalletConnectModalConnect(
             service: _walletConnectModalService!,
           ),
+          // WalletConnectModalConnect(
+          //   service: _walletConnectModalService!,
+          //   width: double.infinity,
+          //   height: 100,
+          // ),
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(8.0),
@@ -250,7 +255,7 @@ class _WCMPageState extends State<WCMPage> with SingleTickerProviderStateMixin {
       // Create the required namespaces
       requiredNamespaces[entry.key.name] = RequiredNamespace(
         chains: entry.value.toList(),
-        methods: getChainMethods(entry.key),
+        methods: getOptionalChainMethods(entry.key),
         events: getChainEvents(entry.key),
       );
     }

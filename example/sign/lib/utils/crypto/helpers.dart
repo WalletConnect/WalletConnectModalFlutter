@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:walletconnect_flutter_dapp/models/chain_metadata.dart';
-import 'package:walletconnect_flutter_dapp/utils/crypto/chain_data_wrapper.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/chain_data.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/eip155.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/solana_data.dart';
 
@@ -27,13 +27,23 @@ ChainMetadata getChainMetadataFromChain(String namespace) {
   return ChainData.chains[0];
 }
 
+List<String> getOptionalChainMethods(ChainType value) {
+  if (value == ChainType.solana) {
+    return SolanaData.methods.values.toList();
+  } else if (value == ChainType.kadena) {
+    return EIP155.ethOptionalMethods; //Kadena.methods.values.toList();
+  } else {
+    return EIP155.ethOptionalMethods;
+  }
+}
+
 List<String> getChainMethods(ChainType value) {
   if (value == ChainType.solana) {
     return SolanaData.methods.values.toList();
   } else if (value == ChainType.kadena) {
-    return EIP155.methods.values.toList(); //Kadena.methods.values.toList();
+    return EIP155.ethRequiredMethods; //Kadena.methods.values.toList();
   } else {
-    return EIP155.methods.values.toList();
+    return EIP155.ethRequiredMethods;
   }
 }
 
@@ -44,5 +54,15 @@ List<String> getChainEvents(ChainType value) {
     return EIP155.events.values.toList(); //Kadena.events.values.toList();
   } else {
     return EIP155.events.values.toList();
+  }
+}
+
+List<String> getUIChainMethods(ChainType value) {
+  if (value == ChainType.solana) {
+    return SolanaData.methods.values.toList();
+  } else if (value == ChainType.kadena) {
+    return EIP155.methods.values.toList(); //Kadena.methods.values.toList();
+  } else {
+    return EIP155.methods.values.toList();
   }
 }

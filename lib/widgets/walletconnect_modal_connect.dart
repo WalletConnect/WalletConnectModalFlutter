@@ -23,12 +23,14 @@ class WalletConnectModalConnect extends StatefulWidget {
     this.buttonRadius,
     this.connectedWidget,
     this.width,
+    this.height,
   });
 
   final IWalletConnectModalService service;
   final double? buttonRadius;
   final Widget? connectedWidget;
   final double? width;
+  final double? height;
 
   @override
   State<WalletConnectModalConnect> createState() =>
@@ -65,7 +67,7 @@ class _WalletConnectModalConnectState extends State<WalletConnectModalConnect> {
       alignment: Alignment.center,
       child: Container(
         constraints: BoxConstraints(
-          minHeight: 40,
+          minHeight: widget.height ?? 40,
           minWidth: widget.width ?? 180,
         ),
         child: _buildButton(context),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:walletconnect_flutter_dapp/models/chain_metadata.dart';
 import 'package:walletconnect_flutter_dapp/pages/wcm_page.dart';
-import 'package:walletconnect_flutter_dapp/utils/crypto/chain_data_wrapper.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/chain_data.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/helpers.dart';
 import 'package:walletconnect_flutter_dapp/utils/dart_defines.dart';
 import 'package:walletconnect_flutter_dapp/utils/string_constants.dart';
