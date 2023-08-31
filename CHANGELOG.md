@@ -1,6 +1,7 @@
 ## 2.1.5
 
 - Added height parameter to the `WalletConnectModalConnect` button
+- Removed image from QR Code, it was sometimes causing problems and needs more testing
 
 ## 2.1.4
 
