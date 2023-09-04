@@ -20,7 +20,7 @@ class GridListWalletItem extends StatelessWidget {
         WalletConnectModalTheme.getData(context);
 
     return Column(
-      // crossAxisAlignment: CrossAxisAlignment.center,
+      // mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         Container(
           width: imageSize,
@@ -52,19 +52,17 @@ class GridListWalletItem extends StatelessWidget {
             color: themeData.foreground100,
           ),
         ),
-        if (listItem.description != null) ...[
-          const SizedBox(height: 2.0),
-          Text(
-            listItem.description ?? '',
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.clip,
-            style: TextStyle(
-              fontSize: 12.0,
-              color: themeData.foreground300,
-            ),
+        const SizedBox(height: 2.0),
+        Text(
+          listItem.description ?? '',
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.clip,
+          style: TextStyle(
+            fontSize: 12.0,
+            color: themeData.foreground300,
           ),
-        ],
+        ),
       ],
     );
   }
