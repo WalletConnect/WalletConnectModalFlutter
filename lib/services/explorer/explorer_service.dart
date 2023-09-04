@@ -133,6 +133,7 @@ class ExplorerService implements IExplorerService {
       if (installed) {
         LoggerUtil.logger.v('Wallet ${item.name} installed: $installed');
       }
+
       _walletListUnsorted.add(
         GridListItemModel<WalletData>(
           title: item.name,

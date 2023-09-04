@@ -84,7 +84,8 @@ void main() {
         when(
           mockPlatformUtils.getPlatformExact(),
         ).thenReturn(PlatformExact.iOS);
-        await utils.isInstalled('https://example.com');
+        bool value = await utils.isInstalled('https://example.com');
+        expect(value, true);
         verify(
           mockPlatformUtils.getPlatformExact(),
         ).called(1);
@@ -98,7 +99,8 @@ void main() {
         when(
           mockPlatformUtils.getPlatformExact(),
         ).thenReturn(PlatformExact.android);
-        await utils.isInstalled('https://example.com');
+        value = await utils.isInstalled('https://example.com');
+        expect(value, true);
         verify(
           mockPlatformUtils.getPlatformExact(),
         ).called(1);

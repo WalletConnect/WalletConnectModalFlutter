@@ -56,7 +56,7 @@ class UrlUtils extends IUrlUtils {
         if (p == PlatformExact.android) {
           return await androidAppCheck(uri);
         } else if (p == PlatformExact.iOS) {
-          await canLaunchUrlFunc(
+          return await canLaunchUrlFunc(
             Uri.parse(
               uri,
             ),

@@ -18,15 +18,20 @@ class GridListItem extends StatelessWidget {
         WalletConnectModalTheme.getData(context);
 
     return Container(
-      margin: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: themeData.overlay010,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: MaterialButton(
-        padding: const EdgeInsets.all(4),
+        padding: const EdgeInsets.all(8),
         onPressed: onSelect,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        focusColor: themeData.overlay020,
-        hoverColor: themeData.overlay010,
+        elevation: 1,
+        focusElevation: 1,
+        hoverElevation: 1,
+        highlightElevation: 1,
         child: child,
       ),
     );

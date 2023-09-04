@@ -52,17 +52,19 @@ class GridListWalletItem extends StatelessWidget {
             color: themeData.foreground100,
           ),
         ),
-        const SizedBox(height: 2.0),
-        Text(
-          listItem.description ?? '',
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.clip,
-          style: TextStyle(
-            fontSize: 12.0,
-            color: themeData.foreground300,
+        if (listItem.description != null) ...[
+          const SizedBox(height: 2.0),
+          Text(
+            listItem.description ?? '',
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.clip,
+            style: TextStyle(
+              fontSize: 12.0,
+              color: themeData.foreground300,
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

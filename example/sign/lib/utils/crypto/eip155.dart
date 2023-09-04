@@ -209,7 +209,7 @@ class EIP155 {
     final Transaction t = Transaction.callContract(
       contract: contract,
       function: balanceFunction,
-      parameters: [EthereumAddress.fromHex(ContractDetails.balanceAddress)],
+      parameters: [EthereumAddress.fromHex(address)],
     );
 
     return await web3App.request(
@@ -218,7 +218,7 @@ class EIP155 {
       request: SessionRequestParams(
         method: 'eth_sendTransaction',
         // Check the `web3dart_extension` file for this function
-        params: [t.toJson(fromAddress: ContractDetails.balanceAddress)],
+        params: [t.toJson(fromAddress: address)],
       ),
     );
   }

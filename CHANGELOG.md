@@ -1,4 +1,4 @@
-## 2.1.6
+## 2.1.7
 
 - Removed image from QR Code, it was sometimes causing problems and needs more testing
 

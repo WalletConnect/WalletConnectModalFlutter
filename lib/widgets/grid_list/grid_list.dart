@@ -28,8 +28,8 @@ class GridList<T> extends StatelessWidget {
     required this.createListItem,
     this.heightOverride,
     this.longBottomSheetHeightOverride,
-    this.longBottomSheetAspectRatio = 0.73,
-    this.itemAspectRatio = 0.85,
+    this.longBottomSheetAspectRatio = 0.79,
+    this.itemAspectRatio = 0.75,
   });
 
   final GridListState state;
@@ -82,29 +82,32 @@ class GridList<T> extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: provider.itemList,
       builder: (context, List<GridListItemModel<T>> value, child) {
+        // Get the number of items to display, and the height of the grid list
         int itemCount;
         double height;
         switch (state) {
           case GridListState.short:
             itemCount = min(8, value.length);
-            height = longBottomSheet ? 120 : (size.height * 0.3);
+            height = longBottomSheet ? 140 : 280;
             break;
           case GridListState.long:
             itemCount = value.length;
-            height = longBottomSheet ? 240 : (size.height * 0.6);
+            height = longBottomSheet ? 200 : 560;
             break;
           case GridListState.extraShort:
             itemCount = min(4, value.length);
-            height = 120;
+            height = 140;
             break;
         }
 
+        // Handle overrides
         if (longBottomSheet && longBottomSheetHeightOverride != null) {
           height = longBottomSheetHeightOverride!;
         } else if (!longBottomSheet && heightOverride != null) {
           height = heightOverride!;
         }
 
+        // Handle keyboard visibility if we have an empty list
         if (value.isEmpty) {
           return KeyboardVisibilityBuilder(
               builder: (context, isKeyboardVisible) {
@@ -139,6 +142,8 @@ class GridList<T> extends StatelessWidget {
             itemCount: itemCount,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: longBottomSheet ? 8 : 4,
+              mainAxisSpacing: 8.0,
+              crossAxisSpacing: 8.0,
               childAspectRatio: longBottomSheet
                   ? longBottomSheetAspectRatio
                   : itemAspectRatio,
