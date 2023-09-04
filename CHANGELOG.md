@@ -1,6 +1,9 @@
 ## 2.1.7
 
 - Removed image from QR Code, it was sometimes causing problems and needs more testing
+- Updated grid list sizing
+- Fixed iOS not showing installed apps
+- Updated tests
 
 ## 2.1.5
 
