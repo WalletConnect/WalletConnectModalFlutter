@@ -1,3 +1,7 @@
+## 2.1.9
+
+- Added safe area to modal for phones with notches
+
 ## 2.1.8
 
 - Removed cards from grid list
