@@ -1,3 +1,7 @@
+## 2.1.8
+
+- Removed cards from grid list
+
 ## 2.1.7
 
 - Removed image from QR Code, it was sometimes causing problems and needs more testing
