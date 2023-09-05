@@ -29,7 +29,7 @@ class GridList<T> extends StatelessWidget {
     this.heightOverride,
     this.longBottomSheetHeightOverride,
     this.longBottomSheetAspectRatio = 0.79,
-    this.itemAspectRatio = 0.75,
+    this.itemAspectRatio = 0.72,
   });
 
   final GridListState state;

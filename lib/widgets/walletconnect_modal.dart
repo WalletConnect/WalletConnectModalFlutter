@@ -214,8 +214,10 @@ class _WalletConnectModalState extends State<WalletConnectModal> {
             // ),
             child: Stack(
               children: [
-                TransitionContainer(
-                  child: _buildBody(),
+                SafeArea(
+                  child: TransitionContainer(
+                    child: _buildBody(),
+                  ),
                 ),
                 const WalletConnectModalToastManager(),
               ],
