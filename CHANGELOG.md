@@ -1,3 +1,7 @@
+## 2.1.10
+
+- Fixed an issue with disconnect not working properly
+
 ## 2.1.9
 
 - Added safe area to modal for phones with notches

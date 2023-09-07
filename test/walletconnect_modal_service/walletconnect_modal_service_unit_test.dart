@@ -226,6 +226,13 @@ void main() {
 
         await service.init();
 
+        int count = 0;
+        f() {
+          count++;
+        }
+
+        service.addListener(f);
+
         when(
           web3App.disconnectSession(
             topic: anyNamed('topic'),
@@ -235,10 +242,28 @@ void main() {
 
         await service.disconnect();
 
-        verify(web3App.disconnectSession(
-          topic: testSession.topic,
-          reason: anyNamed('reason'),
-        )).called(1);
+        verifyInOrder([
+          web3App.disconnectSession(
+            topic: testSession.pairingTopic,
+            reason: anyNamed('reason'),
+          ),
+          web3App.disconnectSession(
+            topic: testSession.topic,
+            reason: anyNamed('reason'),
+          )
+        ]);
+
+        expect(service.isConnected, isFalse);
+        expect(service.session, isNull);
+        expect(service.address, '');
+        expect(count, 1);
+
+        // Should null things out and notify listeners
+        await service.disconnect();
+
+        expect(count, 2);
+
+        service.removeListener(f);
       });
     });
 

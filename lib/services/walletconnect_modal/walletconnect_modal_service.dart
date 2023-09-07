@@ -265,7 +265,11 @@ class WalletConnectModalService extends ChangeNotifier
   Future<void> disconnect() async {
     checkInitialized();
 
+    // If we don't have a session, disconnect automatically and notify listeners
     if (_session == null) {
+      _isConnected = false;
+      _address = '';
+      notifyListeners();
       return;
     }
 
@@ -278,6 +282,7 @@ class WalletConnectModalService extends ChangeNotifier
         message: 'User disconnected',
       ),
     );
+    // Disconnecting the session will produce the onSessionDisconnect callback
     await web3App!.disconnectSession(
       topic: session!.topic,
       // ignore: prefer_const_constructors
@@ -286,6 +291,14 @@ class WalletConnectModalService extends ChangeNotifier
         message: 'User disconnected',
       ),
     );
+
+    // As a failsafe (If the session is expired for example), set the session to null and notify listeners
+    if (_session != null) {
+      _isConnected = false;
+      _address = '';
+      _session = null;
+      notifyListeners();
+    }
   }
 
   @override
