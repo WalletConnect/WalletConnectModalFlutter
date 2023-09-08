@@ -55,7 +55,9 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
 
   /// Disconnects the session and pairing, if any.
   /// If there is no session, this does nothing.
-  Future<void> disconnect();
+  Future<void> disconnect({
+    bool disconnectAllSessions = true,
+  });
 
   Future<void> launchCurrentWallet();
 

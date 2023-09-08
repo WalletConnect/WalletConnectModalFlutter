@@ -1,3 +1,7 @@
+## 2.1.11
+
+- `WalletConnectModalService.disconnect` now disconnects all sessions, unless you tell it to only disconnect the current one
+
 ## 2.1.10
 
 - Fixed an issue with disconnect not working properly

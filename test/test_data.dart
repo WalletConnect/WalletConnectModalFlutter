@@ -148,3 +148,21 @@ final testSession = SessionData(
   self: connectionMetadata,
   peer: connectionMetadata,
 );
+
+final testSession2 = SessionData(
+  topic: 'x',
+  pairingTopic: 'y',
+  relay: Relay('irn'),
+  expiry: 1,
+  acknowledged: true,
+  controller: 'test',
+  namespaces: {
+    'test': const Namespace(
+      accounts: ['abc'],
+      methods: ['method1'],
+      events: [],
+    ),
+  },
+  self: connectionMetadata,
+  peer: connectionMetadata,
+);

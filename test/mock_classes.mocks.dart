@@ -403,6 +403,14 @@ class MockExplorerService extends _i1.Mock implements _i13.ExplorerService {
         returnValue: '',
       ) as String);
   @override
+  set previousRecentWallet(String? _previousRecentWallet) => super.noSuchMethod(
+        Invocation.setter(
+          #previousRecentWallet,
+          _previousRecentWallet,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   _i4.Future<void> init() => (super.noSuchMethod(
         Invocation.method(
           #init,
@@ -629,10 +637,12 @@ class MockWalletConnectModalService extends _i1.Mock
         returnValueForMissingStub: _i4.Future<void>.value(),
       ) as _i4.Future<void>);
   @override
-  _i4.Future<void> disconnect() => (super.noSuchMethod(
+  _i4.Future<void> disconnect({bool? disconnectAllSessions = true}) =>
+      (super.noSuchMethod(
         Invocation.method(
           #disconnect,
           [],
+          {#disconnectAllSessions: disconnectAllSessions},
         ),
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),
@@ -696,6 +706,16 @@ class MockWalletConnectModalService extends _i1.Mock
         ),
         returnValue: '',
       ) as String);
+  @override
+  _i4.Future<void> disconnectSession(_i6.SessionData? toDisconnect) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #disconnectSession,
+          [toDisconnect],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
   @override
   void registerListeners() => super.noSuchMethod(
         Invocation.method(

@@ -219,9 +219,58 @@ void main() {
         );
       });
 
-      test('calls disconnectSession on web3App', () async {
+      test(
+          'only disconnects the current session, if disconnectAllSessions is false',
+          () async {
         when(sessions.getAll()).thenReturn(
-          [testSession],
+          [testSession, testSession2],
+        );
+
+        await service.init();
+
+        int count = 0;
+        f() {
+          count++;
+        }
+
+        service.addListener(f);
+
+        when(
+          web3App.disconnectSession(
+            topic: anyNamed('topic'),
+            reason: anyNamed('reason'),
+          ),
+        ).thenAnswer((_) async {});
+
+        await service.disconnect(disconnectAllSessions: false);
+
+        verifyInOrder([
+          web3App.disconnectSession(
+            topic: testSession.pairingTopic,
+            reason: anyNamed('reason'),
+          ),
+          web3App.disconnectSession(
+            topic: testSession.topic,
+            reason: anyNamed('reason'),
+          )
+        ]);
+
+        expect(service.isConnected, isFalse);
+        expect(service.session, isNull);
+        expect(service.address, '');
+        expect(count, 1);
+
+        // Should null things out and notify listeners
+        await service.disconnect();
+
+        expect(count, 2);
+
+        service.removeListener(f);
+      });
+
+      test('calls disconnectSession multiple times on web3App', () async {
+        when(sessions.getAll()).thenReturn(
+          [testSession, testSession2],
         );
 
         await service.init();
@@ -249,6 +298,14 @@ void main() {
           ),
           web3App.disconnectSession(
             topic: testSession.topic,
+            reason: anyNamed('reason'),
+          ),
+          web3App.disconnectSession(
+            topic: testSession2.pairingTopic,
+            reason: anyNamed('reason'),
+          ),
+          web3App.disconnectSession(
+            topic: testSession2.topic,
             reason: anyNamed('reason'),
           )
         ]);

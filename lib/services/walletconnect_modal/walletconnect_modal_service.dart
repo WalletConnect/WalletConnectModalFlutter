@@ -262,7 +262,9 @@ class WalletConnectModalService extends ChangeNotifier
   }
 
   @override
-  Future<void> disconnect() async {
+  Future<void> disconnect({
+    bool disconnectAllSessions = true,
+  }) async {
     checkInitialized();
 
     // If we don't have a session, disconnect automatically and notify listeners
@@ -273,31 +275,14 @@ class WalletConnectModalService extends ChangeNotifier
       return;
     }
 
-    // Disconnect both the pairing and session
-    await web3App!.disconnectSession(
-      topic: session!.pairingTopic,
-      // ignore: prefer_const_constructors
-      reason: WalletConnectError(
-        code: 0,
-        message: 'User disconnected',
-      ),
-    );
-    // Disconnecting the session will produce the onSessionDisconnect callback
-    await web3App!.disconnectSession(
-      topic: session!.topic,
-      // ignore: prefer_const_constructors
-      reason: WalletConnectError(
-        code: 0,
-        message: 'User disconnected',
-      ),
-    );
-
-    // As a failsafe (If the session is expired for example), set the session to null and notify listeners
-    if (_session != null) {
-      _isConnected = false;
-      _address = '';
-      _session = null;
-      notifyListeners();
+    // If we want to disconnect all sessions, loop through them and disconnect them
+    if (disconnectAllSessions) {
+      for (final SessionData session in web3App!.sessions.getAll()) {
+        await disconnectSession(session);
+      }
+    } else {
+      // Disconnect the session
+      await disconnectSession(_session!);
     }
   }
 
@@ -441,6 +426,36 @@ class WalletConnectModalService extends ChangeNotifier
   }
 
   ////// Private methods //////
+
+  @protected
+  Future<void> disconnectSession(SessionData toDisconnect) async {
+    // Disconnect both the pairing and session
+    await web3App!.disconnectSession(
+      topic: toDisconnect.pairingTopic,
+      // ignore: prefer_const_constructors
+      reason: WalletConnectError(
+        code: 0,
+        message: 'User disconnected',
+      ),
+    );
+    // Disconnecting the session will produce the onSessionDisconnect callback
+    await web3App!.disconnectSession(
+      topic: toDisconnect.topic,
+      // ignore: prefer_const_constructors
+      reason: WalletConnectError(
+        code: 0,
+        message: 'User disconnected',
+      ),
+    );
+
+    // As a failsafe (If the session is expired for example), set the session to null and notify listeners
+    if (_session != null && session!.topic == toDisconnect.topic) {
+      _isConnected = false;
+      _address = '';
+      _session = null;
+      notifyListeners();
+    }
+  }
 
   @protected
   Redirect? constructRedirect() {
