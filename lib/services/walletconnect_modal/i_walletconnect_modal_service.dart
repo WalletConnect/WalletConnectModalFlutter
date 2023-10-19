@@ -1,3 +1,4 @@
+import 'package:event/event.dart';
 import 'package:flutter/material.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';
@@ -33,8 +34,9 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
   /// This is only available after the [open] function is called.
   String? get wcUri;
 
-  /// The service used to fetch wallet listings from the explorer API.
-  // abstract final IExplorerService explorerService;
+  final Event<EventArgs> onPairingExpire = Event();
+
+  Future<void> clearPreviousInactivePairings();
 
   /// Sets up the explorer and the web3App if they already been initialized.
   Future<void> init();
@@ -55,15 +57,11 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
 
   /// Disconnects the session and pairing, if any.
   /// If there is no session, this does nothing.
-  Future<void> disconnect({
-    bool disconnectAllSessions = true,
-  });
+  Future<void> disconnect({bool disconnectAllSessions = true});
 
   Future<void> launchCurrentWallet();
 
-  Future<void> connectWallet({
-    required WalletData walletData,
-  });
+  Future<void> connectWallet({required WalletData walletData});
 
   /// The required namespaces that will be used when connecting to the wallet
   Map<String, RequiredNamespace> get requiredNamespaces;

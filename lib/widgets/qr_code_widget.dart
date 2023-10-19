@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:event/event.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
@@ -28,31 +29,31 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
   @override
   void initState() {
     super.initState();
-    // _qrCode = widget.service.wcUri!;
-
-    _initialize();
-
-    // widget.service.addListener(_qrCodeChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      widget.service.addListener(_rebuild);
+      widget.service.onPairingExpire.subscribe(_onPairingExpire);
+      await widget.service.rebuildConnectionUri();
+    });
   }
 
-  Future<void> _initialize() async {
-    if (_initialized) {
-      return;
-    }
-
+  void _onPairingExpire(EventArgs? args) async {
     await widget.service.rebuildConnectionUri();
+  }
 
+  @override
+  void dispose() {
+    widget.service.onPairingExpire.unsubscribe(_onPairingExpire);
+    widget.service.removeListener(_rebuild);
+    widget.service.clearPreviousInactivePairings();
+    super.dispose();
+  }
+
+  void _rebuild() {
     setState(() {
       _qrCode = widget.service.wcUri!;
       _initialized = true;
     });
   }
-
-  // @override
-  // void dispose() {
-  //   widget.service.removeListener(_qrCodeChanged);
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {

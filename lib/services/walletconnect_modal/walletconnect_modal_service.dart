@@ -70,6 +70,9 @@ class WalletConnectModalService extends ChangeNotifier
   @override
   Map<String, RequiredNamespace> get optionalNamespaces => _optionalNamespaces;
 
+  @override
+  final Event<EventArgs> onPairingExpire = Event();
+
   ConnectResponse? connectResponse;
   Future<SessionData>? get sessionFuture => connectResponse?.session.future;
   BuildContext? context;
@@ -142,6 +145,8 @@ class WalletConnectModalService extends ChangeNotifier
       await WalletConnectModalServices.init();
     } catch (_) {}
 
+    await clearPreviousInactivePairings();
+
     if (_web3App!.sessions.getAll().isNotEmpty) {
       _isConnected = true;
       _session = _web3App!.sessions.getAll().first;
@@ -153,6 +158,15 @@ class WalletConnectModalService extends ChangeNotifier
     _isInitialized = true;
 
     notifyListeners();
+  }
+
+  @override
+  Future<void> clearPreviousInactivePairings() async {
+    for (var pairing in _web3App!.pairings.getAll()) {
+      if (!pairing.active) {
+        await _web3App!.core.expirer.expire(pairing.topic);
+      }
+    }
   }
 
   @override
@@ -176,12 +190,8 @@ class WalletConnectModalService extends ChangeNotifier
 
     _isOpen = true;
 
-    rebuildConnectionUri();
-
     // Reset the explorer
-    explorerService.instance!.filterList(
-      query: '',
-    );
+    explorerService.instance!.filterList(query: '');
     widgetStack.instance.clear();
 
     this.context = context;
@@ -341,15 +351,20 @@ class WalletConnectModalService extends ChangeNotifier
         }
       }
 
+      _web3App!.core.pairing.onPairingExpire.subscribe(_onPairingExpire);
       connectResponse = await web3App!.connect(
         requiredNamespaces: requiredNamespaces,
         optionalNamespaces: optionalNamespaces,
       );
 
       notifyListeners();
-
       awaitConnectResponse();
     }
+  }
+
+  void _onPairingExpire(PairingEvent? args) async {
+    _web3App!.core.pairing.onPairingExpire.unsubscribe(_onPairingExpire);
+    onPairingExpire.broadcast();
   }
 
   bool _connectingWallet = false;
