@@ -242,7 +242,6 @@ class SessionWidgetState extends State<SessionWidget> {
   ) {
     switch (type) {
       case ChainType.eip155:
-        print('swag');
         return EIP155.callMethod(
           web3App: widget.web3App,
           topic: widget.session.topic,
