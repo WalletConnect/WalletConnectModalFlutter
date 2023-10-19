@@ -1,6 +1,7 @@
 ## 2.1.12
 
 - Update `walletconnect_flutter_v2` to use latest 2.1.5 version
+- Rebuild connection URI after pairing expiration.
   
 ## 2.1.11
 
