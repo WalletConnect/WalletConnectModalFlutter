@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
       DeviceOrientation.portraitDown,
     ]);
 
-    LoggerUtil.setLogLevel(Level.verbose);
+    LoggerUtil.setLogLevel(Level.error);
   }
 
   // This widget is the root of your application.

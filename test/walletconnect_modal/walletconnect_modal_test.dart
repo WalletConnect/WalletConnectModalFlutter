@@ -18,8 +18,9 @@ void main() {
     late MockWalletConnectModalService service;
     late MockWeb3App web3App;
     late MockSessions sessions;
+    late MockPairingStore pairings;
     late MockExplorerService es;
-    final MockPlatformUtils mockPlatformUtils = MockPlatformUtils();
+    final mockPlatformUtils = MockPlatformUtils();
 
     setUp(() async {
       // Setup the singletons
@@ -43,12 +44,23 @@ void main() {
       when(sessions.getAll()).thenReturn(
         [],
       );
+      pairings = MockPairingStore();
+      when(web3App.pairings).thenReturn(
+        pairings,
+      );
+      when(pairings.getAll()).thenReturn(
+        [],
+      );
+
       es = MockExplorerService();
       when(es.initialized).thenReturn(ValueNotifier(true));
       when(es.itemList).thenReturn(ValueNotifier(itemList));
       explorerService.instance = es;
 
       service = MockWalletConnectModalService();
+      when(service.onPairingExpireEvent).thenReturn(
+        Event(),
+      );
       when(service.wcUri).thenReturn('test');
       when(service.isInitialized).thenReturn(true);
       // when(service.rebuildConnectionUri()).thenAnswer(
@@ -88,15 +100,11 @@ void main() {
           findsOneWidget,
         );
         expect(
-          find.byKey(
-            WalletConnectModalConstants.helpButtonKey,
-          ),
+          find.byKey(WalletConnectModalConstants.helpButtonKey),
           findsOneWidget,
         );
         expect(
-          find.byKey(
-            WalletConnectModalConstants.closeModalButtonKey,
-          ),
+          find.byKey(WalletConnectModalConstants.closeModalButtonKey),
           findsOneWidget,
         );
 
@@ -105,136 +113,113 @@ void main() {
 
         // Navbar Back Button doesn't exist on home
         expect(
-          find.byKey(
-            WalletConnectModalConstants.navbarBackButtonKey,
-          ),
+          find.byKey(WalletConnectModalConstants.navbarBackButtonKey),
           findsNothing,
         );
 
-        // Help Button
-        await tester.tap(find.byKey(
-          WalletConnectModalConstants.helpButtonKey,
-        ));
+        // Tap on Help Button from initial page
+        await tester.tap(find.byKey(WalletConnectModalConstants.helpButtonKey));
         await tester.pumpAndSettle();
+        // Shows What is a wallet screen
         expect(
-          find.byKey(
-            WalletConnectModalConstants.helpPageKey,
-          ),
+          find.byKey(WalletConnectModalConstants.helpPageKey),
           findsOneWidget,
         );
         expect(
-          find.byKey(
-            WalletConnectModalConstants.navbarBackButtonKey,
-          ),
+          find.byKey(WalletConnectModalConstants.navbarBackButtonKey),
           findsOneWidget,
         );
 
-        // Get a wallet
-        await tester.tap(find.byKey(
-          WalletConnectModalConstants.getAWalletButtonKey,
-        ));
+        // Tap on Get a Wallet Button from What is a wallet screen page
+        await tester
+            .tap(find.byKey(WalletConnectModalConstants.getAWalletButtonKey));
         await tester.pumpAndSettle();
+        // Shows Get a wallet page
         expect(
-          find.byKey(
-            WalletConnectModalConstants.getAWalletPageKey,
-          ),
+          find.byKey(WalletConnectModalConstants.getAWalletPageKey),
           findsOneWidget,
         );
 
-        // Help Button Toggles Back from get a wallet
+        // Tap on Help Button from Get a wallet page
         expect(
-          find.byKey(
-            WalletConnectModalConstants.helpButtonKey,
-          ),
+          find.byKey(WalletConnectModalConstants.helpButtonKey),
           findsOneWidget,
         );
         await tester.tap(
-          find.byKey(
-            WalletConnectModalConstants.helpButtonKey,
-          ),
+          find.byKey(WalletConnectModalConstants.helpButtonKey),
         );
+        // Should pop back to What is a wallet page
         await tester.pumpAndSettle();
         expect(
-          find.byKey(
-            WalletConnectModalConstants.helpPageKey,
-          ),
+          find.byKey(WalletConnectModalConstants.helpPageKey),
+          findsOneWidget,
+        );
+        expect(
+          find.text('What is a wallet?'),
           findsOneWidget,
         );
 
-        // Help button toggles off
+        // Tap on Help Button from What is a wallet page
         expect(
-          find.byKey(
-            WalletConnectModalConstants.helpButtonKey,
-          ),
+          find.byKey(WalletConnectModalConstants.helpButtonKey),
           findsOneWidget,
         );
         await tester.tap(
-          find.byKey(
-            WalletConnectModalConstants.helpButtonKey,
-          ),
+          find.byKey(WalletConnectModalConstants.helpButtonKey),
         );
+        // should go back to home
         await tester.pumpAndSettle();
         expect(
-          find.byKey(
-            WalletConnectModalConstants.helpPageKey,
-          ),
-          findsNothing,
+          find.text('Connect your wallet'),
+          findsOneWidget,
         );
+        // Check initial state again
         expect(
-          find.byKey(
-            WalletConnectModalConstants.qrCodeAndWalletListPageKey,
-          ),
+          find.byKey(WalletConnectModalConstants.qrCodeAndWalletListPageKey),
           findsOneWidget,
         );
         expect(
-          find.byKey(
-            WalletConnectModalConstants.navbarBackButtonKey,
-          ),
+          find.byKey(WalletConnectModalConstants.helpButtonKey),
+          findsOneWidget,
+        );
+        expect(
+          find.byKey(WalletConnectModalConstants.closeModalButtonKey),
+          findsOneWidget,
+        );
+        expect(
+          find.byKey(WalletConnectModalConstants.navbarBackButtonKey),
           findsNothing,
         );
 
         // Grid List - View All
         expect(
-          find.byKey(
-            WalletConnectModalConstants.gridListViewAllButtonKey,
-          ),
+          find.byKey(WalletConnectModalConstants.gridListViewAllButtonKey),
           findsOneWidget,
         );
         await tester.tap(
-          find.byKey(
-            WalletConnectModalConstants.gridListViewAllButtonKey,
-          ),
+          find.byKey(WalletConnectModalConstants.gridListViewAllButtonKey),
         );
         await tester.pumpAndSettle();
         expect(
-          find.byKey(
-            WalletConnectModalConstants.walletListLongPageKey,
-          ),
+          find.byKey(WalletConnectModalConstants.walletListLongPageKey),
           findsOneWidget,
         );
 
         // Navbar Back Button
         expect(
-          find.byKey(
-            WalletConnectModalConstants.navbarBackButtonKey,
-          ),
+          find.byKey(WalletConnectModalConstants.navbarBackButtonKey),
           findsOneWidget,
         );
         await tester.tap(find.byKey(
           WalletConnectModalConstants.navbarBackButtonKey,
         ));
-        // await tester.pump();
         await tester.pumpAndSettle();
         expect(
-          find.byKey(
-            WalletConnectModalConstants.qrCodeAndWalletListPageKey,
-          ),
+          find.byKey(WalletConnectModalConstants.qrCodeAndWalletListPageKey),
           findsOneWidget,
         );
         expect(
-          find.byKey(
-            WalletConnectModalConstants.navbarBackButtonKey,
-          ),
+          find.byKey(WalletConnectModalConstants.navbarBackButtonKey),
           findsNothing,
         );
 

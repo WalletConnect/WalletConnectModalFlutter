@@ -39,7 +39,7 @@ class WalletConnectModalServices {
     await explorer.init();
     for (final entry in _initFunctions.entries) {
       LoggerUtil.logger
-          .v('WalletConnectModalServices init service: ${entry.key}');
+          .t('WalletConnectModalServices init service: ${entry.key}');
       await entry.value();
     }
   }

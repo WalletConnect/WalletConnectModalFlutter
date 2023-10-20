@@ -1,0 +1,2 @@
+dartdoc:
+  include: ["walletconnect_modal_flutter", "walletconnect_flutter_v2"]

@@ -15,9 +15,7 @@ import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_provider
 
 class WalletListShortPage extends StatelessWidget {
   const WalletListShortPage()
-      : super(
-          key: WalletConnectModalConstants.walletListShortPageKey,
-        );
+      : super(key: WalletConnectModalConstants.walletListShortPageKey);
 
   @override
   Widget build(BuildContext context) {

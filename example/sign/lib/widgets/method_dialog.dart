@@ -48,17 +48,12 @@ class MethodDialogState extends State<MethodDialog> {
           if (snapshot.hasData) {
             final String t = jsonEncode(snapshot.data);
             return InkWell(
-              onTap: () async {
-                await Clipboard.setData(
-                  ClipboardData(
-                    text: t,
+              onTap: () {
+                Clipboard.setData(ClipboardData(text: t)).then(
+                  (_) => showPlatformToast(
+                    child: const Text(StringConstants.copiedToClipboard),
+                    context: context,
                   ),
-                );
-                showPlatformToast(
-                  child: const Text(
-                    StringConstants.copiedToClipboard,
-                  ),
-                  context: context,
                 );
               },
               child: Text(
@@ -69,15 +64,12 @@ class MethodDialogState extends State<MethodDialog> {
             return InkWell(
               onTap: () async {
                 await Clipboard.setData(
-                  ClipboardData(
-                    text: snapshot.data.toString(),
+                  ClipboardData(text: snapshot.data.toString()),
+                ).then(
+                  (_) => showPlatformToast(
+                    child: const Text(StringConstants.copiedToClipboard),
+                    context: context,
                   ),
-                );
-                showPlatformToast(
-                  child: const Text(
-                    StringConstants.copiedToClipboard,
-                  ),
-                  context: context,
                 );
               },
               child: Text(

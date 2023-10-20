@@ -131,7 +131,7 @@ class ExplorerService implements IExplorerService {
       bool installed = await urlUtils.instance.isInstalled(uri);
       bool recent = recentWallet == item.id;
       if (installed) {
-        LoggerUtil.logger.v('Wallet ${item.name} installed: $installed');
+        LoggerUtil.logger.t('Wallet ${item.name} installed: $installed');
       }
 
       _walletListUnsorted.add(

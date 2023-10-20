@@ -178,6 +178,6 @@ You can launch the currently connected wallet by calling `service.launchCurrentW
 
 ### Commands
 
-`dart run build_runner build --delete-conflicting-outputs`
+`flutter pub run build_runner build --delete-conflicting-outputs`
 
 

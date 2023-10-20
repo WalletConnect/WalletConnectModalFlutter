@@ -1,8 +1,8 @@
 import 'dart:math';
 
+import 'package:event/event.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/services/utils/platform/platform_utils_singleton.dart';
 import 'package:walletconnect_modal_flutter/services/walletconnect_modal/i_walletconnect_modal_service.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
@@ -28,36 +28,36 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
   @override
   void initState() {
     super.initState();
-    // _qrCode = widget.service.wcUri!;
-
-    _initialize();
-
-    // widget.service.addListener(_qrCodeChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      widget.service.addListener(_rebuild);
+      widget.service.onPairingExpireEvent.subscribe(_onPairingExpire);
+      await widget.service.rebuildConnectionUri();
+      _rebuild();
+    });
   }
 
-  Future<void> _initialize() async {
-    if (_initialized) {
-      return;
-    }
-
+  void _onPairingExpire(EventArgs? args) async {
     await widget.service.rebuildConnectionUri();
+  }
 
+  @override
+  void dispose() {
+    widget.service.onPairingExpireEvent.unsubscribe(_onPairingExpire);
+    widget.service.removeListener(_rebuild);
+    widget.service.clearPreviousInactivePairings();
+    super.dispose();
+  }
+
+  void _rebuild() {
     setState(() {
       _qrCode = widget.service.wcUri!;
       _initialized = true;
     });
   }
 
-  // @override
-  // void dispose() {
-  //   widget.service.removeListener(_qrCodeChanged);
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
-    WalletConnectModalThemeData themeData =
-        WalletConnectModalTheme.getData(context);
+    final themeData = WalletConnectModalTheme.getData(context);
 
     bool isLongBottomSheet = platformUtils.instance.isLongBottomSheet(
       MediaQuery.of(context).orientation,

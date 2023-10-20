@@ -23,6 +23,7 @@ void main() {
     late WalletConnectModalService service;
     late MockWeb3App web3App;
     late MockSessions sessions;
+    late MockPairingStore pairings;
     late MockExplorerService es;
 
     // Assuming these objects have been defined somewhere in your actual code
@@ -66,6 +67,14 @@ void main() {
         sessions,
       );
       when(sessions.getAll()).thenReturn(
+        [],
+      );
+
+      pairings = MockPairingStore();
+      when(web3App.pairings).thenReturn(
+        pairings,
+      );
+      when(pairings.getAll()).thenReturn(
         [],
       );
 
@@ -113,12 +122,12 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      verify(
+      verifyNever(
         web3App.connect(
           requiredNamespaces: anyNamed('requiredNamespaces'),
           optionalNamespaces: anyNamed('optionalNamespaces'),
         ),
-      ).called(1);
+      );
       verify(es.filterList(query: '')).called(1);
       // Once by the open, again by the WalletConnectModal in its init
       verify(mockPlatformUtils.getPlatformType()).called(1);

@@ -25,6 +25,7 @@ void main() {
     late MockRelayClient mockRelayClient;
     late MockUrlUtils mockUrlUtils;
     late MockToastUtils mockToastUtils;
+    late MockPairingStore pairings;
 
     setUp(() {
       web3App = MockWeb3App();
@@ -34,6 +35,7 @@ void main() {
       mockRelayClient = MockRelayClient();
       mockUrlUtils = MockUrlUtils();
       mockToastUtils = MockToastUtils();
+      pairings = MockPairingStore();
 
       // WEB3APP, RELAY, SESSION
       core = Core(projectId: 'projectId');
@@ -56,6 +58,12 @@ void main() {
         sessions,
       );
       when(sessions.getAll()).thenReturn(
+        [],
+      );
+      when(web3App.pairings).thenReturn(
+        pairings,
+      );
+      when(pairings.getAll()).thenReturn(
         [],
       );
 

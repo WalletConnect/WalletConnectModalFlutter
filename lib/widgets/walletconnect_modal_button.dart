@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:walletconnect_modal_flutter/models/walletconnect_modal_theme_data.dart';
 import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
 
 class WalletConnectModalButton extends StatelessWidget {
@@ -32,8 +31,7 @@ class WalletConnectModalButton extends StatelessWidget {
   }
 
   Widget _buildButton(BuildContext context) {
-    final WalletConnectModalThemeData themeData =
-        WalletConnectModalTheme.getData(context);
+    final themeData = WalletConnectModalTheme.getData(context);
 
     if (disabled) {
       return MaterialButton(

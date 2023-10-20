@@ -89,7 +89,7 @@ class UrlUtils extends IUrlUtils {
     LoggerUtil.logger.i(
       'Navigating deep links. Native: ${nativeUri.toString()}, Universal: ${universalUri.toString()}',
     );
-    LoggerUtil.logger.v(
+    LoggerUtil.logger.t(
       'Deep Link Query Params. Native: ${nativeUri?.queryParameters}, Universal: ${universalUri?.queryParameters}',
     );
 
@@ -125,7 +125,7 @@ class UrlUtils extends IUrlUtils {
           }
         }
       } else if (universalUri != null) {
-        LoggerUtil.logger.v(
+        LoggerUtil.logger.t(
           'Navigating deep links. Launching universal URI.',
         );
         final bool launched = await launchUrlFunc(
