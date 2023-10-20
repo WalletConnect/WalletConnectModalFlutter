@@ -15,6 +15,8 @@ import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i19;
 import 'package:url_launcher/url_launcher.dart' as _i21;
 import 'package:w_common/disposable.dart' as _i6;
+import 'package:walletconnect_flutter_v2/apis/core/pairing/pairing_store.dart'
+    as _i31;
 import 'package:walletconnect_flutter_v2/apis/core/relay_client/i_message_tracker.dart'
     as _i11;
 import 'package:walletconnect_flutter_v2/apis/core/relay_client/json_rpc_2/src/peer.dart'
@@ -302,6 +304,16 @@ class _FakeStreamedResponse_22 extends _i1.SmartFake
         );
 }
 
+class _FakePairingInfo_23 extends _i1.SmartFake implements _i7.PairingInfo {
+  _FakePairingInfo_23(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [ExplorerService].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -502,11 +514,11 @@ class MockWalletConnectModalService extends _i1.Mock
   }
 
   @override
-  _i4.Event<_i4.EventArgs> get onPairingExpire => (super.noSuchMethod(
-        Invocation.getter(#onPairingExpire),
+  _i4.Event<_i4.EventArgs> get onPairingExpireEvent => (super.noSuchMethod(
+        Invocation.getter(#onPairingExpireEvent),
         returnValue: _FakeEvent_2<_i4.EventArgs>(
           this,
-          Invocation.getter(#onPairingExpire),
+          Invocation.getter(#onPairingExpireEvent),
         ),
       ) as _i4.Event<_i4.EventArgs>);
   @override
@@ -2607,6 +2619,228 @@ class MockClient extends _i1.Mock implements _i3.Client {
   void close() => super.noSuchMethod(
         Invocation.method(
           #close,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [PairingStore].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockPairingStore extends _i1.Mock implements _i31.PairingStore {
+  @override
+  String get context => (super.noSuchMethod(
+        Invocation.getter(#context),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
+  @override
+  String get version => (super.noSuchMethod(
+        Invocation.getter(#version),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
+  @override
+  _i10.IStore<dynamic> get storage => (super.noSuchMethod(
+        Invocation.getter(#storage),
+        returnValue: _FakeIStore_17<dynamic>(
+          this,
+          Invocation.getter(#storage),
+        ),
+        returnValueForMissingStub: _FakeIStore_17<dynamic>(
+          this,
+          Invocation.getter(#storage),
+        ),
+      ) as _i10.IStore<dynamic>);
+  @override
+  _i4.Event<_i7.StoreCreateEvent<_i7.PairingInfo>> get onCreate =>
+      (super.noSuchMethod(
+        Invocation.getter(#onCreate),
+        returnValue: _FakeEvent_2<_i7.StoreCreateEvent<_i7.PairingInfo>>(
+          this,
+          Invocation.getter(#onCreate),
+        ),
+        returnValueForMissingStub:
+            _FakeEvent_2<_i7.StoreCreateEvent<_i7.PairingInfo>>(
+          this,
+          Invocation.getter(#onCreate),
+        ),
+      ) as _i4.Event<_i7.StoreCreateEvent<_i7.PairingInfo>>);
+  @override
+  _i4.Event<_i7.StoreUpdateEvent<_i7.PairingInfo>> get onUpdate =>
+      (super.noSuchMethod(
+        Invocation.getter(#onUpdate),
+        returnValue: _FakeEvent_2<_i7.StoreUpdateEvent<_i7.PairingInfo>>(
+          this,
+          Invocation.getter(#onUpdate),
+        ),
+        returnValueForMissingStub:
+            _FakeEvent_2<_i7.StoreUpdateEvent<_i7.PairingInfo>>(
+          this,
+          Invocation.getter(#onUpdate),
+        ),
+      ) as _i4.Event<_i7.StoreUpdateEvent<_i7.PairingInfo>>);
+  @override
+  _i4.Event<_i7.StoreDeleteEvent<_i7.PairingInfo>> get onDelete =>
+      (super.noSuchMethod(
+        Invocation.getter(#onDelete),
+        returnValue: _FakeEvent_2<_i7.StoreDeleteEvent<_i7.PairingInfo>>(
+          this,
+          Invocation.getter(#onDelete),
+        ),
+        returnValueForMissingStub:
+            _FakeEvent_2<_i7.StoreDeleteEvent<_i7.PairingInfo>>(
+          this,
+          Invocation.getter(#onDelete),
+        ),
+      ) as _i4.Event<_i7.StoreDeleteEvent<_i7.PairingInfo>>);
+  @override
+  _i4.Event<_i7.StoreSyncEvent> get onSync => (super.noSuchMethod(
+        Invocation.getter(#onSync),
+        returnValue: _FakeEvent_2<_i7.StoreSyncEvent>(
+          this,
+          Invocation.getter(#onSync),
+        ),
+        returnValueForMissingStub: _FakeEvent_2<_i7.StoreSyncEvent>(
+          this,
+          Invocation.getter(#onSync),
+        ),
+      ) as _i4.Event<_i7.StoreSyncEvent>);
+  @override
+  Map<String, _i7.PairingInfo> get data => (super.noSuchMethod(
+        Invocation.getter(#data),
+        returnValue: <String, _i7.PairingInfo>{},
+        returnValueForMissingStub: <String, _i7.PairingInfo>{},
+      ) as Map<String, _i7.PairingInfo>);
+  @override
+  set data(Map<String, _i7.PairingInfo>? _data) => super.noSuchMethod(
+        Invocation.setter(
+          #data,
+          _data,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i7.PairingInfo Function(dynamic) get fromJson => (super.noSuchMethod(
+        Invocation.getter(#fromJson),
+        returnValue: (dynamic __p0) => _FakePairingInfo_23(
+          this,
+          Invocation.getter(#fromJson),
+        ),
+        returnValueForMissingStub: (dynamic __p0) => _FakePairingInfo_23(
+          this,
+          Invocation.getter(#fromJson),
+        ),
+      ) as _i7.PairingInfo Function(dynamic));
+  @override
+  String get storageKey => (super.noSuchMethod(
+        Invocation.getter(#storageKey),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
+  @override
+  _i5.Future<void> update(
+    String? topic, {
+    int? expiry,
+    bool? active,
+    _i7.PairingMetadata? metadata,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #update,
+          [topic],
+          {
+            #expiry: expiry,
+            #active: active,
+            #metadata: metadata,
+          },
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+  @override
+  _i5.Future<void> init() => (super.noSuchMethod(
+        Invocation.method(
+          #init,
+          [],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+  @override
+  bool has(String? key) => (super.noSuchMethod(
+        Invocation.method(
+          #has,
+          [key],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  _i7.PairingInfo? get(String? key) => (super.noSuchMethod(
+        Invocation.method(
+          #get,
+          [key],
+        ),
+        returnValueForMissingStub: null,
+      ) as _i7.PairingInfo?);
+  @override
+  List<_i7.PairingInfo> getAll() => (super.noSuchMethod(
+        Invocation.method(
+          #getAll,
+          [],
+        ),
+        returnValue: <_i7.PairingInfo>[],
+        returnValueForMissingStub: <_i7.PairingInfo>[],
+      ) as List<_i7.PairingInfo>);
+  @override
+  _i5.Future<void> set(
+    String? key,
+    _i7.PairingInfo? value,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #set,
+          [
+            key,
+            value,
+          ],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+  @override
+  _i5.Future<void> delete(String? key) => (super.noSuchMethod(
+        Invocation.method(
+          #delete,
+          [key],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+  @override
+  _i5.Future<void> persist() => (super.noSuchMethod(
+        Invocation.method(
+          #persist,
+          [],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+  @override
+  _i5.Future<void> restore() => (super.noSuchMethod(
+        Invocation.method(
+          #restore,
+          [],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+  @override
+  void checkInitialized() => super.noSuchMethod(
+        Invocation.method(
+          #checkInitialized,
           [],
         ),
         returnValueForMissingStub: null,

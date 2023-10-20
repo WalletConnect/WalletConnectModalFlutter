@@ -18,8 +18,7 @@ class QRCodePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final IWalletConnectModalService service =
-        WalletConnectModalProvider.of(context).service;
+    final service = WalletConnectModalProvider.of(context).service;
 
     return WalletConnectModalNavBar(
       title: const WalletConnectModalNavbarTitle(

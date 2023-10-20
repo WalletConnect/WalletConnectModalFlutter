@@ -1,3 +1,4 @@
+import 'package:walletconnect_flutter_v2/apis/core/pairing/pairing_store.dart';
 import 'package:walletconnect_flutter_v2/apis/core/relay_client/relay_client.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/explorer_service.dart';
@@ -9,16 +10,21 @@ import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 import 'package:mockito/annotations.dart';
 import 'package:http/http.dart' as http;
 
-@GenerateMocks([
-  ExplorerService,
-  WalletConnectModalService,
-  UrlUtils,
-  PlatformUtils,
-  ToastUtils,
-  Web3App,
-  Sessions,
-  RelayClient,
-  StorageService,
-  http.Client,
-])
+@GenerateMocks(
+  [
+    ExplorerService,
+    WalletConnectModalService,
+    UrlUtils,
+    PlatformUtils,
+    ToastUtils,
+    Web3App,
+    Sessions,
+    RelayClient,
+    StorageService,
+    http.Client,
+  ],
+  customMocks: [
+    MockSpec<PairingStore>(onMissingStub: OnMissingStub.returnDefault),
+  ],
+)
 class Mocks {}

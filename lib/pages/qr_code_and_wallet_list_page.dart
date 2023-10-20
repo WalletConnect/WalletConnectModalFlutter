@@ -14,9 +14,7 @@ import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_provider
 
 class QRCodeAndWalletListPage extends StatelessWidget {
   const QRCodeAndWalletListPage()
-      : super(
-          key: WalletConnectModalConstants.qrCodeAndWalletListPageKey,
-        );
+      : super(key: WalletConnectModalConstants.qrCodeAndWalletListPageKey);
 
   @override
   Widget build(BuildContext context) {

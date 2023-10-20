@@ -71,7 +71,7 @@ class WalletConnectModalService extends ChangeNotifier
   Map<String, RequiredNamespace> get optionalNamespaces => _optionalNamespaces;
 
   @override
-  final Event<EventArgs> onPairingExpire = Event();
+  final Event<EventArgs> onPairingExpireEvent = Event();
 
   ConnectResponse? connectResponse;
   Future<SessionData>? get sessionFuture => connectResponse?.session.future;
@@ -139,13 +139,9 @@ class WalletConnectModalService extends ChangeNotifier
     _initError = null;
     try {
       await _web3App!.init();
-    } catch (_) {}
-
-    try {
       await WalletConnectModalServices.init();
+      await clearPreviousInactivePairings();
     } catch (_) {}
-
-    await clearPreviousInactivePairings();
 
     if (_web3App!.sessions.getAll().isNotEmpty) {
       _isConnected = true;
@@ -364,7 +360,7 @@ class WalletConnectModalService extends ChangeNotifier
 
   void _onPairingExpire(PairingEvent? args) async {
     _web3App!.core.pairing.onPairingExpire.unsubscribe(_onPairingExpire);
-    onPairingExpire.broadcast();
+    onPairingExpireEvent.broadcast();
   }
 
   bool _connectingWallet = false;

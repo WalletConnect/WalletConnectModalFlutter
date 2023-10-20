@@ -34,7 +34,7 @@ abstract class IWalletConnectModalService implements ChangeNotifier {
   /// This is only available after the [open] function is called.
   String? get wcUri;
 
-  final Event<EventArgs> onPairingExpire = Event();
+  final Event<EventArgs> onPairingExpireEvent = Event();
 
   Future<void> clearPreviousInactivePairings();
 
