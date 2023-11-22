@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:walletconnect_modal_flutter/pages/qr_code_and_wallet_list_page.dart';
 import 'package:walletconnect_modal_flutter/pages/wallet_list_short_page.dart';
@@ -8,11 +7,6 @@ import 'package:walletconnect_modal_flutter/services/utils/widget_stack/i_widget
 
 class WidgetStack extends IWidgetStack {
   final List<Widget> _stack = [];
-
-  @override
-  final ValueListenable<Widget> current = ValueNotifier<Widget>(
-    const SizedBox.shrink(),
-  );
 
   @override
   Widget getCurrent() {

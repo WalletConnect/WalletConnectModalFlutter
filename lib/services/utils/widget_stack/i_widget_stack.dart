@@ -1,9 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 abstract class IWidgetStack with ChangeNotifier {
-  abstract final ValueListenable<Widget> current;
-
   /// Returns the current widget.
   Widget getCurrent();
 
