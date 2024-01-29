@@ -1,7 +1,5 @@
-// ignore: depend_on_referenced_packages
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:universal_io/io.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
 import 'dart:convert';

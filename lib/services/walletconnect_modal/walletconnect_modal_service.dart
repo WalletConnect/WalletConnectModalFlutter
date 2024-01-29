@@ -1,8 +1,5 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:async';
 
-import 'package:event/event.dart';
 import 'package:flutter/material.dart';
 import 'package:w_common/disposable.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';

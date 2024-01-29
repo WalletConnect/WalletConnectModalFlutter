@@ -6,35 +6,38 @@ part of 'listings.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_WalletData _$$_WalletDataFromJson(Map<String, dynamic> json) =>
-    _$_WalletData(
+_$WalletDataImpl _$$WalletDataImplFromJson(Map<String, dynamic> json) =>
+    _$WalletDataImpl(
       listing: Listing.fromJson(json['listing'] as Map<String, dynamic>),
       installed: json['installed'] as bool,
       recent: json['recent'] as bool,
     );
 
-Map<String, dynamic> _$$_WalletDataToJson(_$_WalletData instance) =>
+Map<String, dynamic> _$$WalletDataImplToJson(_$WalletDataImpl instance) =>
     <String, dynamic>{
       'listing': instance.listing.toJson(),
       'installed': instance.installed,
       'recent': instance.recent,
     };
 
-_$_ListingResponse _$$_ListingResponseFromJson(Map<String, dynamic> json) =>
-    _$_ListingResponse(
+_$ListingResponseImpl _$$ListingResponseImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ListingResponseImpl(
       listings: (json['listings'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(k, Listing.fromJson(e as Map<String, dynamic>)),
       ),
       total: json['total'] as int,
     );
 
-Map<String, dynamic> _$$_ListingResponseToJson(_$_ListingResponse instance) =>
+Map<String, dynamic> _$$ListingResponseImplToJson(
+        _$ListingResponseImpl instance) =>
     <String, dynamic>{
       'listings': instance.listings.map((k, e) => MapEntry(k, e.toJson())),
       'total': instance.total,
     };
 
-_$_Listing _$$_ListingFromJson(Map<String, dynamic> json) => _$_Listing(
+_$ListingImpl _$$ListingImplFromJson(Map<String, dynamic> json) =>
+    _$ListingImpl(
       id: json['id'] as String,
       name: json['name'] as String,
       homepage: json['homepage'] as String,
@@ -47,7 +50,7 @@ _$_Listing _$$_ListingFromJson(Map<String, dynamic> json) => _$_Listing(
       desktop: Redirect.fromJson(json['desktop'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$_ListingToJson(_$_Listing instance) {
+Map<String, dynamic> _$$ListingImplToJson(_$ListingImpl instance) {
   final val = <String, dynamic>{
     'id': instance.id,
     'name': instance.name,
@@ -68,7 +71,7 @@ Map<String, dynamic> _$$_ListingToJson(_$_Listing instance) {
   return val;
 }
 
-_$_App _$$_AppFromJson(Map<String, dynamic> json) => _$_App(
+_$AppImpl _$$AppImplFromJson(Map<String, dynamic> json) => _$AppImpl(
       browser: json['browser'] as String?,
       ios: json['ios'] as String?,
       android: json['android'] as String?,
@@ -82,7 +85,7 @@ _$_App _$$_AppFromJson(Map<String, dynamic> json) => _$_App(
       opera: json['opera'] as String?,
     );
 
-Map<String, dynamic> _$$_AppToJson(_$_App instance) {
+Map<String, dynamic> _$$AppImplToJson(_$AppImpl instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
@@ -105,19 +108,20 @@ Map<String, dynamic> _$$_AppToJson(_$_App instance) {
   return val;
 }
 
-_$_Injected _$$_InjectedFromJson(Map<String, dynamic> json) => _$_Injected(
+_$InjectedImpl _$$InjectedImplFromJson(Map<String, dynamic> json) =>
+    _$InjectedImpl(
       injectedId: json['injected_id'] as String,
       namespace: json['namespace'] as String,
     );
 
-Map<String, dynamic> _$$_InjectedToJson(_$_Injected instance) =>
+Map<String, dynamic> _$$InjectedImplToJson(_$InjectedImpl instance) =>
     <String, dynamic>{
       'injected_id': instance.injectedId,
       'namespace': instance.namespace,
     };
 
-_$_ListingParams _$$_ListingParamsFromJson(Map<String, dynamic> json) =>
-    _$_ListingParams(
+_$ListingParamsImpl _$$ListingParamsImplFromJson(Map<String, dynamic> json) =>
+    _$ListingParamsImpl(
       page: json['page'] as int?,
       search: json['search'] as String?,
       entries: json['entries'] as int?,
@@ -128,7 +132,7 @@ _$_ListingParams _$$_ListingParamsFromJson(Map<String, dynamic> json) =>
       sdks: json['sdks'] as String?,
     );
 
-Map<String, dynamic> _$$_ListingParamsToJson(_$_ListingParams instance) {
+Map<String, dynamic> _$$ListingParamsImplToJson(_$ListingParamsImpl instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {

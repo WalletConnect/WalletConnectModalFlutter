@@ -1,0 +1,1 @@
+Check out the [example app](https://github.com/WalletConnect/WalletConnectModalFlutter/tree/master/example/sign)

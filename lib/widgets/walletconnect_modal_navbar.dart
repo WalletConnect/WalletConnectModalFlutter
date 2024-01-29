@@ -60,6 +60,7 @@ class WalletConnectModalNavBar extends StatelessWidget {
             ],
           ),
         ),
+        const SizedBox(height: 12.0),
         child,
       ],
     );
