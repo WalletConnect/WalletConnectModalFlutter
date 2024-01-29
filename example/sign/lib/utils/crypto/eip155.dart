@@ -7,7 +7,6 @@ import 'package:walletconnect_flutter_dapp/utils/crypto/contract.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/test_data.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/web3dart_extension.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
-import 'package:web3dart/web3dart.dart';
 
 enum EIP155UIMethods {
   personalSign,

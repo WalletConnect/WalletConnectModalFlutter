@@ -12,18 +12,9 @@ class GridListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final WalletConnectModalThemeData themeData =
-    //     WalletConnectModalTheme.getData(context);
-
-    return
-        // Container(
-        // decoration: BoxDecoration(
-        //   color: themeData.overlay010,
-        //   borderRadius: BorderRadius.circular(8),
-        // ),
-        // child:
-        MaterialButton(
-      padding: const EdgeInsets.all(8),
+    return MaterialButton(
+      visualDensity: VisualDensity.compact,
+      padding: const EdgeInsets.all(0),
       onPressed: onSelect,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -33,7 +24,6 @@ class GridListItem extends StatelessWidget {
       hoverElevation: 1,
       highlightElevation: 1,
       child: child,
-      // ),
     );
   }
 }

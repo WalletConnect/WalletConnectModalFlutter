@@ -1,4 +1,3 @@
-import 'package:event/event.dart';
 import 'package:flutter/material.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/models/listings.dart';

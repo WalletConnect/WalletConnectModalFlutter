@@ -84,11 +84,11 @@ class _$WalletDataCopyWithImpl<$Res, $Val extends WalletData>
 }
 
 /// @nodoc
-abstract class _$$_WalletDataCopyWith<$Res>
+abstract class _$$WalletDataImplCopyWith<$Res>
     implements $WalletDataCopyWith<$Res> {
-  factory _$$_WalletDataCopyWith(
-          _$_WalletData value, $Res Function(_$_WalletData) then) =
-      __$$_WalletDataCopyWithImpl<$Res>;
+  factory _$$WalletDataImplCopyWith(
+          _$WalletDataImpl value, $Res Function(_$WalletDataImpl) then) =
+      __$$WalletDataImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Listing listing, bool installed, bool recent});
@@ -98,11 +98,11 @@ abstract class _$$_WalletDataCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_WalletDataCopyWithImpl<$Res>
-    extends _$WalletDataCopyWithImpl<$Res, _$_WalletData>
-    implements _$$_WalletDataCopyWith<$Res> {
-  __$$_WalletDataCopyWithImpl(
-      _$_WalletData _value, $Res Function(_$_WalletData) _then)
+class __$$WalletDataImplCopyWithImpl<$Res>
+    extends _$WalletDataCopyWithImpl<$Res, _$WalletDataImpl>
+    implements _$$WalletDataImplCopyWith<$Res> {
+  __$$WalletDataImplCopyWithImpl(
+      _$WalletDataImpl _value, $Res Function(_$WalletDataImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -112,7 +112,7 @@ class __$$_WalletDataCopyWithImpl<$Res>
     Object? installed = null,
     Object? recent = null,
   }) {
-    return _then(_$_WalletData(
+    return _then(_$WalletDataImpl(
       listing: null == listing
           ? _value.listing
           : listing // ignore: cast_nullable_to_non_nullable
@@ -132,12 +132,12 @@ class __$$_WalletDataCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(includeIfNull: false)
-class _$_WalletData implements _WalletData {
-  const _$_WalletData(
+class _$WalletDataImpl implements _WalletData {
+  const _$WalletDataImpl(
       {required this.listing, required this.installed, required this.recent});
 
-  factory _$_WalletData.fromJson(Map<String, dynamic> json) =>
-      _$$_WalletDataFromJson(json);
+  factory _$WalletDataImpl.fromJson(Map<String, dynamic> json) =>
+      _$$WalletDataImplFromJson(json);
 
   @override
   final Listing listing;
@@ -152,10 +152,10 @@ class _$_WalletData implements _WalletData {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_WalletData &&
+            other is _$WalletDataImpl &&
             (identical(other.listing, listing) || other.listing == listing) &&
             (identical(other.installed, installed) ||
                 other.installed == installed) &&
@@ -169,12 +169,12 @@ class _$_WalletData implements _WalletData {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_WalletDataCopyWith<_$_WalletData> get copyWith =>
-      __$$_WalletDataCopyWithImpl<_$_WalletData>(this, _$identity);
+  _$$WalletDataImplCopyWith<_$WalletDataImpl> get copyWith =>
+      __$$WalletDataImplCopyWithImpl<_$WalletDataImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_WalletDataToJson(
+    return _$$WalletDataImplToJson(
       this,
     );
   }
@@ -184,10 +184,10 @@ abstract class _WalletData implements WalletData {
   const factory _WalletData(
       {required final Listing listing,
       required final bool installed,
-      required final bool recent}) = _$_WalletData;
+      required final bool recent}) = _$WalletDataImpl;
 
   factory _WalletData.fromJson(Map<String, dynamic> json) =
-      _$_WalletData.fromJson;
+      _$WalletDataImpl.fromJson;
 
   @override
   Listing get listing;
@@ -197,7 +197,7 @@ abstract class _WalletData implements WalletData {
   bool get recent;
   @override
   @JsonKey(ignore: true)
-  _$$_WalletDataCopyWith<_$_WalletData> get copyWith =>
+  _$$WalletDataImplCopyWith<_$WalletDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -255,22 +255,22 @@ class _$ListingResponseCopyWithImpl<$Res, $Val extends ListingResponse>
 }
 
 /// @nodoc
-abstract class _$$_ListingResponseCopyWith<$Res>
+abstract class _$$ListingResponseImplCopyWith<$Res>
     implements $ListingResponseCopyWith<$Res> {
-  factory _$$_ListingResponseCopyWith(
-          _$_ListingResponse value, $Res Function(_$_ListingResponse) then) =
-      __$$_ListingResponseCopyWithImpl<$Res>;
+  factory _$$ListingResponseImplCopyWith(_$ListingResponseImpl value,
+          $Res Function(_$ListingResponseImpl) then) =
+      __$$ListingResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Map<String, Listing> listings, int total});
 }
 
 /// @nodoc
-class __$$_ListingResponseCopyWithImpl<$Res>
-    extends _$ListingResponseCopyWithImpl<$Res, _$_ListingResponse>
-    implements _$$_ListingResponseCopyWith<$Res> {
-  __$$_ListingResponseCopyWithImpl(
-      _$_ListingResponse _value, $Res Function(_$_ListingResponse) _then)
+class __$$ListingResponseImplCopyWithImpl<$Res>
+    extends _$ListingResponseCopyWithImpl<$Res, _$ListingResponseImpl>
+    implements _$$ListingResponseImplCopyWith<$Res> {
+  __$$ListingResponseImplCopyWithImpl(
+      _$ListingResponseImpl _value, $Res Function(_$ListingResponseImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -279,7 +279,7 @@ class __$$_ListingResponseCopyWithImpl<$Res>
     Object? listings = null,
     Object? total = null,
   }) {
-    return _then(_$_ListingResponse(
+    return _then(_$ListingResponseImpl(
       listings: null == listings
           ? _value._listings
           : listings // ignore: cast_nullable_to_non_nullable
@@ -295,13 +295,13 @@ class __$$_ListingResponseCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(includeIfNull: false)
-class _$_ListingResponse implements _ListingResponse {
-  const _$_ListingResponse(
+class _$ListingResponseImpl implements _ListingResponse {
+  const _$ListingResponseImpl(
       {required final Map<String, Listing> listings, required this.total})
       : _listings = listings;
 
-  factory _$_ListingResponse.fromJson(Map<String, dynamic> json) =>
-      _$$_ListingResponseFromJson(json);
+  factory _$ListingResponseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ListingResponseImplFromJson(json);
 
   final Map<String, Listing> _listings;
   @override
@@ -320,10 +320,10 @@ class _$_ListingResponse implements _ListingResponse {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ListingResponse &&
+            other is _$ListingResponseImpl &&
             const DeepCollectionEquality().equals(other._listings, _listings) &&
             (identical(other.total, total) || other.total == total));
   }
@@ -336,12 +336,13 @@ class _$_ListingResponse implements _ListingResponse {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ListingResponseCopyWith<_$_ListingResponse> get copyWith =>
-      __$$_ListingResponseCopyWithImpl<_$_ListingResponse>(this, _$identity);
+  _$$ListingResponseImplCopyWith<_$ListingResponseImpl> get copyWith =>
+      __$$ListingResponseImplCopyWithImpl<_$ListingResponseImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ListingResponseToJson(
+    return _$$ListingResponseImplToJson(
       this,
     );
   }
@@ -350,10 +351,10 @@ class _$_ListingResponse implements _ListingResponse {
 abstract class _ListingResponse implements ListingResponse {
   const factory _ListingResponse(
       {required final Map<String, Listing> listings,
-      required final int total}) = _$_ListingResponse;
+      required final int total}) = _$ListingResponseImpl;
 
   factory _ListingResponse.fromJson(Map<String, dynamic> json) =
-      _$_ListingResponse.fromJson;
+      _$ListingResponseImpl.fromJson;
 
   @override
   Map<String, Listing> get listings;
@@ -361,7 +362,7 @@ abstract class _ListingResponse implements ListingResponse {
   int get total;
   @override
   @JsonKey(ignore: true)
-  _$$_ListingResponseCopyWith<_$_ListingResponse> get copyWith =>
+  _$$ListingResponseImplCopyWith<_$ListingResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -489,10 +490,10 @@ class _$ListingCopyWithImpl<$Res, $Val extends Listing>
 }
 
 /// @nodoc
-abstract class _$$_ListingCopyWith<$Res> implements $ListingCopyWith<$Res> {
-  factory _$$_ListingCopyWith(
-          _$_Listing value, $Res Function(_$_Listing) then) =
-      __$$_ListingCopyWithImpl<$Res>;
+abstract class _$$ListingImplCopyWith<$Res> implements $ListingCopyWith<$Res> {
+  factory _$$ListingImplCopyWith(
+          _$ListingImpl value, $Res Function(_$ListingImpl) then) =
+      __$$ListingImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -514,10 +515,11 @@ abstract class _$$_ListingCopyWith<$Res> implements $ListingCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ListingCopyWithImpl<$Res>
-    extends _$ListingCopyWithImpl<$Res, _$_Listing>
-    implements _$$_ListingCopyWith<$Res> {
-  __$$_ListingCopyWithImpl(_$_Listing _value, $Res Function(_$_Listing) _then)
+class __$$ListingImplCopyWithImpl<$Res>
+    extends _$ListingCopyWithImpl<$Res, _$ListingImpl>
+    implements _$$ListingImplCopyWith<$Res> {
+  __$$ListingImplCopyWithImpl(
+      _$ListingImpl _value, $Res Function(_$ListingImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -532,7 +534,7 @@ class __$$_ListingCopyWithImpl<$Res>
     Object? mobile = null,
     Object? desktop = null,
   }) {
-    return _then(_$_Listing(
+    return _then(_$ListingImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -572,8 +574,8 @@ class __$$_ListingCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(includeIfNull: false, fieldRename: FieldRename.snake)
-class _$_Listing implements _Listing {
-  const _$_Listing(
+class _$ListingImpl implements _Listing {
+  const _$ListingImpl(
       {required this.id,
       required this.name,
       required this.homepage,
@@ -584,8 +586,8 @@ class _$_Listing implements _Listing {
       required this.desktop})
       : _injected = injected;
 
-  factory _$_Listing.fromJson(Map<String, dynamic> json) =>
-      _$$_ListingFromJson(json);
+  factory _$ListingImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ListingImplFromJson(json);
 
   @override
   final String id;
@@ -618,10 +620,10 @@ class _$_Listing implements _Listing {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Listing &&
+            other is _$ListingImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.homepage, homepage) ||
@@ -641,12 +643,12 @@ class _$_Listing implements _Listing {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ListingCopyWith<_$_Listing> get copyWith =>
-      __$$_ListingCopyWithImpl<_$_Listing>(this, _$identity);
+  _$$ListingImplCopyWith<_$ListingImpl> get copyWith =>
+      __$$ListingImplCopyWithImpl<_$ListingImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ListingToJson(
+    return _$$ListingImplToJson(
       this,
     );
   }
@@ -661,9 +663,9 @@ abstract class _Listing implements Listing {
       required final App app,
       final List<Injected>? injected,
       required final Redirect mobile,
-      required final Redirect desktop}) = _$_Listing;
+      required final Redirect desktop}) = _$ListingImpl;
 
-  factory _Listing.fromJson(Map<String, dynamic> json) = _$_Listing.fromJson;
+  factory _Listing.fromJson(Map<String, dynamic> json) = _$ListingImpl.fromJson;
 
   @override
   String get id;
@@ -683,7 +685,7 @@ abstract class _Listing implements Listing {
   Redirect get desktop;
   @override
   @JsonKey(ignore: true)
-  _$$_ListingCopyWith<_$_Listing> get copyWith =>
+  _$$ListingImplCopyWith<_$ListingImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -803,9 +805,9 @@ class _$AppCopyWithImpl<$Res, $Val extends App> implements $AppCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$$_AppCopyWith<$Res> implements $AppCopyWith<$Res> {
-  factory _$$_AppCopyWith(_$_App value, $Res Function(_$_App) then) =
-      __$$_AppCopyWithImpl<$Res>;
+abstract class _$$AppImplCopyWith<$Res> implements $AppCopyWith<$Res> {
+  factory _$$AppImplCopyWith(_$AppImpl value, $Res Function(_$AppImpl) then) =
+      __$$AppImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -823,9 +825,9 @@ abstract class _$$_AppCopyWith<$Res> implements $AppCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_AppCopyWithImpl<$Res> extends _$AppCopyWithImpl<$Res, _$_App>
-    implements _$$_AppCopyWith<$Res> {
-  __$$_AppCopyWithImpl(_$_App _value, $Res Function(_$_App) _then)
+class __$$AppImplCopyWithImpl<$Res> extends _$AppCopyWithImpl<$Res, _$AppImpl>
+    implements _$$AppImplCopyWith<$Res> {
+  __$$AppImplCopyWithImpl(_$AppImpl _value, $Res Function(_$AppImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -843,7 +845,7 @@ class __$$_AppCopyWithImpl<$Res> extends _$AppCopyWithImpl<$Res, _$_App>
     Object? edge = freezed,
     Object? opera = freezed,
   }) {
-    return _then(_$_App(
+    return _then(_$AppImpl(
       browser: freezed == browser
           ? _value.browser
           : browser // ignore: cast_nullable_to_non_nullable
@@ -895,8 +897,8 @@ class __$$_AppCopyWithImpl<$Res> extends _$AppCopyWithImpl<$Res, _$_App>
 /// @nodoc
 
 @JsonSerializable(includeIfNull: false, fieldRename: FieldRename.snake)
-class _$_App implements _App {
-  const _$_App(
+class _$AppImpl implements _App {
+  const _$AppImpl(
       {this.browser,
       this.ios,
       this.android,
@@ -909,7 +911,8 @@ class _$_App implements _App {
       this.edge,
       this.opera});
 
-  factory _$_App.fromJson(Map<String, dynamic> json) => _$$_AppFromJson(json);
+  factory _$AppImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppImplFromJson(json);
 
   @override
   final String? browser;
@@ -940,10 +943,10 @@ class _$_App implements _App {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_App &&
+            other is _$AppImpl &&
             (identical(other.browser, browser) || other.browser == browser) &&
             (identical(other.ios, ios) || other.ios == ios) &&
             (identical(other.android, android) || other.android == android) &&
@@ -965,12 +968,12 @@ class _$_App implements _App {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AppCopyWith<_$_App> get copyWith =>
-      __$$_AppCopyWithImpl<_$_App>(this, _$identity);
+  _$$AppImplCopyWith<_$AppImpl> get copyWith =>
+      __$$AppImplCopyWithImpl<_$AppImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_AppToJson(
+    return _$$AppImplToJson(
       this,
     );
   }
@@ -988,9 +991,9 @@ abstract class _App implements App {
       final String? firefox,
       final String? safari,
       final String? edge,
-      final String? opera}) = _$_App;
+      final String? opera}) = _$AppImpl;
 
-  factory _App.fromJson(Map<String, dynamic> json) = _$_App.fromJson;
+  factory _App.fromJson(Map<String, dynamic> json) = _$AppImpl.fromJson;
 
   @override
   String? get browser;
@@ -1016,7 +1019,8 @@ abstract class _App implements App {
   String? get opera;
   @override
   @JsonKey(ignore: true)
-  _$$_AppCopyWith<_$_App> get copyWith => throw _privateConstructorUsedError;
+  _$$AppImplCopyWith<_$AppImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 Injected _$InjectedFromJson(Map<String, dynamic> json) {
@@ -1072,21 +1076,22 @@ class _$InjectedCopyWithImpl<$Res, $Val extends Injected>
 }
 
 /// @nodoc
-abstract class _$$_InjectedCopyWith<$Res> implements $InjectedCopyWith<$Res> {
-  factory _$$_InjectedCopyWith(
-          _$_Injected value, $Res Function(_$_Injected) then) =
-      __$$_InjectedCopyWithImpl<$Res>;
+abstract class _$$InjectedImplCopyWith<$Res>
+    implements $InjectedCopyWith<$Res> {
+  factory _$$InjectedImplCopyWith(
+          _$InjectedImpl value, $Res Function(_$InjectedImpl) then) =
+      __$$InjectedImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String injectedId, String namespace});
 }
 
 /// @nodoc
-class __$$_InjectedCopyWithImpl<$Res>
-    extends _$InjectedCopyWithImpl<$Res, _$_Injected>
-    implements _$$_InjectedCopyWith<$Res> {
-  __$$_InjectedCopyWithImpl(
-      _$_Injected _value, $Res Function(_$_Injected) _then)
+class __$$InjectedImplCopyWithImpl<$Res>
+    extends _$InjectedCopyWithImpl<$Res, _$InjectedImpl>
+    implements _$$InjectedImplCopyWith<$Res> {
+  __$$InjectedImplCopyWithImpl(
+      _$InjectedImpl _value, $Res Function(_$InjectedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1095,7 +1100,7 @@ class __$$_InjectedCopyWithImpl<$Res>
     Object? injectedId = null,
     Object? namespace = null,
   }) {
-    return _then(_$_Injected(
+    return _then(_$InjectedImpl(
       injectedId: null == injectedId
           ? _value.injectedId
           : injectedId // ignore: cast_nullable_to_non_nullable
@@ -1111,11 +1116,11 @@ class __$$_InjectedCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(includeIfNull: false, fieldRename: FieldRename.snake)
-class _$_Injected implements _Injected {
-  const _$_Injected({required this.injectedId, required this.namespace});
+class _$InjectedImpl implements _Injected {
+  const _$InjectedImpl({required this.injectedId, required this.namespace});
 
-  factory _$_Injected.fromJson(Map<String, dynamic> json) =>
-      _$$_InjectedFromJson(json);
+  factory _$InjectedImpl.fromJson(Map<String, dynamic> json) =>
+      _$$InjectedImplFromJson(json);
 
   @override
   final String injectedId;
@@ -1128,10 +1133,10 @@ class _$_Injected implements _Injected {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Injected &&
+            other is _$InjectedImpl &&
             (identical(other.injectedId, injectedId) ||
                 other.injectedId == injectedId) &&
             (identical(other.namespace, namespace) ||
@@ -1145,12 +1150,12 @@ class _$_Injected implements _Injected {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_InjectedCopyWith<_$_Injected> get copyWith =>
-      __$$_InjectedCopyWithImpl<_$_Injected>(this, _$identity);
+  _$$InjectedImplCopyWith<_$InjectedImpl> get copyWith =>
+      __$$InjectedImplCopyWithImpl<_$InjectedImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_InjectedToJson(
+    return _$$InjectedImplToJson(
       this,
     );
   }
@@ -1159,9 +1164,10 @@ class _$_Injected implements _Injected {
 abstract class _Injected implements Injected {
   const factory _Injected(
       {required final String injectedId,
-      required final String namespace}) = _$_Injected;
+      required final String namespace}) = _$InjectedImpl;
 
-  factory _Injected.fromJson(Map<String, dynamic> json) = _$_Injected.fromJson;
+  factory _Injected.fromJson(Map<String, dynamic> json) =
+      _$InjectedImpl.fromJson;
 
   @override
   String get injectedId;
@@ -1169,7 +1175,7 @@ abstract class _Injected implements Injected {
   String get namespace;
   @override
   @JsonKey(ignore: true)
-  _$$_InjectedCopyWith<_$_Injected> get copyWith =>
+  _$$InjectedImplCopyWith<_$InjectedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1271,11 +1277,11 @@ class _$ListingParamsCopyWithImpl<$Res, $Val extends ListingParams>
 }
 
 /// @nodoc
-abstract class _$$_ListingParamsCopyWith<$Res>
+abstract class _$$ListingParamsImplCopyWith<$Res>
     implements $ListingParamsCopyWith<$Res> {
-  factory _$$_ListingParamsCopyWith(
-          _$_ListingParams value, $Res Function(_$_ListingParams) then) =
-      __$$_ListingParamsCopyWithImpl<$Res>;
+  factory _$$ListingParamsImplCopyWith(
+          _$ListingParamsImpl value, $Res Function(_$ListingParamsImpl) then) =
+      __$$ListingParamsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -1290,11 +1296,11 @@ abstract class _$$_ListingParamsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ListingParamsCopyWithImpl<$Res>
-    extends _$ListingParamsCopyWithImpl<$Res, _$_ListingParams>
-    implements _$$_ListingParamsCopyWith<$Res> {
-  __$$_ListingParamsCopyWithImpl(
-      _$_ListingParams _value, $Res Function(_$_ListingParams) _then)
+class __$$ListingParamsImplCopyWithImpl<$Res>
+    extends _$ListingParamsCopyWithImpl<$Res, _$ListingParamsImpl>
+    implements _$$ListingParamsImplCopyWith<$Res> {
+  __$$ListingParamsImplCopyWithImpl(
+      _$ListingParamsImpl _value, $Res Function(_$ListingParamsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1309,7 +1315,7 @@ class __$$_ListingParamsCopyWithImpl<$Res>
     Object? excludedIds = freezed,
     Object? sdks = freezed,
   }) {
-    return _then(_$_ListingParams(
+    return _then(_$ListingParamsImpl(
       page: freezed == page
           ? _value.page
           : page // ignore: cast_nullable_to_non_nullable
@@ -1349,8 +1355,8 @@ class __$$_ListingParamsCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(includeIfNull: false)
-class _$_ListingParams implements _ListingParams {
-  const _$_ListingParams(
+class _$ListingParamsImpl implements _ListingParams {
+  const _$ListingParamsImpl(
       {this.page,
       this.search,
       this.entries,
@@ -1360,8 +1366,8 @@ class _$_ListingParams implements _ListingParams {
       this.excludedIds,
       this.sdks});
 
-  factory _$_ListingParams.fromJson(Map<String, dynamic> json) =>
-      _$$_ListingParamsFromJson(json);
+  factory _$ListingParamsImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ListingParamsImplFromJson(json);
 
   @override
   final int? page;
@@ -1386,10 +1392,10 @@ class _$_ListingParams implements _ListingParams {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ListingParams &&
+            other is _$ListingParamsImpl &&
             (identical(other.page, page) || other.page == page) &&
             (identical(other.search, search) || other.search == search) &&
             (identical(other.entries, entries) || other.entries == entries) &&
@@ -1410,12 +1416,12 @@ class _$_ListingParams implements _ListingParams {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ListingParamsCopyWith<_$_ListingParams> get copyWith =>
-      __$$_ListingParamsCopyWithImpl<_$_ListingParams>(this, _$identity);
+  _$$ListingParamsImplCopyWith<_$ListingParamsImpl> get copyWith =>
+      __$$ListingParamsImplCopyWithImpl<_$ListingParamsImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ListingParamsToJson(
+    return _$$ListingParamsImplToJson(
       this,
     );
   }
@@ -1430,10 +1436,10 @@ abstract class _ListingParams implements ListingParams {
       final String? chains,
       final String? recommendedIds,
       final String? excludedIds,
-      final String? sdks}) = _$_ListingParams;
+      final String? sdks}) = _$ListingParamsImpl;
 
   factory _ListingParams.fromJson(Map<String, dynamic> json) =
-      _$_ListingParams.fromJson;
+      _$ListingParamsImpl.fromJson;
 
   @override
   int? get page;
@@ -1453,6 +1459,6 @@ abstract class _ListingParams implements ListingParams {
   String? get sdks;
   @override
   @JsonKey(ignore: true)
-  _$$_ListingParamsCopyWith<_$_ListingParams> get copyWith =>
+  _$$ListingParamsImplCopyWith<_$ListingParamsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

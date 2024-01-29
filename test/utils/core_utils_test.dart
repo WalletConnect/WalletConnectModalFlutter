@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/services/utils/core/core_utils.dart';
-import 'package:walletconnect_modal_flutter/constants/constants.dart';
 
 void main() {
   final coreUtils = CoreUtils();
@@ -47,10 +46,7 @@ void main() {
       final userAgent = coreUtils.getUserAgent();
       expect(userAgent.startsWith('w3m-flutter-'), true);
       expect(userAgent.contains('/flutter-core-'), true);
-      expect(
-          userAgent.contains(
-              WalletConnectModalConstants.WALLETCONNECT_MODAL_VERSION),
-          true);
+      expect(userAgent.contains(packageVersion), true);
       expect(userAgent.endsWith(WalletConnectUtils.getOS()), true);
     });
   });

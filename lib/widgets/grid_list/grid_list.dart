@@ -29,7 +29,7 @@ class GridList<T> extends StatelessWidget {
     this.heightOverride,
     this.longBottomSheetHeightOverride,
     this.longBottomSheetAspectRatio = 0.79,
-    this.itemAspectRatio = 0.72,
+    this.itemAspectRatio = 0.8,
   });
 
   final GridListState state;
@@ -71,11 +71,10 @@ class GridList<T> extends StatelessWidget {
   }
 
   Widget _buildGridList(BuildContext context) {
-    final WalletConnectModalThemeData themeData =
-        WalletConnectModalTheme.getData(context);
+    final themeData = WalletConnectModalTheme.getData(context);
     final size = MediaQuery.of(context).size;
 
-    final bool longBottomSheet = platformUtils.instance.isLongBottomSheet(
+    final longBottomSheet = platformUtils.instance.isLongBottomSheet(
       MediaQuery.of(context).orientation,
     );
 
@@ -88,7 +87,7 @@ class GridList<T> extends StatelessWidget {
         switch (state) {
           case GridListState.short:
             itemCount = min(8, value.length);
-            height = longBottomSheet ? 140 : 280;
+            height = longBottomSheet ? 140 : 230;
             break;
           case GridListState.long:
             itemCount = value.length;
@@ -162,10 +161,11 @@ class GridList<T> extends StatelessWidget {
                   key: Key(value[index].title),
                   onSelect: () => onSelect(value[index].data),
                   child: createListItem(
-                      value[index],
-                      size.height < 700.0
-                          ? GridList.smallTileSize
-                          : GridList.tileSize),
+                    value[index],
+                    size.height < 700.0
+                        ? GridList.smallTileSize
+                        : GridList.tileSize,
+                  ),
                 );
               }
             },
@@ -180,8 +180,7 @@ class GridList<T> extends StatelessWidget {
     List<GridListItemModel<T>> items,
     int startIndex,
   ) {
-    final WalletConnectModalThemeData themeData =
-        WalletConnectModalTheme.getData(context);
+    final themeData = WalletConnectModalTheme.getData(context);
     final Size size = MediaQuery.of(context).size;
     final tileSize =
         size.height < 700.0 ? GridList.smallTileSize : GridList.tileSize;

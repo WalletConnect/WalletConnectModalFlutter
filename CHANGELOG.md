@@ -1,3 +1,7 @@
+## 2.1.14
+
+- Minor UI fixes
+
 ## 2.1.13
 
 - Update dependency and license change

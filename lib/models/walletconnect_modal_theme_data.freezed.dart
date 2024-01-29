@@ -252,12 +252,12 @@ class _$WalletConnectModalThemeDataCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_WalletConnectModalThemeDataCopyWith<$Res>
+abstract class _$$WalletConnectModalThemeDataImplCopyWith<$Res>
     implements $WalletConnectModalThemeDataCopyWith<$Res> {
-  factory _$$_WalletConnectModalThemeDataCopyWith(
-          _$_WalletConnectModalThemeData value,
-          $Res Function(_$_WalletConnectModalThemeData) then) =
-      __$$_WalletConnectModalThemeDataCopyWithImpl<$Res>;
+  factory _$$WalletConnectModalThemeDataImplCopyWith(
+          _$WalletConnectModalThemeDataImpl value,
+          $Res Function(_$WalletConnectModalThemeDataImpl) then) =
+      __$$WalletConnectModalThemeDataImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -292,13 +292,13 @@ abstract class _$$_WalletConnectModalThemeDataCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_WalletConnectModalThemeDataCopyWithImpl<$Res>
+class __$$WalletConnectModalThemeDataImplCopyWithImpl<$Res>
     extends _$WalletConnectModalThemeDataCopyWithImpl<$Res,
-        _$_WalletConnectModalThemeData>
-    implements _$$_WalletConnectModalThemeDataCopyWith<$Res> {
-  __$$_WalletConnectModalThemeDataCopyWithImpl(
-      _$_WalletConnectModalThemeData _value,
-      $Res Function(_$_WalletConnectModalThemeData) _then)
+        _$WalletConnectModalThemeDataImpl>
+    implements _$$WalletConnectModalThemeDataImplCopyWith<$Res> {
+  __$$WalletConnectModalThemeDataImplCopyWithImpl(
+      _$WalletConnectModalThemeDataImpl _value,
+      $Res Function(_$WalletConnectModalThemeDataImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -333,7 +333,7 @@ class __$$_WalletConnectModalThemeDataCopyWithImpl<$Res>
     Object? radiusL = null,
     Object? radius3XL = null,
   }) {
-    return _then(_$_WalletConnectModalThemeData(
+    return _then(_$WalletConnectModalThemeDataImpl(
       primary100: null == primary100
           ? _value.primary100
           : primary100 // ignore: cast_nullable_to_non_nullable
@@ -452,8 +452,9 @@ class __$$_WalletConnectModalThemeDataCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_WalletConnectModalThemeData implements _WalletConnectModalThemeData {
-  const _$_WalletConnectModalThemeData(
+class _$WalletConnectModalThemeDataImpl
+    implements _WalletConnectModalThemeData {
+  const _$WalletConnectModalThemeDataImpl(
       {required this.primary100,
       required this.primary090,
       required this.primary080,
@@ -548,10 +549,10 @@ class _$_WalletConnectModalThemeData implements _WalletConnectModalThemeData {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_WalletConnectModalThemeData &&
+            other is _$WalletConnectModalThemeDataImpl &&
             (identical(other.primary100, primary100) ||
                 other.primary100 == primary100) &&
             (identical(other.primary090, primary090) ||
@@ -641,9 +642,9 @@ class _$_WalletConnectModalThemeData implements _WalletConnectModalThemeData {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_WalletConnectModalThemeDataCopyWith<_$_WalletConnectModalThemeData>
-      get copyWith => __$$_WalletConnectModalThemeDataCopyWithImpl<
-          _$_WalletConnectModalThemeData>(this, _$identity);
+  _$$WalletConnectModalThemeDataImplCopyWith<_$WalletConnectModalThemeDataImpl>
+      get copyWith => __$$WalletConnectModalThemeDataImplCopyWithImpl<
+          _$WalletConnectModalThemeDataImpl>(this, _$identity);
 }
 
 abstract class _WalletConnectModalThemeData
@@ -676,7 +677,7 @@ abstract class _WalletConnectModalThemeData
       required final double radiusS,
       required final double radiusM,
       required final double radiusL,
-      required final double radius3XL}) = _$_WalletConnectModalThemeData;
+      required final double radius3XL}) = _$WalletConnectModalThemeDataImpl;
 
   @override
   Color get primary100;
@@ -736,6 +737,6 @@ abstract class _WalletConnectModalThemeData
   double get radius3XL;
   @override
   @JsonKey(ignore: true)
-  _$$_WalletConnectModalThemeDataCopyWith<_$_WalletConnectModalThemeData>
+  _$$WalletConnectModalThemeDataImplCopyWith<_$WalletConnectModalThemeDataImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:event/event.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';

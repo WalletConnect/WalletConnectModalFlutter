@@ -168,8 +168,7 @@ class WalletItem extends StatelessWidget {
           ),
         ),
         trailing: SizedBox(
-          height: 28,
-          width: 72,
+          width: 80,
           child: WalletConnectModalButton(
             onPressed: () => urlUtils.instance.launchUrl(
               Uri.parse(
