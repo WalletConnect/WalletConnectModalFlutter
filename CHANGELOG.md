@@ -1,3 +1,7 @@
+## 2.1.15
+
+- Updated dependencies
+
 ## 2.1.14
 
 - Minor UI fixes

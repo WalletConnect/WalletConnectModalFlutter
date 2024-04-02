@@ -1,11 +1,9 @@
 import 'dart:convert';
 
 import 'package:walletconnect_flutter_dapp/models/chain_metadata.dart';
-import 'package:walletconnect_flutter_dapp/models/eth/ethereum_transaction.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/chain_data.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/contract.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/test_data.dart';
-import 'package:walletconnect_flutter_dapp/utils/crypto/web3dart_extension.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 enum EIP155UIMethods {
@@ -116,10 +114,10 @@ class EIP155 {
           web3App: web3App,
           topic: topic,
           chainId: chainId,
-          transaction: EthereumTransaction(
-            from: address,
-            to: address,
-            value: '0x01',
+          transaction: Transaction(
+            from: EthereumAddress.fromHex(address),
+            to: EthereumAddress.fromHex(address),
+            value: EtherAmount.fromInt(EtherUnit.finney, 11), // == 0.011
           ),
         );
       // case EIP155UIMethods.ethSign:
@@ -203,9 +201,9 @@ class EIP155 {
       EthereumAddress.fromHex(ContractDetails.contractAddress),
     );
 
-    final ContractFunction balanceFunction = contract.function('balanceOf');
+    final balanceFunction = contract.function('balanceOf');
 
-    final Transaction t = Transaction.callContract(
+    final transaction = Transaction.callContract(
       contract: contract,
       function: balanceFunction,
       parameters: [EthereumAddress.fromHex(address)],
@@ -217,7 +215,7 @@ class EIP155 {
       request: SessionRequestParams(
         method: 'eth_sendTransaction',
         // Check the `web3dart_extension` file for this function
-        params: [t.toJson(fromAddress: address)],
+        params: [transaction.toJson()],
       ),
     );
   }
@@ -226,7 +224,7 @@ class EIP155 {
     required IWeb3App web3App,
     required String topic,
     required String chainId,
-    required EthereumTransaction transaction,
+    required Transaction transaction,
   }) async {
     return await web3App.request(
       topic: topic,

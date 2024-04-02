@@ -38,7 +38,7 @@ void main() {
 
       when(mockUrlUtils.launchUrl(
         any,
-        mode: anyNamed("mode"),
+        mode: anyNamed('mode'),
       )).thenAnswer(
         (_) => Future.value(true),
       );

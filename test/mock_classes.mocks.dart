@@ -1967,6 +1967,56 @@ class MockWeb3App extends _i1.Mock implements _i4.Web3App {
       ) as _i5.Future<dynamic>);
 
   @override
+  _i5.Future<List<dynamic>> requestReadContract({
+    required _i4.DeployedContract? deployedContract,
+    required String? functionName,
+    required String? rpcUrl,
+    List<dynamic>? parameters = const [],
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #requestReadContract,
+          [],
+          {
+            #deployedContract: deployedContract,
+            #functionName: functionName,
+            #rpcUrl: rpcUrl,
+            #parameters: parameters,
+          },
+        ),
+        returnValue: _i5.Future<List<dynamic>>.value(<dynamic>[]),
+      ) as _i5.Future<List<dynamic>>);
+
+  @override
+  _i5.Future<dynamic> requestWriteContract({
+    required String? topic,
+    required String? chainId,
+    required String? rpcUrl,
+    required _i4.DeployedContract? deployedContract,
+    required String? functionName,
+    required _i4.Transaction? transaction,
+    String? method,
+    List<dynamic>? parameters = const [],
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #requestWriteContract,
+          [],
+          {
+            #topic: topic,
+            #chainId: chainId,
+            #rpcUrl: rpcUrl,
+            #deployedContract: deployedContract,
+            #functionName: functionName,
+            #transaction: transaction,
+            #method: method,
+            #parameters: parameters,
+          },
+        ),
+        returnValue: _i5.Future<dynamic>.value(),
+      ) as _i5.Future<dynamic>);
+
+  @override
   void registerEventHandler({
     required String? chainId,
     required String? event,
