@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:universal_io/io.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:walletconnect_modal_flutter/services/utils/platform/i_platform_utils.dart';
 
 class PlatformUtils extends IPlatformUtils {
   @override
   PlatformExact getPlatformExact() {
+    if (kIsWeb) {
+      return PlatformExact.web;
+    }
     if (Platform.isAndroid) {
       return PlatformExact.android;
     } else if (Platform.isIOS) {
@@ -16,22 +20,21 @@ class PlatformUtils extends IPlatformUtils {
       return PlatformExact.macOS;
     } else if (Platform.isWindows) {
       return PlatformExact.windows;
-    } else if (kIsWeb) {
-      return PlatformExact.web;
     }
-    return PlatformExact.web;
+    throw Exception();
   }
 
   @override
   PlatformType getPlatformType() {
+    if (kIsWeb) {
+      return PlatformType.web;
+    }
     if (Platform.isAndroid || Platform.isIOS) {
       return PlatformType.mobile;
     } else if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
       return PlatformType.desktop;
-    } else if (kIsWeb) {
-      return PlatformType.web;
     }
-    return PlatformType.mobile;
+    throw Exception();
   }
 
   @override

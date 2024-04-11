@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:w_common/disposable.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
@@ -217,6 +218,7 @@ class WalletConnectModalService extends ChangeNotifier
         isDismissible: false,
         isScrollControlled: true,
         enableDrag: false,
+        useRootNavigator: true,
         constraints: BoxConstraints(
           minWidth: MediaQuery.of(context).size.width,
         ),
@@ -229,8 +231,22 @@ class WalletConnectModalService extends ChangeNotifier
     } else {
       await showDialog(
         context: context,
-        builder: (context) {
-          return root;
+        barrierDismissible: false,
+        useSafeArea: true,
+        useRootNavigator: true,
+        anchorPoint: Offset(0, 0),
+        builder: (_) {
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            clipBehavior: Clip.antiAlias,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: 360.0,
+                maxHeight: 680.0,
+              ),
+              child: root,
+            ),
+          );
         },
       );
     }

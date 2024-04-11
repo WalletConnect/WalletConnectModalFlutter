@@ -21,7 +21,7 @@ dependencies:
   qr_flutter: ^4.1.0
   shared_preferences: ^2.2.2
   smooth_page_indicator: ^1.1.0
-  universal_io: ^2.2.2
+  # universal_io: ^2.2.2
   url_launcher: ^6.2.4
   w_common: ^3.0.1
   walletconnect_flutter_v2: ^2.2.2
