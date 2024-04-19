@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:w_common/disposable.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
