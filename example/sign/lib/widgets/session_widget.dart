@@ -3,6 +3,8 @@ import 'package:walletconnect_flutter_dapp/models/chain_metadata.dart';
 import 'package:walletconnect_flutter_dapp/utils/constants.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/eip155.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/helpers.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/polkadot.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/solana.dart';
 import 'package:walletconnect_flutter_dapp/utils/string_constants.dart';
 import 'package:walletconnect_flutter_dapp/widgets/method_dialog.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
@@ -98,10 +100,7 @@ class SessionWidgetState extends State<SessionWidget> {
     ];
 
     children.addAll(
-      _buildChainMethodButtons(
-        chainMetadata,
-        account,
-      ),
+      _buildChainMethodButtons(chainMetadata, account),
     );
 
     children.addAll([
@@ -151,7 +150,7 @@ class SessionWidgetState extends State<SessionWidget> {
   ) {
     final List<Widget> buttons = [];
     // Add Methods
-    for (final String method in getUIChainMethods(chainMetadata.type)) {
+    for (final method in getUIChainMethods(chainMetadata.type)) {
       buttons.add(
         Container(
           width: double.infinity,
@@ -167,11 +166,7 @@ class SessionWidgetState extends State<SessionWidget> {
                 chainMetadata,
                 address,
               );
-              MethodDialog.show(
-                context,
-                method,
-                future,
-              );
+              MethodDialog.show(context, method, future);
               widget.launchRedirect();
             },
             style: ButtonStyle(
@@ -247,7 +242,23 @@ class SessionWidgetState extends State<SessionWidget> {
           topic: widget.session.topic,
           method: method.toEip155Method()!,
           chainId: chainMetadata.namespace,
-          address: address.toLowerCase(),
+          address: address,
+        );
+      case ChainType.polkadot:
+        return Polkadot.callMethod(
+          web3App: widget.web3App,
+          topic: widget.session.topic,
+          method: method,
+          chainId: chainMetadata.namespace,
+          address: address,
+        );
+      case ChainType.solana:
+        return Solana.callMethod(
+          web3App: widget.web3App,
+          topic: widget.session.topic,
+          method: method,
+          chainId: chainMetadata.namespace,
+          address: address,
         );
       // case ChainType.kadena:
       //   return Kadena.callMethod(

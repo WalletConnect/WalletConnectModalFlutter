@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:walletconnect_flutter_dapp/models/chain_metadata.dart';
 import 'package:walletconnect_flutter_dapp/utils/constants.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/chain_data.dart';
-import 'package:walletconnect_flutter_dapp/utils/crypto/helpers.dart';
 import 'package:walletconnect_flutter_dapp/utils/string_constants.dart';
 import 'package:walletconnect_flutter_dapp/widgets/chain_button.dart';
 import 'package:walletconnect_flutter_dapp/widgets/session_widget.dart';
@@ -185,7 +184,11 @@ class _WCMPageState extends State<WCMPage> with SingleTickerProviderStateMixin {
                 session: session,
                 web3App: widget.web3App,
                 launchRedirect: () {
-                  _walletConnectModalService!.launchCurrentWallet();
+                  final redirect = _walletConnectModalService
+                      ?.session?.peer.metadata.redirect;
+                  if (redirect != null) {
+                    _walletConnectModalService!.launchCurrentWallet();
+                  }
                 },
               ),
             ),
@@ -212,56 +215,70 @@ class _WCMPageState extends State<WCMPage> with SingleTickerProviderStateMixin {
         _selectedChains.add(chain);
       }
     });
-    _updateRequiredNamespaces();
+    _updateNamespaces();
   }
 
-  void _updateRequiredNamespaces() {
+  void _updateNamespaces() {
     final Map<String, RequiredNamespace> requiredNamespaces = {};
-    if (_firstChain != null) {
-      requiredNamespaces[_firstChain!.type.name] = RequiredNamespace(
-        chains: [_firstChain!.namespace],
-        methods: getChainMethods(_firstChain!.type),
-        events: getChainEvents(_firstChain!.type),
-      );
+    for (var chainData in _selectedChains) {
+      for (var key in chainData.requiredNamespaces.keys) {
+        final chains = chainData.requiredNamespaces[key]!.chains ?? [];
+        final methods = chainData.requiredNamespaces[key]!.methods;
+        final events = chainData.requiredNamespaces[key]!.events;
+
+        // Adds every requiredNamespaces from every selected chain
+
+        requiredNamespaces[key] = RequiredNamespace(
+          chains: <String>{
+            ...(requiredNamespaces[key]?.chains ?? []),
+            ...chains
+          }.toList(),
+          methods: <String>{
+            ...(requiredNamespaces[key]?.methods ?? []),
+            ...methods
+          }.toList(),
+          events: <String>{
+            ...(requiredNamespaces[key]?.events ?? []),
+            ...events
+          }.toList(),
+        );
+      }
     }
-    final Map<String, RequiredNamespace> optionalNamespaces =
-        _getOtionalNamespaces();
 
     _walletConnectModalService?.setRequiredNamespaces(
       requiredNamespaces: requiredNamespaces,
     );
+    debugPrint('WCM Page, requiredNamespaces: $requiredNamespaces');
+
+    final Map<String, RequiredNamespace> optionalNamespaces = {};
+    for (var chainData in _selectedChains) {
+      for (var key in chainData.optionalNamespaces.keys) {
+        final chains = chainData.optionalNamespaces[key]!.chains ?? [];
+        final methods = chainData.optionalNamespaces[key]!.methods;
+        final events = chainData.optionalNamespaces[key]!.events;
+
+        // Adds every optionalNamespaces from every selected chain
+
+        optionalNamespaces[key] = RequiredNamespace(
+          chains: <String>{
+            ...(optionalNamespaces[key]?.chains ?? []),
+            ...chains
+          }.toList(),
+          methods: <String>{
+            ...(optionalNamespaces[key]?.methods ?? []),
+            ...methods
+          }.toList(),
+          events: <String>{
+            ...(optionalNamespaces[key]?.events ?? []),
+            ...events
+          }.toList(),
+        );
+      }
+    }
+
     _walletConnectModalService?.setOptionalNamespaces(
       optionalNamespaces: optionalNamespaces,
     );
-
-    LoggerUtil.logger.i(
-      '_updateRequiredNamespaces, requiredNamespaces: $requiredNamespaces, optionalNamespaces: $optionalNamespaces',
-    );
-  }
-
-  Map<String, RequiredNamespace> _getOtionalNamespaces() {
-    final Map<String, RequiredNamespace> requiredNamespaces = {};
-    final Map<ChainType, Set<String>> chains = {};
-
-    // Construct our list of chains for each type of blockchain
-    for (final chain in _selectedChains) {
-      if (!chains.containsKey(chain.type)) {
-        chains[chain.type] = {};
-      }
-      chains[chain.type]!.add(chain.namespace);
-    }
-
-    for (final entry in chains.entries) {
-      // Create the required namespaces
-      requiredNamespaces[entry.key.name] = RequiredNamespace(
-        chains: entry.value.toList(),
-        methods: getOptionalChainMethods(entry.key),
-        events: getChainEvents(entry.key),
-      );
-    }
-
-    LoggerUtil.logger
-        .i('WCM Page, _getRequiredNamespaces: $requiredNamespaces');
-    return requiredNamespaces;
+    debugPrint('WCM Page, optionalNamespaces: $optionalNamespaces');
   }
 }

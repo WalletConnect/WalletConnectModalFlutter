@@ -45,25 +45,26 @@ extension EIP155EventsStringX on String {
 }
 
 class EIP155 {
-  static const ethRequiredMethods = [
+  static const requiredMethods = [
     'personal_sign',
-    'eth_signTypedData',
     'eth_sendTransaction',
   ];
   static const walletSwitchEthChain = 'wallet_switchEthereumChain';
   static const walletAddEthChain = 'wallet_addEthereumChain';
-  static const ethOptionalMethods = [
+  static const optionalMethods = [
     walletSwitchEthChain,
     walletAddEthChain,
+    'eth_signTypedData',
   ];
   static const allMethods = [
-    ...ethRequiredMethods,
-    ...ethOptionalMethods,
+    ...requiredMethods,
+    ...optionalMethods,
   ];
-  static const ethEvents = [
+  static const requiredEvents = [
     'chainChanged',
     'accountsChanged',
   ];
+  static const optionalEvents = <String>[];
 
   static final Map<EIP155UIMethods, String> methods = {
     EIP155UIMethods.personalSign: 'personal_sign',

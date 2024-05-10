@@ -1,3 +1,8 @@
+## 2.1.16
+
+- Updated dependencies
+- Support for Solana and Polkadot in sample dapp
+
 ## 2.1.15
 
 - Updated dependencies

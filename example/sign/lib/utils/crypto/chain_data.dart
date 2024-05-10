@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:walletconnect_flutter_dapp/models/chain_metadata.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/eip155.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/polkadot.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/solana.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 class ChainData {
@@ -15,16 +17,16 @@ class ChainData {
       tokenName: 'ETH',
       requiredNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethRequiredMethods,
           chains: ['eip155:1'],
-          events: EIP155.ethEvents,
+          methods: EIP155.requiredMethods,
+          events: EIP155.requiredEvents,
         ),
       },
       optionalNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethOptionalMethods,
           chains: ['eip155:1'],
-          events: [],
+          methods: EIP155.optionalMethods,
+          events: EIP155.optionalEvents,
         ),
       },
       rpcUrl: 'https://eth.drpc.org',
@@ -39,16 +41,16 @@ class ChainData {
       tokenName: 'MATIC',
       requiredNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethRequiredMethods,
           chains: ['eip155:137'],
-          events: EIP155.ethEvents,
+          methods: EIP155.requiredMethods,
+          events: EIP155.requiredEvents,
         ),
       },
       optionalNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethOptionalMethods,
           chains: ['eip155:137'],
-          events: [],
+          methods: EIP155.optionalMethods,
+          events: EIP155.optionalEvents,
         ),
       },
       rpcUrl: 'https://polygon.drpc.org',
@@ -63,16 +65,16 @@ class ChainData {
       tokenName: 'ARB',
       requiredNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethRequiredMethods,
           chains: ['eip155:42161'],
-          events: EIP155.ethEvents,
+          methods: EIP155.requiredMethods,
+          events: EIP155.requiredEvents,
         ),
       },
       optionalNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethOptionalMethods,
           chains: ['eip155:42161'],
-          events: [],
+          methods: EIP155.optionalMethods,
+          events: EIP155.optionalEvents,
         ),
       },
       rpcUrl: 'https://arbitrum.blockpi.network/v1/rpc/public',
@@ -87,16 +89,16 @@ class ChainData {
       tokenName: 'AVAX',
       requiredNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethRequiredMethods,
           chains: ['eip155:43114'],
-          events: EIP155.ethEvents,
+          methods: EIP155.requiredMethods,
+          events: EIP155.requiredEvents,
         ),
       },
       optionalNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethOptionalMethods,
           chains: ['eip155:43114'],
-          events: [],
+          methods: EIP155.optionalMethods,
+          events: EIP155.optionalEvents,
         ),
       },
       rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
@@ -111,16 +113,16 @@ class ChainData {
       tokenName: 'BNB',
       requiredNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethRequiredMethods,
           chains: ['eip155:56'],
-          events: EIP155.ethEvents,
+          methods: EIP155.requiredMethods,
+          events: EIP155.requiredEvents,
         ),
       },
       optionalNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethOptionalMethods,
           chains: ['eip155:56'],
-          events: [],
+          methods: EIP155.optionalMethods,
+          events: EIP155.optionalEvents,
         ),
       },
       rpcUrl: 'https://bsc-dataseed.binance.org/',
@@ -135,16 +137,16 @@ class ChainData {
       tokenName: 'FTM',
       requiredNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethRequiredMethods,
           chains: ['eip155:250'],
-          events: EIP155.ethEvents,
+          methods: EIP155.requiredMethods,
+          events: EIP155.requiredEvents,
         ),
       },
       optionalNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethOptionalMethods,
           chains: ['eip155:250'],
-          events: [],
+          methods: EIP155.optionalMethods,
+          events: EIP155.optionalEvents,
         ),
       },
       rpcUrl: 'https://rpc.ftm.tools/',
@@ -159,16 +161,16 @@ class ChainData {
       tokenName: 'OP',
       requiredNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethRequiredMethods,
           chains: ['eip155:10'],
-          events: EIP155.ethEvents,
+          methods: EIP155.requiredMethods,
+          events: EIP155.requiredEvents,
         ),
       },
       optionalNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethOptionalMethods,
           chains: ['eip155:10'],
-          events: [],
+          methods: EIP155.optionalMethods,
+          events: EIP155.optionalEvents,
         ),
       },
       rpcUrl: 'https://mainnet.optimism.io/',
@@ -183,16 +185,16 @@ class ChainData {
       tokenName: 'EVMOS',
       requiredNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethRequiredMethods,
           chains: ['eip155:9001'],
-          events: EIP155.ethEvents,
+          methods: EIP155.requiredMethods,
+          events: EIP155.requiredEvents,
         ),
       },
       optionalNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethOptionalMethods,
           chains: ['eip155:9001'],
-          events: [],
+          methods: EIP155.optionalMethods,
+          events: EIP155.optionalEvents,
         ),
       },
       rpcUrl: 'https://eth.bd.evmos.org:8545',
@@ -207,16 +209,16 @@ class ChainData {
       tokenName: 'IOTX',
       requiredNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethRequiredMethods,
           chains: ['eip155:4689'],
-          events: EIP155.ethEvents,
+          methods: EIP155.requiredMethods,
+          events: EIP155.requiredEvents,
         ),
       },
       optionalNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethOptionalMethods,
           chains: ['eip155:4689'],
-          events: [],
+          methods: EIP155.optionalMethods,
+          events: EIP155.optionalEvents,
         ),
       },
       rpcUrl: 'https://rpc.ankr.com/iotex',
@@ -231,40 +233,55 @@ class ChainData {
       tokenName: 'METIS',
       requiredNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethRequiredMethods,
           chains: ['eip155:1088'],
-          events: EIP155.ethEvents,
+          methods: EIP155.requiredMethods,
+          events: EIP155.requiredEvents,
         ),
       },
       optionalNamespaces: {
         'eip155': const RequiredNamespace(
-          methods: EIP155.ethOptionalMethods,
           chains: ['eip155:1088'],
-          events: [],
+          methods: EIP155.optionalMethods,
+          events: EIP155.optionalEvents,
         ),
       },
       rpcUrl: 'https://metis-mainnet.public.blastapi.io',
     ),
-    // const ChainMetadata(
-    //   type: ChainType.solana,
-    //   chainId: 'solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ',
-    //   name: 'Solana',
-    //   logo: 'TODO',
-    //   color: Colors.black,
-    //   rpc: [
-    //     "https://api.mainnet-beta.solana.com",
-    //     "https://solana-api.projectserum.com",
-    //   ],
-    // ),
-    // ChainMetadata(
-    //   type: ChainType.kadena,
-    //   chainId: 'kadena:mainnet01',
-    //   name: 'Kadena',
-    //   logo: 'TODO',
-    //   color: Colors.purple.shade600,
-    //   rpc: [
-    //     "https://api.testnet.chainweb.com",
-    //   ],
-    // ),
+    const ChainMetadata(
+      type: ChainType.polkadot,
+      chainId: '91b171bb158e2d3848fa23a9f1c25182',
+      namespace: 'polkadot:91b171bb158e2d3848fa23a9f1c25182',
+      chainName: 'Polkadot Mainnet',
+      chainIcon: '/chain-logos/polkadot.png',
+      color: Color.fromARGB(255, 255, 18, 192),
+      rpcUrl: 'wss://rpc.polkadot.io',
+      tokenName: 'DOT',
+      requiredNamespaces: {},
+      optionalNamespaces: {
+        'polkadot': RequiredNamespace(
+          chains: ['polkadot:91b171bb158e2d3848fa23a9f1c25182'],
+          methods: Polkadot.methods,
+          events: Polkadot.events,
+        ),
+      },
+    ),
+    const ChainMetadata(
+      type: ChainType.solana,
+      chainId: '5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp',
+      namespace: 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp',
+      chainName: 'Solana Mainnet',
+      chainIcon: '/chain-logos/solana.png',
+      color: Color.fromARGB(255, 176, 30, 255),
+      rpcUrl: 'https://api.tatum.io/v3/blockchain/node/solana-mainnet',
+      tokenName: 'SOL',
+      requiredNamespaces: {},
+      optionalNamespaces: {
+        'solana': RequiredNamespace(
+          chains: ['solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp'],
+          methods: Solana.methods,
+          events: Solana.events,
+        ),
+      },
+    ),
   ];
 }
