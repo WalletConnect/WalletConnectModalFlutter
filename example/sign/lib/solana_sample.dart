@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:walletconnect_flutter_dapp/utils/crypto/contract.dart';
 import 'package:walletconnect_flutter_dapp/utils/dart_defines.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
@@ -80,6 +81,52 @@ class _MyHomePageState extends State<SolanaSamplePage> {
 
   void _onSessionEvent(SessionEvent? args) {
     log('_onSessionEvent ${args.toString()}');
+  }
+
+  void requestReadContract() {
+    final deployedContract = DeployedContract(
+      ContractAbi.fromJson(
+        jsonEncode(ContractDetails.readContractAbi),
+        'Tether USD',
+      ),
+      EthereumAddress.fromHex(ContractDetails.contractAddress),
+    );
+
+    _modalService!.web3App!.requestReadContract(
+      deployedContract: deployedContract,
+      functionName: 'balanceOf',
+      rpcUrl: 'https://eth.drpc.org',
+      parameters: [
+        // address to read balance of
+        EthereumAddress.fromHex('0x......'),
+      ],
+    );
+  }
+
+  void requestWriteContract() {
+    final deployedContract = DeployedContract(
+      ContractAbi.fromJson(
+        jsonEncode(ContractDetails.readContractAbi),
+        'Tether USD',
+      ),
+      EthereumAddress.fromHex(ContractDetails.contractAddress),
+    );
+
+    _modalService!.web3App!.requestWriteContract(
+      deployedContract: deployedContract,
+      topic: _modalService!.session!.topic,
+      chainId: 'eip155:1',
+      rpcUrl: 'https://eth.drpc.org',
+      functionName: 'transfer',
+      transaction: Transaction(
+        from: EthereumAddress.fromHex(_modalService!.address!),
+      ),
+      parameters: [
+        // address to transfer to
+        EthereumAddress.fromHex('0x....'),
+        BigInt.from(0.0000000000001),
+      ],
+    );
   }
 
   @override
