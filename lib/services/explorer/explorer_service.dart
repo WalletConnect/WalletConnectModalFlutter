@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/constants/string_constants.dart';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:walletconnect_modal_flutter/models/listings.dart';
 import 'package:walletconnect_modal_flutter/services/explorer/i_explorer_service.dart';
