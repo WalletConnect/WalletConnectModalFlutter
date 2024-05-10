@@ -28,7 +28,7 @@ _$ListingResponseImpl _$$ListingResponseImplFromJson(
       listings: (json['listings'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(k, Listing.fromJson(e as Map<String, dynamic>)),
       ),
-      total: json['total'] as int,
+      total: (json['total'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$ListingResponseImplToJson(
@@ -124,10 +124,10 @@ Map<String, dynamic> _$$InjectedImplToJson(_$InjectedImpl instance) =>
 
 _$ListingParamsImpl _$$ListingParamsImplFromJson(Map<String, dynamic> json) =>
     _$ListingParamsImpl(
-      page: json['page'] as int?,
+      page: (json['page'] as num?)?.toInt(),
       search: json['search'] as String?,
-      entries: json['entries'] as int?,
-      version: json['version'] as int?,
+      entries: (json['entries'] as num?)?.toInt(),
+      version: (json['version'] as num?)?.toInt(),
       chains: json['chains'] as String?,
       recommendedIds: json['recommendedIds'] as String?,
       excludedIds: json['excludedIds'] as String?,

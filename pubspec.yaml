@@ -7,8 +7,8 @@ environment:
   sdk: '>=2.19.0 <4.0.0'
 
 dependencies:
-  appcheck: ^1.0.6
-  cupertino_icons: ^1.0.6
+  appcheck: ^1.1.0
+  cupertino_icons: ^1.0.8
   event: ^2.1.2
   flutter:
     sdk: flutter
@@ -16,13 +16,13 @@ dependencies:
   flutter_svg: ^2.0.9
   freezed_annotation: ^2.4.1
   http: ^1.2.0
-  json_annotation: ^4.8.1
+  json_annotation: ^4.9.0
   logger: ^2.0.2+1
   qr_flutter: ^4.1.0
-  shared_preferences: ^2.2.2
+  shared_preferences: ^2.2.3
   smooth_page_indicator: ^1.1.0
   universal_io: ^2.2.2
-  url_launcher: ^6.2.4
+  url_launcher: ^6.2.6
   w_common: ^3.0.1
   walletconnect_flutter_v2: ^2.2.3
 
