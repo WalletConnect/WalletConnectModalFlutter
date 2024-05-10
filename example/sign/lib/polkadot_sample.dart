@@ -1,23 +1,22 @@
 import 'dart:convert';
 import 'dart:developer';
 
-// ignore: depend_on_referenced_packages
-import 'package:bs58/bs58.dart';
-
 import 'package:flutter/material.dart';
+
 import 'package:walletconnect_flutter_dapp/utils/crypto/contract.dart';
 import 'package:walletconnect_flutter_dapp/utils/dart_defines.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 
-class SolanaSamplePage extends StatefulWidget {
-  const SolanaSamplePage({super.key});
+class PolkadotSamplePage extends StatefulWidget {
+  const PolkadotSamplePage({super.key});
 
   @override
-  State<SolanaSamplePage> createState() => _MyHomePageState();
+  State<PolkadotSamplePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<SolanaSamplePage> {
+class _MyHomePageState extends State<PolkadotSamplePage> {
   bool _initialized = false;
   IWalletConnectModalService? _modalService;
 
@@ -54,11 +53,11 @@ class _MyHomePageState extends State<SolanaSamplePage> {
         ),
       },
       optionalNamespaces: {
-        'solana': const RequiredNamespace(
-          chains: ['solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp'],
+        'polkadot': const RequiredNamespace(
+          chains: ['polkadot:91b171bb158e2d3848fa23a9f1c25182'],
           methods: [
-            'solana_signMessage',
-            'solana_signTransaction',
+            'polkadot_signMessage',
+            'polkadot_signTransaction',
           ],
           events: [],
         ),
@@ -163,30 +162,27 @@ class _MyHomePageState extends State<SolanaSamplePage> {
             WalletConnectModalConnect(
               service: _modalService!,
             ),
-            const SizedBox.square(dimension: 10),
             Visibility(
               visible: _modalService!.isConnected,
               child: ElevatedButton(
                 onPressed: () async {
                   final account = _modalService!
-                      .session!.namespaces['solana']!.accounts.last;
+                      .session!.namespaces['polkadot']!.accounts.last;
                   final address = account.split(":").last;
-                  final bytes = utf8.encode('This is an example message');
-                  final message = base58.encode(bytes);
                   final result = await _modalService!.web3App!.request(
                     topic: _modalService!.session!.topic,
-                    chainId: 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp',
+                    chainId: 'polkadot:91b171bb158e2d3848fa23a9f1c25182',
                     request: SessionRequestParams(
-                      method: 'solana_signMessage',
+                      method: 'polkadot_signMessage',
                       params: {
-                        'pubkey': address,
-                        'message': message,
+                        'address': address,
+                        'message': 'This is an example message',
                       },
                     ),
                   );
                   debugPrint('result $result');
                 },
-                child: const Text('solana_signMessage'),
+                child: const Text('polkadot_signMessage'),
               ),
             ),
           ],
