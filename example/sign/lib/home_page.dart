@@ -10,12 +10,7 @@ import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:walletconnect_modal_flutter/walletconnect_modal_flutter.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({
-    super.key,
-    required this.swapTheme,
-  });
-
-  final void Function() swapTheme;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -89,41 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return Scaffold(
-      body: Stack(
-        children: [
-          WCMPage(web3App: _web3App!),
-          Positioned(
-            bottom: 20,
-            right: 20,
-            child: Row(
-              children: [
-                _buildIconButton(
-                  Icons.theater_comedy_outlined,
-                  widget.swapTheme,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildIconButton(IconData icon, void Function()? onPressed) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.blue,
-        borderRadius: BorderRadius.circular(
-          48,
-        ),
-      ),
-      child: IconButton(
-        icon: Icon(
-          icon,
-          color: Colors.white,
-        ),
-        iconSize: 24,
-        onPressed: onPressed,
+      body: WCMPage(
+        web3App: _web3App!,
       ),
     );
   }

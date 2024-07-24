@@ -17,7 +17,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   bool _isDark = true;
   List<Color> primaryColors = [
     WalletConnectModalThemeData.darkMode.primary100,
@@ -28,6 +28,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        final platformDispatcher = View.of(context).platformDispatcher;
+        final platformBrightness = platformDispatcher.platformBrightness;
+        _isDark = platformBrightness == Brightness.dark;
+      });
+    });
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
@@ -37,6 +45,12 @@ class _MyAppState extends State<MyApp> {
     ]);
 
     LoggerUtil.setLogLevel(Level.error);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   // This widget is the root of your application.
@@ -57,14 +71,20 @@ class _MyAppState extends State<MyApp> {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: SizedBox(
-          width: double.infinity,
-          child: MyHomePage(
-            swapTheme: _swapTheme,
-          ),
-        ),
+        home: const MyHomePage(),
       ),
     );
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    if (mounted) {
+      final platformDispatcher = View.of(context).platformDispatcher;
+      final platformBrightness = platformDispatcher.platformBrightness;
+      _isDark = platformBrightness == Brightness.dark;
+      _swapTheme();
+    }
+    super.didChangePlatformBrightness();
   }
 
   void _swapTheme() {

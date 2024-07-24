@@ -1,3 +1,8 @@
+## 2.1.17
+
+- Dependency updates
+- Minor changes
+
 ## 2.1.16
 
 - Updated dependencies

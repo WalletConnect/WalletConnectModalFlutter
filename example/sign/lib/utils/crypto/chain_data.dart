@@ -106,7 +106,7 @@ class ChainData {
     ChainMetadata(
       type: ChainType.eip155,
       color: Colors.yellow.shade600,
-      chainName: 'Binance Smart Chain',
+      chainName: 'Binance Chain',
       namespace: 'eip155:56',
       chainId: '56',
       chainIcon: '93564157-2e8e-4ce7-81df-b264dbee9b00',
