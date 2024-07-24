@@ -25,7 +25,7 @@ Future<bool> _launchUrl(Uri url, {LaunchMode? mode}) async {
 }
 
 Future<bool> _androidLaunch(String uri) async {
-  return await AppCheck.isAppEnabled(uri);
+  return await AppCheck().isAppEnabled(uri);
 }
 
 class UrlUtils extends IUrlUtils {
