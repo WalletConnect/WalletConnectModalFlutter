@@ -6,6 +6,7 @@ part 'listings.g.dart';
 
 @freezed
 class WalletData with _$WalletData {
+  // ignore: invalid_annotation_target
   @JsonSerializable(includeIfNull: false)
   const factory WalletData({
     required Listing listing,
@@ -19,6 +20,7 @@ class WalletData with _$WalletData {
 
 @freezed
 class ListingResponse with _$ListingResponse {
+  // ignore: invalid_annotation_target
   @JsonSerializable(includeIfNull: false)
   const factory ListingResponse({
     required Map<String, Listing> listings,
@@ -31,6 +33,7 @@ class ListingResponse with _$ListingResponse {
 
 @freezed
 class Listing with _$Listing {
+  // ignore: invalid_annotation_target
   @JsonSerializable(includeIfNull: false, fieldRename: FieldRename.snake)
   const factory Listing({
     required String id,
@@ -49,6 +52,7 @@ class Listing with _$Listing {
 
 @freezed
 class App with _$App {
+  // ignore: invalid_annotation_target
   @JsonSerializable(includeIfNull: false, fieldRename: FieldRename.snake)
   const factory App({
     String? browser,
@@ -69,6 +73,7 @@ class App with _$App {
 
 @freezed
 class Injected with _$Injected {
+  // ignore: invalid_annotation_target
   @JsonSerializable(includeIfNull: false, fieldRename: FieldRename.snake)
   const factory Injected({
     required String injectedId,
@@ -81,6 +86,7 @@ class Injected with _$Injected {
 
 @freezed
 class ListingParams with _$ListingParams {
+  // ignore: invalid_annotation_target
   @JsonSerializable(includeIfNull: false)
   const factory ListingParams({
     int? page,

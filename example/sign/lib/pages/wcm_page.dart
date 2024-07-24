@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:walletconnect_flutter_dapp/models/chain_metadata.dart';
 import 'package:walletconnect_flutter_dapp/utils/constants.dart';
 import 'package:walletconnect_flutter_dapp/utils/crypto/chain_data.dart';
-import 'package:walletconnect_flutter_dapp/utils/string_constants.dart';
 import 'package:walletconnect_flutter_dapp/widgets/chain_button.dart';
 import 'package:walletconnect_flutter_dapp/widgets/session_widget.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
@@ -99,13 +98,32 @@ class _WCMPageState extends State<WCMPage> with SingleTickerProviderStateMixin {
 
   Widget _buildWalletConnect() {
     // Build the list of chain button
-    final List<ChainMetadata> chains = ChainData.chains;
+    final List<Widget> evmChainButtons = [];
+    final List<Widget> nonEvmChainButtons = [];
 
-    List<Widget> chainButtons = [];
+    final evmChains = ChainData.chains.where((e) => e.type == ChainType.eip155);
+    final nonEvmChains =
+        ChainData.chains.where((e) => e.type != ChainType.eip155);
 
-    for (final ChainMetadata chain in chains) {
+    for (final ChainMetadata chain in evmChains) {
       // Build the button
-      chainButtons.add(
+      evmChainButtons.add(
+        ChainButton(
+          chain: chain,
+          onPressed: () {
+            _selectChain(
+              chain,
+              // deselectOthers: true,
+            );
+          },
+          selected: _selectedChains.contains(chain),
+        ),
+      );
+    }
+
+    for (final ChainMetadata chain in nonEvmChains) {
+      // Build the button
+      nonEvmChainButtons.add(
         ChainButton(
           chain: chain,
           onPressed: () {
@@ -123,37 +141,26 @@ class _WCMPageState extends State<WCMPage> with SingleTickerProviderStateMixin {
       appBar: AppBar(
         title: const Text('WalletConnectModal'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      body: ListView(
         children: [
+          const Text('EVM Chains:', style: StyleConstants.buttonText),
+          const SizedBox(height: StyleConstants.linear8),
+          Wrap(
+            spacing: 10.0,
+            children: evmChainButtons,
+          ),
+          const Divider(),
+          const Text('Non EVM Chains:', style: StyleConstants.buttonText),
+          Wrap(
+            spacing: 10.0,
+            children: nonEvmChainButtons,
+          ),
+          const Divider(),
+          const SizedBox(height: StyleConstants.linear8),
           WalletConnectModalConnect(
             service: _walletConnectModalService!,
-          ),
-          // WalletConnectModalConnect(
-          //   service: _walletConnectModalService!,
-          //   width: double.infinity,
-          //   height: 100,
-          // ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView(
-                children: [
-                  const Text(
-                    StringConstants.selectChains,
-                    style: StyleConstants.subtitleText,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: StyleConstants.linear24,
-                  ),
-                  // _buildTestnetSwitch(),
-                  ...chainButtons,
-                ],
-              ),
-            ),
+            width: double.infinity,
+            height: 50.0,
           ),
         ],
       ),
