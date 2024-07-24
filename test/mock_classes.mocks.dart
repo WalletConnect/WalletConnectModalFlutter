@@ -242,8 +242,9 @@ class _FakeAuthRequestResponse_16 extends _i1.SmartFake
         );
 }
 
-class _FakeIStore_17<T> extends _i1.SmartFake implements _i9.IStore<T> {
-  _FakeIStore_17(
+class _FakeSessionAuthRequestResponse_17 extends _i1.SmartFake
+    implements _i4.SessionAuthRequestResponse {
+  _FakeSessionAuthRequestResponse_17(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -252,8 +253,8 @@ class _FakeIStore_17<T> extends _i1.SmartFake implements _i9.IStore<T> {
         );
 }
 
-class _FakeSessionData_18 extends _i1.SmartFake implements _i4.SessionData {
-  _FakeSessionData_18(
+class _FakeIStore_18<T> extends _i1.SmartFake implements _i9.IStore<T> {
+  _FakeIStore_18(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -262,9 +263,19 @@ class _FakeSessionData_18 extends _i1.SmartFake implements _i4.SessionData {
         );
 }
 
-class _FakeIMessageTracker_19 extends _i1.SmartFake
+class _FakeSessionData_19 extends _i1.SmartFake implements _i4.SessionData {
+  _FakeSessionData_19(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeIMessageTracker_20 extends _i1.SmartFake
     implements _i10.IMessageTracker {
-  _FakeIMessageTracker_19(
+  _FakeIMessageTracker_20(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -273,9 +284,9 @@ class _FakeIMessageTracker_19 extends _i1.SmartFake
         );
 }
 
-class _FakeIWebSocketHandler_20 extends _i1.SmartFake
+class _FakeIWebSocketHandler_21 extends _i1.SmartFake
     implements _i11.IWebSocketHandler {
-  _FakeIWebSocketHandler_20(
+  _FakeIWebSocketHandler_21(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -284,8 +295,8 @@ class _FakeIWebSocketHandler_20 extends _i1.SmartFake
         );
 }
 
-class _FakeResponse_21 extends _i1.SmartFake implements _i3.Response {
-  _FakeResponse_21(
+class _FakeResponse_22 extends _i1.SmartFake implements _i3.Response {
+  _FakeResponse_22(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -294,9 +305,9 @@ class _FakeResponse_21 extends _i1.SmartFake implements _i3.Response {
         );
 }
 
-class _FakeStreamedResponse_22 extends _i1.SmartFake
+class _FakeStreamedResponse_23 extends _i1.SmartFake
     implements _i3.StreamedResponse {
-  _FakeStreamedResponse_22(
+  _FakeStreamedResponse_23(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -305,8 +316,8 @@ class _FakeStreamedResponse_22 extends _i1.SmartFake
         );
 }
 
-class _FakePairingInfo_23 extends _i1.SmartFake implements _i4.PairingInfo {
-  _FakePairingInfo_23(
+class _FakePairingInfo_24 extends _i1.SmartFake implements _i4.PairingInfo {
+  _FakePairingInfo_24(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -1892,6 +1903,16 @@ class MockWeb3App extends _i1.Mock implements _i4.Web3App {
       ) as _i7.IGenericStore<_i4.StoredCacao>);
 
   @override
+  _i4.Event<_i4.SessionAuthResponse> get onSessionAuthResponse =>
+      (super.noSuchMethod(
+        Invocation.getter(#onSessionAuthResponse),
+        returnValue: _FakeEvent_2<_i4.SessionAuthResponse>(
+          this,
+          Invocation.getter(#onSessionAuthResponse),
+        ),
+      ) as _i4.Event<_i4.SessionAuthResponse>);
+
+  @override
   _i5.Future<void> init() => (super.noSuchMethod(
         Invocation.method(
           #init,
@@ -1971,6 +1992,7 @@ class MockWeb3App extends _i1.Mock implements _i4.Web3App {
     required _i4.DeployedContract? deployedContract,
     required String? functionName,
     required String? rpcUrl,
+    _i4.EthereumAddress? sender,
     List<dynamic>? parameters = const [],
   }) =>
       (super.noSuchMethod(
@@ -1981,6 +2003,7 @@ class MockWeb3App extends _i1.Mock implements _i4.Web3App {
             #deployedContract: deployedContract,
             #functionName: functionName,
             #rpcUrl: rpcUrl,
+            #sender: sender,
             #parameters: parameters,
           },
         ),
@@ -2148,6 +2171,56 @@ class MockWeb3App extends _i1.Mock implements _i4.Web3App {
       ) as Map<int, _i4.StoredCacao>);
 
   @override
+  _i5.Future<_i4.SessionAuthRequestResponse> authenticate({
+    required _i4.SessionAuthRequestParams? params,
+    String? pairingTopic,
+    List<List<String>>? methods = const [
+      [r'wc_sessionAuthenticate']
+    ],
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #authenticate,
+          [],
+          {
+            #params: params,
+            #pairingTopic: pairingTopic,
+            #methods: methods,
+          },
+        ),
+        returnValue: _i5.Future<_i4.SessionAuthRequestResponse>.value(
+            _FakeSessionAuthRequestResponse_17(
+          this,
+          Invocation.method(
+            #authenticate,
+            [],
+            {
+              #params: params,
+              #pairingTopic: pairingTopic,
+              #methods: methods,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i4.SessionAuthRequestResponse>);
+
+  @override
+  _i5.Future<bool> validateSignedCacao({
+    required _i4.Cacao? cacao,
+    required String? projectId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #validateSignedCacao,
+          [],
+          {
+            #cacao: cacao,
+            #projectId: projectId,
+          },
+        ),
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
+
+  @override
   String formatAuthMessage({
     required String? iss,
     required _i4.CacaoRequestPayload? cacaoPayload,
@@ -2204,7 +2277,7 @@ class MockSessions extends _i1.Mock implements _i4.Sessions {
   @override
   _i9.IStore<dynamic> get storage => (super.noSuchMethod(
         Invocation.getter(#storage),
-        returnValue: _FakeIStore_17<dynamic>(
+        returnValue: _FakeIStore_18<dynamic>(
           this,
           Invocation.getter(#storage),
         ),
@@ -2267,7 +2340,7 @@ class MockSessions extends _i1.Mock implements _i4.Sessions {
   @override
   _i4.SessionData Function(dynamic) get fromJson => (super.noSuchMethod(
         Invocation.getter(#fromJson),
-        returnValue: (dynamic __p0) => _FakeSessionData_18(
+        returnValue: (dynamic __p0) => _FakeSessionData_19(
           this,
           Invocation.getter(#fromJson),
         ),
@@ -2505,7 +2578,7 @@ class MockRelayClient extends _i1.Mock implements _i25.RelayClient {
   @override
   _i10.IMessageTracker get messageTracker => (super.noSuchMethod(
         Invocation.getter(#messageTracker),
-        returnValue: _FakeIMessageTracker_19(
+        returnValue: _FakeIMessageTracker_20(
           this,
           Invocation.getter(#messageTracker),
         ),
@@ -2542,7 +2615,7 @@ class MockRelayClient extends _i1.Mock implements _i25.RelayClient {
   @override
   _i11.IWebSocketHandler get socketHandler => (super.noSuchMethod(
         Invocation.getter(#socketHandler),
-        returnValue: _FakeIWebSocketHandler_20(
+        returnValue: _FakeIWebSocketHandler_21(
           this,
           Invocation.getter(#socketHandler),
         ),
@@ -2730,7 +2803,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_21(
+        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_22(
           this,
           Invocation.method(
             #head,
@@ -2751,7 +2824,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_21(
+        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_22(
           this,
           Invocation.method(
             #get,
@@ -2778,7 +2851,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_21(
+        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_22(
           this,
           Invocation.method(
             #post,
@@ -2809,7 +2882,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_21(
+        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_22(
           this,
           Invocation.method(
             #put,
@@ -2840,7 +2913,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_21(
+        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_22(
           this,
           Invocation.method(
             #patch,
@@ -2871,7 +2944,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_21(
+        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_22(
           this,
           Invocation.method(
             #delete,
@@ -2928,7 +3001,7 @@ class MockClient extends _i1.Mock implements _i3.Client {
           [request],
         ),
         returnValue:
-            _i5.Future<_i3.StreamedResponse>.value(_FakeStreamedResponse_22(
+            _i5.Future<_i3.StreamedResponse>.value(_FakeStreamedResponse_23(
           this,
           Invocation.method(
             #send,
@@ -2980,11 +3053,11 @@ class MockPairingStore extends _i1.Mock implements _i30.PairingStore {
   @override
   _i9.IStore<dynamic> get storage => (super.noSuchMethod(
         Invocation.getter(#storage),
-        returnValue: _FakeIStore_17<dynamic>(
+        returnValue: _FakeIStore_18<dynamic>(
           this,
           Invocation.getter(#storage),
         ),
-        returnValueForMissingStub: _FakeIStore_17<dynamic>(
+        returnValueForMissingStub: _FakeIStore_18<dynamic>(
           this,
           Invocation.getter(#storage),
         ),
@@ -3067,11 +3140,11 @@ class MockPairingStore extends _i1.Mock implements _i30.PairingStore {
   @override
   _i4.PairingInfo Function(dynamic) get fromJson => (super.noSuchMethod(
         Invocation.getter(#fromJson),
-        returnValue: (dynamic __p0) => _FakePairingInfo_23(
+        returnValue: (dynamic __p0) => _FakePairingInfo_24(
           this,
           Invocation.getter(#fromJson),
         ),
-        returnValueForMissingStub: (dynamic __p0) => _FakePairingInfo_23(
+        returnValueForMissingStub: (dynamic __p0) => _FakePairingInfo_24(
           this,
           Invocation.getter(#fromJson),
         ),

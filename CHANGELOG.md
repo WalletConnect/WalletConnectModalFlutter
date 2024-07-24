@@ -1,4 +1,4 @@
-## 2.1.17
+## 2.1.18
 
 - Dependency updates
 - Minor changes
