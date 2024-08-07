@@ -1,3 +1,7 @@
+## 2.1.20
+
+- Minor updates
+
 ## 2.1.19
 
 - Dependency updates

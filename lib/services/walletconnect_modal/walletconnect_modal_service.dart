@@ -228,9 +228,19 @@ class WalletConnectModalService extends ChangeNotifier
       );
     } else {
       await showDialog(
+        barrierDismissible: false,
+        useSafeArea: true,
+        useRootNavigator: true,
+        anchorPoint: Offset(0, 0),
         context: context,
-        builder: (context) {
-          return root;
+        builder: (_) {
+          return Dialog(
+            clipBehavior: Clip.hardEdge,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 360, maxHeight: 600),
+              child: root,
+            ),
+          );
         },
       );
     }
